@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Boxing
+{
+    abstract public class Box : BoxBase
+    {
+        public Box (Orientation orientation) : base (orientation)
+        {
+        }
+
+        public void Layout (int width, int height)
+        {
+            Layout (0, 0, width, height);
+        }
+
+        public void Layout (Point point, Size size)
+        {
+            Layout (point.X, point.Y, size.Width, size.Height);
+        }
+
+        public void Layout (int x, int y, int width, int height)
+        {
+            Size final = Size.New (Orientation);
+            Size used;
+
+            LayoutPosition = Point.New (x, y, Orientation);
+            LayoutSize = Size.New (width, height, Orientation);
+
+            if (Children.Count == 0)
+            {
+                // To simplify
+                //      always set UserMinSize to 0, 0 (not set)
+                //      always set UserMaxSize to Int32.Max, Int32.max (not set)
+                used = Size.New (UserMinSize.Width, UserMinSize.Height, Orientation);
+            }
+            else
+            {
+                used = LayoutPass (LayoutPosition, LayoutSize);
+
+                final = Size.New (Orientation);
+                final.Main = LayoutSize.Main;
+                final.Cross = Math.Max (used.Cross, LayoutSize.Cross);
+
+                used = LayoutPass (LayoutPosition, final);
+            }
+            ActualSize.Width = Math.Max (used.Width, UserMinSize.Width);
+            ActualSize.Height = Math.Max (used.Height, UserMinSize.Height);
+        }
+
+        protected Size LayoutPass (Point layoutPosition, Size layoutSize)
+        {
+            if (Wrap == true && Children.Count > 1)
+                return LayoutPassWrap (layoutPosition, layoutSize);
+            return LayoutLine (layoutPosition, layoutSize, Children, Min);
+        }
+
+        private Size LayoutPassWrap (Point layoutPosition, Size max)
+        {
+            List<Line> lines = Lines.GetLines (Orientation, Children, max.Width, max.Height);
+            Point position = Point.New (Orientation);
+            Point offset = Point.New (Orientation);
+            Size total = Size.New (Orientation);
+            Size size = Size.New (Orientation);
+            Size used;
+            Extra extra;
+
+            offset.Cross = max.Cross;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                position.Main = layoutPosition.Main;
+                position.Cross = layoutPosition.Cross + total.Cross;
+                size.Main = max.Main;
+                size.Cross = offset.Cross;
+
+                used = LayoutLine (position, size, lines[i].Children, lines[i].Min);
+
+                total.Main = Math.Max (total.Main, used.Main);
+                total.Cross += used.Cross;
+                offset.Cross = Math.Max (offset.Cross - used.Cross, 0);
+            }
+
+            extra = Extra.Get (lines.Count, total.Cross, max.Cross);
+            total.Reset ();
+            offset.Cross = max.Cross;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                position.Main = layoutPosition.Main;
+                position.Cross = layoutPosition.Cross + total.Cross;
+                size.Main = max.Main;
+                size.Cross = offset.Cross;
+
+                used = LayoutLine (position, size, lines[i].Children, lines[i].Min);
+
+                position.Main = layoutPosition.Main;
+                position.Cross = layoutPosition.Cross + total.Cross;
+                size.Main = max.Main;
+                size.Cross = used.Cross + extra.GetLength (i);
+
+                used = LayoutLine (position, size, lines[i].Children, lines[i].Min);
+                
+                total.Main = Math.Max (total.Main, used.Main);
+                total.Cross += used.Cross + extra.GetLength (i);
+                offset.Cross = Math.Max (offset.Cross - used.Cross - extra.GetLength (i), 0);
+            }
+            return total;
+        }
+
+        protected Size LayoutLine (Point position,
+                                   Size max,
+                                   List<Packed> children,
+                                   Size min)
+        {
+            Point offset = Point.New (Orientation);
+            Point point = Point.New (Orientation);
+            Size used = Size.New (Orientation);
+            Size size = Size.New (Orientation);
+            Extra extra = Extra.Get (children.Count, min.Main, max.Main);
+
+            for (int i = 0; i < children.Count; i++)
+            {
+                Box child = children[i].Box;
+
+                point.Main = position.Main + offset.Main;
+                point.Cross = position.Cross;
+                size.Main = child.Min.GetMain (Orientation) + extra.GetLength (i);
+                size.Cross = max.Cross;
+
+                child.Layout (point, size);
+
+                used.Main += child.ActualSize.GetMain (Orientation);
+                used.Cross = Math.Max (used.Cross, child.ActualSize.GetCross (Orientation));
+                offset.Main += child.Min.GetMain (Orientation) + extra.GetLength (i);
+            }
+            return used;
+        }
+    }
+}

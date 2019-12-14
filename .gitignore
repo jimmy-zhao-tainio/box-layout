@@ -1,0 +1,12 @@
+
+.vs/BoxLayout/v15/.suo
+*.lock
+*.ide
+*.ide-shm
+*.ide-wal
+*.suo
+*.dll
+*.pdb
+bin
+obj
+packages

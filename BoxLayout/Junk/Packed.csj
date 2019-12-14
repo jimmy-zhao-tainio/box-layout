@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Boxing
+{
+    public class Packed
+    {
+        public Box Box;
+        public Packing Packing;
+
+        public Packed (Box box, Packing packing)
+        {
+            Box = box;
+            Packing = packing;
+        }
+    }
+}
