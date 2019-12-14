@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxLayout", "BoxLayout\BoxL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxLayout.Test", "BoxLayout.Test\BoxLayout.Test.csproj", "{5FCCAF4B-9453-4568-8131-E76FABB16DEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxLayout.App", "WindowsFormsApp1\BoxLayout.App.csproj", "{9533B561-6D2F-4B83-BC31-14DF6C99D9D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxLayout.App", "BoxLayout.App\BoxLayout.App.csproj", "{9533B561-6D2F-4B83-BC31-14DF6C99D9D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

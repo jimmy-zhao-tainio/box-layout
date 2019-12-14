@@ -70,9 +70,7 @@
     <Compile Include="Box-Vertical.cs" />
     <Compile Include="Box-Horizontal.cs" />
     <Compile Include="BoxCreate\BoxCreate.cs" />
-    <None Include="Junk\Packed.csj" />
     <Compile Include="Fill.cs" />
-    <None Include="Junk\Packing.csj" />
     <Compile Include="Orientation.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Size.cs" />
