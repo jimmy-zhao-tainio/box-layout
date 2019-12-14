@@ -52,10 +52,10 @@ namespace Boxing
                 Size size = Size.New (width, height, Orientation);
 
                 // First pass, find used cross size given all layout size.
-                // Could be the final pass if cross fill is used since all layout size is given here.
+                // This could be the final pass if cross fill is used since all layout size is given here.
                 used = LayoutPass (size);
 
-                // Second pass if cross fill is not used.
+                // Second pass, if cross fill is not used (because the first pass already gave all available cross length).
                 if (Children.Any (b => b.FillCross) == false && used.Cross < size.Cross)
                 {
                     size.Cross = used.Cross;
@@ -86,40 +86,43 @@ namespace Boxing
             Size size = Size.New (Orientation);
             Size used;
             Fill fill;
+            Line line;
 
             offset.Cross = max.Cross;
 
             for (int i = 0; i < lines.Count; i++)
             {
+                line = lines[i];
                 position.Main = 0;
                 position.Cross = total.Cross;
                 size.Main = max.Main;
                 size.Cross = offset.Cross;
 
-                used = LayoutLine (position, size, lines[i].Children, lines[i].Min);
+                used = LayoutLine (position, size, line.Children, line.Min);
                 total.Main = Math.Max (total.Main, used.Main);
                 total.Cross += used.Cross;
                 offset.Cross = Math.Max (offset.Cross - used.Cross, 0);
             }
 
-            fill = Boxing.Fill.New (lines.Count, total.Cross, max.Cross);
+            fill = Boxing.Fill.New (lines.Count (l => l.Children.Any (c => c.FillCross)), total.Cross, max.Cross);
             total.Reset ();
             offset.Cross = max.Cross;
 
             for (int i = 0; i < lines.Count; i++)
             {
+                line = lines[i];
                 position.Main = 0;
                 position.Cross = total.Cross;
                 size.Main = max.Main;
                 size.Cross = offset.Cross;
 
-                used = LayoutLine (position, size, lines[i].Children, lines[i].Min);
+                used = LayoutLine (position, size, line.Children, line.Min);
                 position.Main = 0;
                 position.Cross = total.Cross;
                 size.Main = max.Main;
-                size.Cross = used.Cross + fill.Next ();
+                size.Cross = used.Cross + (line.Children.Any (c => c.FillCross) ? fill.Next () : 0);
 
-                used = LayoutLine (position, size, lines[i].Children, lines[i].Min);
+                used = LayoutLine (position, size, line.Children, line.Min);
                 total.Main = Math.Max (total.Main, used.Main);
                 total.Cross = total.Cross + size.Cross;
                 offset.Cross = Math.Max (offset.Cross - size.Cross, 0);

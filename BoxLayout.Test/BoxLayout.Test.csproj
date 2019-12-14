@@ -73,6 +73,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Test.FillWrap.cs" />
     <Compile Include="Test.Fill.cs" />
     <Compile Include="Test.ComputeMinSizes.cs" />
     <Compile Include="Test.ExtraLength.cs" />
