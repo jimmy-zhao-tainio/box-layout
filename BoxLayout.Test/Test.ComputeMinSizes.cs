@@ -89,8 +89,8 @@ namespace Unit
         public void UserMax ()
         {
             Box top = BoxCreate.FromXml (@"
-                <hbox maxSize=""10, 20"">
-                    <vbox minSize=""100, 100"" />
+                <hbox max-size=""10, 20"">
+                    <vbox min-size=""100, 100"" />
                 </hbox>
             ");
             Assert.IsTrue (top.Min.Equals (10, 20));

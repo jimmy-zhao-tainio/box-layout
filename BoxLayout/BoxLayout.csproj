@@ -70,9 +70,10 @@
     <Compile Include="Box-Vertical.cs" />
     <Compile Include="Box-Horizontal.cs" />
     <Compile Include="BoxCreate\BoxCreate.cs" />
-    <Compile Include="Fill.cs" />
+    <Compile Include="Spacing.cs" />
     <Compile Include="Orientation.cs" />
     <Compile Include="Point.cs" />
+    <Compile Include="Expand.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Lines.cs" />
     <Compile Include="Box.cs" />

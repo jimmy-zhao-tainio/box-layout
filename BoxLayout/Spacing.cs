@@ -5,28 +5,28 @@ using System.Text;
 
 namespace Boxing 
 {
-    public struct Fill
+    public struct Spacing
     {
         public int Length;
         public int Remainder;
         public int Index;
 
-        static public Fill New(int itemCount, int itemLength, int availableLength)
+        static public Spacing New(int itemCount, int itemLength, int availableLength)
         {
-            Fill fill;
+            Spacing spacing;
             int difference = availableLength - itemLength;
 
             if (difference <= 0 || itemCount == 0)
             {
-                fill.Length = 0;
-                fill.Remainder = 0;
-                fill.Index = 0;
-                return fill;
+                spacing.Length = 0;
+                spacing.Remainder = 0;
+                spacing.Index = 0;
+                return spacing;
             }
-            fill.Length = difference / itemCount;
-            fill.Remainder = difference % itemCount;
-            fill.Index = 0;
-            return fill;
+            spacing.Length = difference / itemCount;
+            spacing.Remainder = difference % itemCount;
+            spacing.Index = 0;
+            return spacing;
         }
 
         public int Next()

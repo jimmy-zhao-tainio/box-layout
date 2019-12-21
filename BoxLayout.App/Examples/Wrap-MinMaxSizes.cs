@@ -14,11 +14,11 @@ namespace Boxes
         {
             Box top = BoxCreate.FromXml (@"
                 <hbox>
-                    <hbox wrap=""true"" fill=""true"">
-                        <vbox minSize=""100, 200"" maxSize=""200, 200"" fill=""true"" />
-                        <vbox minSize=""50, 50"" maxSize=""100, 100"" fill=""true"" />
-                        <vbox minSize=""50, 50"" maxSize=""100, 100"" fill=""true"" />
-                        <vbox minSize=""100, 100"" maxSize=""200, 200""  fill=""true"" />
+                    <hbox wrap=""true"" expand=""true"">
+                        <vbox min-size=""100, 200"" max-size=""200, 200"" expand=""true"" />
+                        <vbox min-size=""50, 50"" max-size=""100, 100"" expand=""true"" />
+                        <vbox min-size=""50, 50"" max-size=""100, 100"" expand=""true"" />
+                        <vbox min-size=""100, 100"" max-size=""200, 200""  expand=""true"" />
                     </hbox>
                 </hbox>
             ");

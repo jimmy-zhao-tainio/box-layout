@@ -43,12 +43,12 @@ namespace Unit
         public void H1V2H1Box()
         {
             Box box = BoxCreate.FromXml(@"
-                <hbox minSize=""1, 1"">
-                    <vbox minSize=""2, 1"">
-                        <hbox minSize=""3, 1"" />
+                <hbox min-size=""1, 1"">
+                    <vbox min-size=""2, 1"">
+                        <hbox min-size=""3, 1"" />
                     </vbox>
-                    <vbox minSize=""2, 2"">
-                        <hbox minSize=""3, 2"" />
+                    <vbox min-size=""2, 2"">
+                        <hbox min-size=""3, 2"" />
                     </vbox>
                 </hbox>");
             Box v1 = box.Children[0];

@@ -14,27 +14,27 @@ namespace Boxes
         {
             Box top = BoxCreate.FromXml (@"
                 <hbox>
-                    <vbox wrap=""true"" fill=""true"">
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
+                    <vbox wrap=""true"" expand=""true"">
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
                     </vbox>
-                    <hbox wrap=""true"" fill=""true"">
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
-                        <vbox minSize=""50, 50"" fill=""true"" />
+                    <hbox wrap=""true"" expand=""true"">
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
+                        <vbox min-size=""50, 50"" expand=""true"" />
                     </hbox>
                 </hbox>
             ");

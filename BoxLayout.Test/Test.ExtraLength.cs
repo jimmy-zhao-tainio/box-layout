@@ -14,7 +14,7 @@ namespace Unit
         [TestMethod]
         public void None()
         {
-            Fill extra = Fill.New (4, 40, 40);
+            Spacing extra = Spacing.New (4, 40, 40);
 
             Assert.IsTrue (extra.Next () == 0);
             Assert.IsTrue (extra.Next () == 0);
@@ -25,7 +25,7 @@ namespace Unit
         [TestMethod]
         public void OnePixelEach()
         {
-            Fill extra = Fill.New (4, 40, 44);
+            Spacing extra = Spacing.New (4, 40, 44);
 
             Assert.IsTrue (extra.Next () == 1);
             Assert.IsTrue (extra.Next () == 1);
@@ -36,7 +36,7 @@ namespace Unit
         [TestMethod]
         public void LastWithoutExtra()
         {
-            Fill extra = Fill.New (4, 40, 43);
+            Spacing extra = Spacing.New (4, 40, 43);
 
             Assert.IsTrue (extra.Next () == 1);
             Assert.IsTrue (extra.Next () == 1);

@@ -70,13 +70,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\Align-Main-Right.cs" />
     <Compile Include="Examples\Example.cs" />
-    <Compile Include="Examples\Fill-Center-Vertical.cs" />
-    <Compile Include="Examples\Fill-Center-Horizontal.cs" />
-    <Compile Include="Examples\NoFillMinMaxWrap.cs" />
-    <Compile Include="Examples\FillMinMaxWrap.cs" />
+    <Compile Include="Examples\ExpandCross.cs" />
+    <Compile Include="Examples\ExpandMain.cs" />
+    <Compile Include="Examples\ExpandEmpty.cs" />
+    <Compile Include="Examples\Expand-Center-Vertical.cs" />
+    <Compile Include="Examples\Expand-Center-Horizontal.cs" />
+    <Compile Include="Examples\NoExpandMinMaxWrap.cs" />
+    <Compile Include="Examples\ExpandMinMaxWrap.cs" />
     <Compile Include="Examples\Wrap-MinMaxSizes.cs" />
     <Compile Include="Examples\Wrap-MaxSizes.cs" />
+    <Compile Include="Examples\Align-Main-Left.cs" />
     <Compile Include="Examples\Wrap-MinSizes.cs" />
     <Compile Include="App.cs">
       <SubType>Form</SubType>

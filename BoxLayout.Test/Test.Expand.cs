@@ -9,15 +9,15 @@ using Boxing;
 namespace Unit
 {
     [TestClass]
-    public class TestFill
+    public class TestExpand
     {
         [TestMethod]
-        public void FillMainTrue()
+        public void ExpandMainTrue()
         {
             Box top = BoxCreate.FromXml (@"
-                <hbox>
-                    <vbox minSize=""10, 10"" fillMain=""true"" />
-                </hbox>
+                <vbox>
+                    <hbox min-size=""10, 10"" expand-main=""true"" />
+                </vbox>
             ");
             Box v1 = top.Children[0];
             top.Layout (100, 100);
@@ -26,12 +26,12 @@ namespace Unit
         }
 
         [TestMethod]
-        public void FillCrossTrue()
+        public void ExpandCrossTrue()
         {
             Box top = BoxCreate.FromXml (@"
-                <hbox>
-                    <vbox minSize=""10, 10"" fillCross=""true"" />
-                </hbox>
+                <vbox>
+                    <hbox min-size=""10, 10"" expand-cross=""true"" />
+                </vbox>
             ");
             Box v1 = top.Children[0];
             top.Layout (100, 100);
@@ -40,12 +40,12 @@ namespace Unit
         }
 
         [TestMethod]
-        public void FillTrue()
+        public void ExpandTrue()
         {
             Box top = BoxCreate.FromXml (@"
                 <hbox>
-                    <vbox minSize=""10, 10"" fill=""true"" />
-                    <vbox minSize=""10, 10"" fill=""true"" />
+                    <vbox min-size=""10, 10"" expand=""true"" />
+                    <vbox min-size=""10, 10"" expand=""true"" />
                 </hbox>
             ");
             Box v1 = top.Children[0];
@@ -58,12 +58,12 @@ namespace Unit
         }
 
         [TestMethod]
-        public void FillFalse()
+        public void ExpandFalse()
         {
             Box top = BoxCreate.FromXml (@"
                 <hbox>
-                    <vbox minSize=""10, 10"" fill=""false"" />
-                    <vbox minSize=""10, 10"" fill=""false"" />
+                    <vbox min-size=""10, 10"" expand=""false"" />
+                    <vbox min-size=""10, 10"" expand=""false"" />
                 </hbox>
             ");
             Box v1 = top.Children[0];

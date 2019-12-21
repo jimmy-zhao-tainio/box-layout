@@ -14,18 +14,18 @@ namespace Boxing
         {
             [XmlAttribute ("orientation")]
             public string Orientation = "horizontal";
-            [XmlAttribute ("minSize")]
+            [XmlAttribute ("min-size")]
             public string MinSize;
-            [XmlAttribute ("maxSize")]
+            [XmlAttribute ("max-size")]
             public string MaxSize;
             [XmlAttribute ("wrap")]
             public string Wrap = "false";
-            [XmlAttribute ("fill")]
-            public string Fill = "false";
-            [XmlAttribute ("fillMain")]
-            public string FillMain = null;
-            [XmlAttribute ("fillCross")]
-            public string FillCross = null;
+            [XmlAttribute ("expand")]
+            public string Expand = "false";
+            [XmlAttribute ("expand-main")]
+            public string ExpandMain = null;
+            [XmlAttribute ("expand-cross")]
+            public string ExpandCross = null;
 
             [XmlElement ("BoxGlue")]
             public List<BoxGlue> Children = new List<BoxGlue> ();
@@ -51,11 +51,17 @@ namespace Boxing
                     box.UserMaxSize.Height = Convert.ToInt32 (MaxSize.Split (",".ToCharArray ())[1]);
                 }
                 box.Wrap = Wrap.ToLower() == "true" ? true : false;
-                box.Fill = Fill.ToLower() == "true" ? true : false;
-                if (FillMain != null)
-                    box.FillMain = FillMain.ToLower () == "true" ? true : false;
-                if (FillCross != null)
-                    box.FillCross = FillCross.ToLower() == "true" ? true : false;
+
+                if (Expand.ToLower () == "true")
+                {
+                    box.Expand.Main = true;
+                    box.Expand.Cross = true;
+                }
+                if (ExpandMain != null)
+                    box.Expand.Main = ExpandMain.ToLower () == "true" ? true : false;
+                if (ExpandCross != null)
+                    box.Expand.Cross = ExpandCross.ToLower() == "true" ? true : false;
+
                 for (int i = 0; i < Children.Count; i++)
                     box.Pack (Children[i].ToBox ());
                 return box;

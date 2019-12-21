@@ -73,8 +73,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.FillWrap.cs" />
-    <Compile Include="Test.Fill.cs" />
+    <Compile Include="Test.MainAlign.cs" />
+    <Compile Include="Test.ExpandWrap.cs" />
+    <Compile Include="Test.Expand.cs" />
     <Compile Include="Test.ComputeMinSizes.cs" />
     <Compile Include="Test.ExtraLength.cs" />
     <Compile Include="Test.MinSize.cs" />

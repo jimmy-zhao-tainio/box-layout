@@ -8,19 +8,19 @@ using Boxing;
 
 namespace Boxes
 {
-    public class FillCenterHorizontal : Example, IExample
+    public class ExpandCenterHorizontal : Example, IExample
     {
         public Box GetTop ()
         {
             Box top = BoxCreate.FromXml (@"
-                    <hbox wrap=""false"" fill=""true"">
-                        <vbox fill=""true"" />
-                        <vbox fillCross=""true"">
-                            <hbox fillMain=""true"" />
-                            <hbox minSize=""100, 100"" />
-                            <hbox fillMain=""true"" />
+                    <hbox>
+                        <vbox expand=""true"" />
+                        <vbox expand-main=""true"">
+                            <hbox expand-cross=""true"" />
+                            <hbox min-size=""100, 100"" />
+                            <hbox expand-cross=""true"" />
                         </vbox>
-                        <vbox fill=""true"" />
+                        <vbox expand=""true"" />
                     </hbox>
             ");
             brushes.Clear ();

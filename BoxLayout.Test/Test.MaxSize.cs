@@ -16,9 +16,9 @@ namespace Unit
         {
             Box top = BoxCreate.FromXml (@"
                 <hbox>
-                    <hbox maxSize=""10, 10"">
-                        <vbox minSize=""10, 10"" />
-                        <vbox minSize=""10, 10"" />
+                    <hbox max-size=""10, 10"">
+                        <vbox min-size=""10, 10"" />
+                        <vbox min-size=""10, 10"" />
                     </hbox>
                 </hbox>
             ");

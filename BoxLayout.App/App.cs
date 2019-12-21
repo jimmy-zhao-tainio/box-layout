@@ -16,10 +16,15 @@ namespace WindowsFormsApp1
         Boxes.IExample ibox;
         Dictionary<string, Boxes.IExample> iboxes = new Dictionary<string, Boxes.IExample> ()
         {
-            { "FillMinMaxWrap", new Boxes.FillMinMaxWrap() },
-            { "NoFillMinMaxWrap", new Boxes.NoFillMinMaxWrap() },
-            { "FillCenterHorizontal", new Boxes.FillCenterHorizontal() },
-            { "FillCenterVertical", new Boxes.FillCenterVertical() },
+            { "ExpandEmpty", new Boxes.ExpandEmpty() },
+            { "ExpandMain", new Boxes.ExpandMain() },
+            { "ExpandCross", new Boxes.ExpandCross() },
+            { "AlignMainLeft", new Boxes.AlignMainLeft() },
+            { "AlignMainRight", new Boxes.AlignMainRight() },
+            { "ExpandMinMaxWrap", new Boxes.ExpandMinMaxWrap() },
+            { "NoExpandMinMaxWrap", new Boxes.NoExoandMinMaxWrap() },
+            { "ExpandCenterHorizontal", new Boxes.ExpandCenterHorizontal() },
+            { "ExpandCenterVertical", new Boxes.ExpandCenterVertical() },
             { "WrapMinMaxSizes", new Boxes.WrapMinMaxSizes () },
             { "WrapMaxSizes", new Boxes.WrapMaxSizes () },
             { "WrapMinSizes", new Boxes.WrapMinSizes () },

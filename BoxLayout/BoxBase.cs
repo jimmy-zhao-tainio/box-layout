@@ -16,6 +16,7 @@ namespace Boxing
             _actualSize = Size.New (Orientation);
             _userMinSize = Size.New (0, 0, Orientation);
             _userMaxSize = Size.New (int.MaxValue, int.MaxValue, Orientation);
+            _expand = Expand.New (Orientation);
         }
 
         private bool _minIsValid = false;
@@ -89,40 +90,13 @@ namespace Boxing
         // Toggles the use of extraspace on the main and cross axis.
         // Parent box attempts to distributes an equal amount of space to all children with this setting enabled.
         // See the Fill struct for more details on remainders.
-        public bool Fill
+        private Expand _expand;
+        public Expand Expand
         {
-            get { return FillMain && FillCross; }
+            get { return _expand; }
             set
             {
-                FillMain = value;
-                FillCross = value;
-            }
-        }
-
-        // Toggles the use of extraspace on the main axis.
-        private bool _fillMain = false;
-        public bool FillMain
-        {
-            get { return _fillMain; }
-            set
-            {
-                if (_fillMain == value)
-                    return;
-                _fillMain = value;
-                MinIsValid = false;
-            }
-        }
-
-        // Toggles the use of extraspace on the cross axis.
-        private bool _fillCross = false;
-        public bool FillCross
-        {
-            get { return _fillCross; }
-            set
-            {
-                if (_fillCross == value)
-                    return;
-                _fillCross = value;
+                _expand = value;
                 MinIsValid = false;
             }
         }

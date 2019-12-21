@@ -15,7 +15,8 @@ namespace Boxes
         public Box GetTop ()
         {
             Box top = new BoxHorizontal ();
-            top.Fill = true;
+            top.Expand.Main = true;
+            top.Expand.Cross = true;
             boxCount = 1;
             brushes.Clear ();
             Randomize (top, 12, 20);
@@ -30,7 +31,8 @@ namespace Boxes
             for (int i = 0; i < level; i++)
             {
                 Box box = random.Next (0, 2) == 0 ? (Box)new BoxHorizontal() : (Box)new BoxVertical();
-                box.Fill = true;
+                box.Expand.Main = true;
+                box.Expand.Cross = true;
                 parent.Pack (box);
                 boxCount++;
             }

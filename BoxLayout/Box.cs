@@ -56,7 +56,7 @@ namespace Boxing
                 used = LayoutPass (size);
 
                 // Second pass, if cross fill is not used (because the first pass already gave all available cross length).
-                if (Children.Any (b => b.FillCross) == false && used.Cross < size.Cross)
+                if (Children.Any (b => b.Expand.GetCross (Orientation)) == false && used.Cross < size.Cross)
                 {
                     size.Cross = used.Cross;
                     used = LayoutPass (size);
@@ -85,7 +85,7 @@ namespace Boxing
             Size total = Size.New (Orientation);
             Size size = Size.New (Orientation);
             Size used;
-            Fill fill;
+            Spacing fill;
             Line line;
 
             offset.Cross = max.Cross;
@@ -104,7 +104,7 @@ namespace Boxing
                 offset.Cross = Math.Max (offset.Cross - used.Cross, 0);
             }
 
-            fill = Boxing.Fill.New (lines.Count (l => l.Children.Any (c => c.FillCross)), total.Cross, max.Cross);
+            fill = Boxing.Spacing.New (lines.Count (l => l.Children.Any (c => c.Expand.GetCross (Orientation))), total.Cross, max.Cross);
             total.Reset ();
             offset.Cross = max.Cross;
 
@@ -120,7 +120,7 @@ namespace Boxing
                 position.Main = 0;
                 position.Cross = total.Cross;
                 size.Main = max.Main;
-                size.Cross = used.Cross + (line.Children.Any (c => c.FillCross) ? fill.Next () : 0);
+                size.Cross = used.Cross + (line.Children.Any (c => c.Expand.GetCross(Orientation)) ? fill.Next () : 0);
 
                 used = LayoutLine (position, size, line.Children, line.Min);
                 total.Main = Math.Max (total.Main, used.Main);
@@ -140,7 +140,7 @@ namespace Boxing
             Size used = Size.New (Orientation);
             Size size = Size.New (Orientation);
 
-            Fill fill = Boxing.Fill.New (children.Count (c => c.FillMain), childrenSize.Main, lineSize.Main);
+            Spacing fill = Boxing.Spacing.New (children.Count (c => c.Expand.GetMain (Orientation)), childrenSize.Main, lineSize.Main);
 
             for (int i = 0; i < children.Count; i++)
             {
@@ -150,7 +150,7 @@ namespace Boxing
                 point.Cross = position.Cross;
 
                 // Distribute extra space along the main axis for those that wants it.
-                int fillLength = (child.FillMain ? fill.Next () : 0);
+                int fillLength = (child.Expand.GetMain (Orientation) ? fill.Next () : 0);
                 size.Main = child.Min.GetMain (Orientation) + fillLength;
                 size.Cross = lineSize.Cross;
 
