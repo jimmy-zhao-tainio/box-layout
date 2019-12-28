@@ -8,7 +8,7 @@ using Boxing;
 
 namespace Boxes
 {
-    public class WrapMaxSizes : Example, IExample
+    public class WrapOnlyMaxSizes : Example, IExample
     {
         public Box GetTop ()
         {

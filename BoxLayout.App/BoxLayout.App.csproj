@@ -73,6 +73,7 @@
     <Compile Include="Examples\Align-Main-Right.cs" />
     <Compile Include="Examples\Example.cs" />
     <Compile Include="Examples\ExpandCross.cs" />
+    <Compile Include="Examples\ExpandMainMinMax.cs" />
     <Compile Include="Examples\ExpandMain.cs" />
     <Compile Include="Examples\ExpandEmpty.cs" />
     <Compile Include="Examples\Expand-Center-Vertical.cs" />

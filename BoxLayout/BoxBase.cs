@@ -69,11 +69,6 @@ namespace Boxing
             get { return _children; }
         }
 
-        /*
-            "Parent setting"
-
-            Wraps items to new lines.
-        */
         private bool _wrap = false;
         public bool Wrap
         {
@@ -87,9 +82,6 @@ namespace Boxing
             }
         }
 
-        // Toggles the use of extraspace on the main and cross axis.
-        // Parent box attempts to distributes an equal amount of space to all children with this setting enabled.
-        // See the Fill struct for more details on remainders.
         private Expand _expand;
         public Expand Expand
         {
