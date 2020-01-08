@@ -19,6 +19,7 @@ namespace WindowsFormsApp1
             { "ExpandEmpty", new Boxes.ExpandEmpty() },
             { "ExpandMain", new Boxes.ExpandMain() },
             { "ExpandCross", new Boxes.ExpandCross() },
+            { "ExpandCrossWrap", new Boxes.ExpandCrossWrap() },
             { "ExpandMainMinMax", new Boxes.ExpandMainMinMax() },
             { "AlignMainLeft", new Boxes.AlignMainLeft() },
             { "AlignMainRight", new Boxes.AlignMainRight() },

@@ -31,6 +31,8 @@ namespace Boxing
         public Orientation Orientation;
         public List<Box> Children = new List<Box> ();
         public Size Min;
+        public Size UserMaxSize;
+        public Expand Expand;
 
         public Line (Orientation orientation, List<Box> children, int maxWidth, int maxHeight, int index)
         {
@@ -60,6 +62,24 @@ namespace Boxing
                 }
                 Children.Add (children[index + Children.Count]);
             }
+            UserMaxSize = Size.New (-1, -1, orientation);
+            for (int i = 0; i < Children.Count; i++)
+            {
+                child = Children[i];
+
+                if (child.UserMaxSize.GetMain (orientation) != Int32.MaxValue)
+                    UserMaxSize.Main = Math.Max (child.UserMaxSize.GetMain (orientation), UserMaxSize.Main);
+                if (child.UserMaxSize.GetCross (orientation) != Int32.MaxValue)
+                    UserMaxSize.Cross = Math.Max (child.UserMaxSize.GetCross (orientation), UserMaxSize.Cross);
+            }
+            if (UserMaxSize.Main == -1)
+                UserMaxSize.Main = Int32.MaxValue;
+            if (UserMaxSize.Cross == -1)
+                UserMaxSize.Cross = Int32.MaxValue;
+
+            Expand = Expand.New (Orientation);
+            Expand.Main = Children.Any (b => b.Expand.GetMain (Orientation));
+            Expand.Cross = Children.Any (b => b.Expand.GetCross (Orientation));
         }
     }
 }

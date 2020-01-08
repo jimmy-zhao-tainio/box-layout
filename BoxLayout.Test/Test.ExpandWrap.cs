@@ -64,5 +64,27 @@ namespace Unit
             Assert.IsTrue (v2.LayoutPosition.Equals (0, 10));
             Assert.IsTrue (v2.LayoutSize.Equals (10, 10));
         }
+
+
+        [TestMethod]
+        public void ExpandWrapMaxSize()
+        {
+            Box top = BoxCreate.FromXml (@"
+                <hbox>
+                    <hbox wrap=""true"" expand=""true"">
+                        <vbox expand=""true"" min-size=""10, 10"" max-size=""10, 10"" />
+                        <vbox expand=""true"" min-size=""10, 0""  max-size=""10, 10"" />
+                    </hbox>
+                </hbox>
+            ");
+            Box h1 = top.Children[0];
+            Box v1 = h1.Children[0];
+            Box v2 = h1.Children[1];
+            top.Layout (10, 30);
+            Assert.IsTrue (v1.LayoutPosition.Equals (0, 0));
+            Assert.IsTrue (v1.LayoutSize.Equals (10, 10));
+            Assert.IsTrue (v2.LayoutPosition.Equals (0, 10));
+            Assert.IsTrue (v2.LayoutSize.Equals (10, 10));
+        }
     }
 }

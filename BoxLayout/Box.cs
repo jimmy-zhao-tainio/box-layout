@@ -41,17 +41,16 @@ namespace Boxing
                 // This could be the final pass if cross fill is used since all layout size is given here.
                 used = LayoutPass (size);
 
-                // Second pass, if cross fill is not used (because the first pass already gave all available cross length).
+                // Second pass, if cross fill is not used, because the first pass already gave all available cross length.
                 if (Children.Any (b => b.Expand.GetCross (Orientation)) == false && used.Cross < size.Cross)
                 {
                     size.Cross = used.Cross;
                     used = LayoutPass (size);
                 }
             }
-            // Always respect given layout position and size.
             LayoutPosition = Point.New (x, y, Orientation);
             LayoutSize = Size.New (width, height, Orientation);
-            // Can't be smaller than user limits.
+            // Can't be smaller than UserMinSize.
             ActualSize.Main = Math.Max (used.Main, UserMinSize.Main);
             ActualSize.Cross = Math.Max (used.Cross, UserMinSize.Cross);
         }
@@ -66,53 +65,74 @@ namespace Boxing
         private Size LayoutPassWrap (Size max)
         {
             List<Line> lines = Lines.GetLines (Orientation, Children, max.Width, max.Height);
+            Dictionary<Line, int> minimumCross = new Dictionary<Line, int> ();
+            Dictionary<Line, int> finalCross = new Dictionary<Line, int> ();
+
             Point position = Point.New (Orientation);
-            Point offset = Point.New (Orientation);
+
+            // Layout with no cross length to find minimum used cross length for each line.
+            Size min = Size.New (max.Width, max.Height, Orientation);
+            lines.ForEach (line => {
+                min.Cross = line.Min.Cross;
+                minimumCross[line] = LayoutLine (position, min, line.Children, line.Min).Cross;
+                // For lines that cannot expand, this would also be their final cross length.
+                if (line.Expand.GetCross (Orientation) == false)
+                    finalCross[line] = minimumCross[line];
+            });
+
+            // Find lines that can expand cross wise.
+            List<Line> expandingLines = lines.Where (line => line.Expand.GetCross (Orientation)).ToList ();
+
+            while (expandingLines.Count != 0)
+            {
+                // Find minimum cross lengths for expanding lines.
+                int expandingMinCross = expandingLines.Sum (e => minimumCross[e]);
+                // Find final cross lengths, i.e. already used lengths.
+                int usedCross = finalCross.Sum (pair => pair.Value);
+                // Calculate available cross length.
+                int availableCross = max.Cross - usedCross;
+
+                Spacing spacing = Spacing.New (expandingLines.Count, expandingMinCross, availableCross);
+
+                // Set spacing
+                expandingLines.ForEach (line => finalCross[line] = minimumCross[line] + spacing.Next ());
+
+                // Find lines that hits UserMaxSize and expanded too much.
+                List<Line> hitUserMax = expandingLines.Where (line => finalCross[line] >= line.UserMaxSize.Cross).ToList ();
+
+                if (hitUserMax.Count > 0)
+                {
+                    // Correct the finalCross length for lines.
+                    hitUserMax.ForEach (line => finalCross[line] = line.UserMaxSize.Cross);
+                    // Remove them from the expandingLines list and re-run the loop if necessary.
+                    expandingLines = expandingLines.Except (hitUserMax).ToList ();
+                    // Reset expandingLines final cross length.
+                    expandingLines.ForEach (line => finalCross[line] = 0);
+                }
+                else
+                {
+                    // If no line hit UserMax, then they've expanded as much as possible and we're done.
+                    expandingLines.Clear ();
+                }
+            }
+
+            // Layout with final cross lengths.
             Size total = Size.New (Orientation);
-            Size size = Size.New (Orientation);
-            Size used;
-            Spacing spacing;
-            Line line;
 
-            offset.Cross = max.Cross;
+            lines.ForEach (line => {
+                Size lineSize = Size.New (Orientation);
+                lineSize.Main = max.Main;
+                lineSize.Cross = finalCross[line];
 
-            for (int i = 0; i < lines.Count; i++)
-            {
-                line = lines[i];
                 position.Main = 0;
                 position.Cross = total.Cross;
-                size.Main = max.Main;
-                size.Cross = offset.Cross;
 
-                used = LayoutLine (position, size, line.Children, line.Min);
+                Size used = LayoutLine (position, lineSize, line.Children, line.Min);
+
                 total.Main = Math.Max (total.Main, used.Main);
-                total.Cross += used.Cross;
-                offset.Cross = Math.Max (offset.Cross - used.Cross, 0);
-            }
+                total.Cross += lineSize.Cross;
+            });
 
-            spacing = Spacing.New (lines.Count (l => l.Children.Any (c => c.Expand.GetCross (Orientation))), total.Cross, max.Cross);
-            total.Reset ();
-            offset.Cross = max.Cross;
-
-            for (int i = 0; i < lines.Count; i++)
-            {
-                line = lines[i];
-                position.Main = 0;
-                position.Cross = total.Cross;
-                size.Main = max.Main;
-                size.Cross = offset.Cross;
-
-                used = LayoutLine (position, size, line.Children, line.Min);
-                position.Main = 0;
-                position.Cross = total.Cross;
-                size.Main = max.Main;
-                size.Cross = used.Cross + (line.Children.Any (c => c.Expand.GetCross(Orientation)) ? spacing.Next () : 0);
-
-                used = LayoutLine (position, size, line.Children, line.Min);
-                total.Main = Math.Max (total.Main, used.Main);
-                total.Cross = total.Cross + size.Cross;
-                offset.Cross = Math.Max (offset.Cross - size.Cross, 0);
-            }
             return total;
         }
 
@@ -123,7 +143,7 @@ namespace Boxing
         {
             Point offset = Point.New (Orientation);
             Point point = Point.New (Orientation);
-            Size used = Size.New (Orientation);
+            Size usedTotal = Size.New (Orientation);
             Size size = Size.New (Orientation);
 
             Dictionary<Box, int> mainLengths = ExpandLine.GetMainLengths (Orientation, children, lineSize.Main);
@@ -134,31 +154,23 @@ namespace Boxing
 
                 point.Main = position.Main + offset.Main;
                 point.Cross = position.Cross;
-
                 size.Main = mainLengths[child];
                 size.Cross = lineSize.Cross;
 
-                // Make sure we're respecting user set max sizes.
-                size.Width = Math.Min (size.Width, child.UserMaxSize.Width);
-                size.Height = Math.Min (size.Height, child.UserMaxSize.Height);
-
                 child.Layout (point, size);
 
-                // Get the actual used size, unless it overflows.
                 if (child.ActualSize.GetMain (Orientation) > child.LayoutSize.GetMain (Orientation))
-                    used.Main += child.LayoutSize.GetMain (Orientation);
+                    usedTotal.Main += child.LayoutSize.GetMain (Orientation);
                 else
-                    used.Main += child.ActualSize.GetMain (Orientation);
+                    usedTotal.Main += child.ActualSize.GetMain (Orientation);
 
                 if (child.ActualSize.GetCross (Orientation) > child.LayoutSize.GetCross (Orientation))
-                    used.Cross = Math.Max (used.Cross, child.LayoutSize.GetCross (Orientation));
+                    usedTotal.Cross = Math.Max (usedTotal.Cross, child.LayoutSize.GetCross (Orientation));
                 else
-                    used.Cross = Math.Max (used.Cross, child.ActualSize.GetCross (Orientation));
-
-                // Make sure not to use size.Main here as it does not include fillLength.
-                 offset.Main = offset.Main + mainLengths[child];
+                    usedTotal.Cross = Math.Max (usedTotal.Cross, child.ActualSize.GetCross (Orientation));
+                offset.Main = offset.Main + size.Main;
             }
-            return used;
+            return usedTotal;
         }
     }
 }
