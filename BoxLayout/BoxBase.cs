@@ -5,6 +5,13 @@ using System.Text;
 
 namespace Boxing
 {
+    public class BoxComputed
+    {
+        // Uses parent orientation
+        public int MainLength;
+        public bool CanExpand;
+    }
+
     abstract public class BoxBase
     {
         public event System.EventHandler OnMinSizeChanged;
@@ -13,7 +20,7 @@ namespace Boxing
         public BoxBase (Orientation orientation)
         {
             Orientation = orientation;
-            _actualSize = Size.New (Orientation);
+            ActualSize = Size.New (Orientation);
             _userMinSize = Size.New (0, 0, Orientation);
             _userMaxSize = Size.New (int.MaxValue, int.MaxValue, Orientation);
             _expand = Expand.New (Orientation);
@@ -63,11 +70,7 @@ namespace Boxing
             }
         }
 
-        protected List<Box> _children = new List<Box> ();
-        public List<Box> Children
-        {
-            get { return _children; }
-        }
+        public List<Box> Children = new List<Box> ();
 
         private bool _wrap = false;
         public bool Wrap
@@ -92,6 +95,10 @@ namespace Boxing
                 MinIsValid = false;
             }
         }
+
+        public Align AlignMain = Align.Start;
+        public Align AlignCross = Align.Start;
+        public SelfAlignCross SelfAlignCross = SelfAlignCross.Inherit;
 
         private Size _userMinSize;
         public Size UserMinSize
@@ -121,27 +128,12 @@ namespace Boxing
             }
         }
 
-        private Point _layoutPosition;
-        public Point LayoutPosition
-        {
-            get { return _layoutPosition; }
-            set { _layoutPosition = value; }
-        }
+        public Point LayoutPosition;
+        public Size LayoutSize;
+        public Size ActualSize;
 
-        private Size _layoutSize;
-        public Size LayoutSize
-        {
-            get { return _layoutSize; }
-            set { _layoutSize = value; }
-        }
-
-        private Size _actualSize;
-        public Size ActualSize
-        {
-            get { return _actualSize; }
-            set { _actualSize = value; }
-        }
-
+        public List<Line> Lines;
+        
         protected void Child_OnMinSizeChanged (object sender, EventArgs e)
         {
             MinIsValid = false;
@@ -151,7 +143,7 @@ namespace Boxing
         {
             Size size = Size.New (Orientation);
 
-            foreach (Box box in _children)
+            foreach (Box box in Children)
             {
                 if (size.Main < _userMaxSize.Main)
                 {
@@ -181,21 +173,23 @@ namespace Boxing
 
         public void Pack (Box child)
         {
-            _children.Add(child);
+            Children.Add(child);
             child.OnMinSizeChanged += Child_OnMinSizeChanged;
             MinIsValid = false;
         }
 
         public void Unpack (Box child)
         {
-            for (int i = 0; i < _children.Count; i++)
+            for (int i = 0; i < Children.Count; i++)
             {
-                if (_children[i] != child)
+                if (Children[i] != child)
                     continue;
-                _children.RemoveAt (i);
+                Children.RemoveAt (i);
                 child.OnMinSizeChanged -= Child_OnMinSizeChanged;
                 MinIsValid = false;
             }
         }
+
+        public BoxComputed Computed = new BoxComputed ();
     }
 }

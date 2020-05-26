@@ -8,12 +8,12 @@ using Boxing;
 
 namespace Boxes
 {
-    public class AlignMainRight : Example, IExample
+    public class AlignMainEnd : Example, IExample
     {
         public Box GetTop ()
         {
             Box top = BoxCreate.FromXml (@"
-                <hbox expand=""true"" alignMain=""right"">
+                <hbox expand=""true"" align-main=""end"">
                         <vbox min-size=""100, 100"" />
                         <vbox min-size=""100, 100"" />
                         <vbox min-size=""100, 100"" />

@@ -42,14 +42,6 @@ namespace Boxing
             return New (0, 0, orientation);
         }
 
-        public static Point New (Point point)
-        {
-            if (point is HPoint)
-                return new HPoint (point.X, point.Y);
-            return new VPoint (point.X, point.Y);
-        }
-
-
         public int GetMain (Orientation orientation)
         {
             if (orientation == Orientation.Horizontal)

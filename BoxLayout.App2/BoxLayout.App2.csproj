@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9533B561-6D2F-4B83-BC31-14DF6C99D9D5}</ProjectGuid>
+    <ProjectGuid>{1D1928D7-3410-4D31-87C8-576BE3BAAA20}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>App</RootNamespace>
     <AssemblyName>BoxLayout.App</AssemblyName>
@@ -134,9 +134,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoxLayout\BoxLayout.csproj">
-      <Project>{207e7796-7197-4139-8297-0aea86de8cdc}</Project>
-      <Name>BoxLayout</Name>
+    <ProjectReference Include="..\BoxLayout2\BoxLayout2.csproj">
+      <Project>{03aa643f-caa9-4eae-9329-fcb6d7c4248c}</Project>
+      <Name>BoxLayout2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

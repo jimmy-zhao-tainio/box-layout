@@ -73,8 +73,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.ExpandLine.cs" />
+    <Compile Include="Test.Computed.cs" />
     <Compile Include="Test.ExpandMinMax.cs" />
+    <Compile Include="Test.WrapMinSize.cs" />
     <Compile Include="Test.MainAlign.cs" />
     <Compile Include="Test.ExpandWrap.cs" />
     <Compile Include="Test.Expand.cs" />

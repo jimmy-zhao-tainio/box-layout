@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Boxing
 {
-    public class Lines
+    public class LinesAlgorithm
     {
-        private Lines () { }
+        private LinesAlgorithm () { }
 
         public static List<Line> GetLines (Orientation orientation, List<Box> children, int width, int height)
         {

@@ -9,7 +9,7 @@ using Boxing;
 namespace Unit
 {
     [TestClass]
-    public class TestExpandLine
+    public class TestComputeMainLength
     {
         [TestMethod]
         public void WithoutSpace()
@@ -25,10 +25,10 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Dictionary<Box, int> lengths = ExpandLine.GetMainLengths(Orientation.Horizontal, list, 20);
+            Compute.MainLengths(Orientation.Horizontal, list, 20);
 
-            Assert.IsTrue (lengths[h1] == 10);
-            Assert.IsTrue (lengths[h2] == 10);
+            Assert.IsTrue (h1.Computed.MainLength == 10);
+            Assert.IsTrue (h2.Computed.MainLength == 10);
         }
 
         [TestMethod]
@@ -45,10 +45,10 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Dictionary<Box, int> lengths = ExpandLine.GetMainLengths(Orientation.Horizontal, list, 40);
+            Compute.MainLengths(Orientation.Horizontal, list, 40);
             
-            Assert.IsTrue (lengths[h1] == 10);
-            Assert.IsTrue (lengths[h2] == 30);
+            Assert.IsTrue (h1.Computed.MainLength == 10);
+            Assert.IsTrue (h2.Computed.MainLength == 30);
         }
 
         [TestMethod]
@@ -67,10 +67,10 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Dictionary<Box, int> lengths = ExpandLine.GetMainLengths(Orientation.Horizontal, list, 21);
+            Compute.MainLengths(Orientation.Horizontal, list, 21);
 
-            Assert.IsTrue (lengths[h1] == 10);
-            Assert.IsTrue (lengths[h2] == 11);
+            Assert.IsTrue (h1.Computed.MainLength == 10);
+            Assert.IsTrue (h2.Computed.MainLength == 11);
         }
 
         [TestMethod]
@@ -89,10 +89,10 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Dictionary<Box, int> lengths = ExpandLine.GetMainLengths(Orientation.Horizontal, list, 22);
+            Compute.MainLengths(Orientation.Horizontal, list, 22);
 
-            Assert.IsTrue (lengths[h1] == 12);
-            Assert.IsTrue (lengths[h2] == 10);
+            Assert.IsTrue (h1.Computed.MainLength == 12);
+            Assert.IsTrue (h2.Computed.MainLength == 10);
         }
 
         [TestMethod]
@@ -114,11 +114,49 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
-            Dictionary<Box, int> lengths = ExpandLine.GetMainLengths(Orientation.Horizontal, list, 300);
+            Compute.MainLengths(Orientation.Horizontal, list, 300);
 
-            Assert.IsTrue (lengths[h1] == 140);
-            Assert.IsTrue (lengths[h2] == 20);
-            Assert.IsTrue (lengths[h3] == 140);
+            Assert.IsTrue (h1.Computed.MainLength == 140);
+            Assert.IsTrue (h2.Computed.MainLength == 20);
+            Assert.IsTrue (h3.Computed.MainLength == 140);
+        }
+
+        [TestMethod]
+        public void Benchmark1()
+        {
+            List<Box> list = new List<Box> ();
+            int items = 1000;
+
+            for (int i = 0; i < items; i++)
+            {
+                Box box = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+                box.Expand.Horizontal = true;
+                if (i % 3 == 0)
+                    box.UserMaxSize.Main = 20;
+                list.Add (box);
+            }
+            
+            for (int i = 0; i < items; i++)
+                Compute.MainLengths(Orientation.Horizontal, list, items * 300);
+        }
+
+        [TestMethod]
+        public void Benchmark2()
+        {
+            List<Box> list = new List<Box> ();
+            int items = 1000;
+
+            for (int i = 0; i < items; i++)
+            {
+                Box box = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+                box.Expand.Horizontal = true;
+                if (i % 3 == 0)
+                    box.UserMaxSize.Main = 20;
+                list.Add (box);
+            }
+            
+            for (int i = 0; i < items; i++)
+                Compute.MainLengths(Orientation.Horizontal, list, items * 300);
         }
 
         [TestMethod]
@@ -144,11 +182,11 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
-            Dictionary<Box, int> lengths = ExpandLine.GetMainLengths(Orientation.Horizontal, list, 160);
+            Compute.MainLengths(Orientation.Horizontal, list, 160);
 
-            Assert.IsTrue (lengths[h1] == 20);
-            Assert.IsTrue (lengths[h2] == 60);
-            Assert.IsTrue (lengths[h3] == 80);
+            Assert.IsTrue (h1.Computed.MainLength == 20);
+            Assert.IsTrue (h2.Computed.MainLength == 60);
+            Assert.IsTrue (h3.Computed.MainLength == 80);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Unit
                 </vbox>
             ");
             Box v1 = top.Children[0];
-            top.Layout (100, 100);
+            Layout.Process (top, 100, 100);
             Assert.IsTrue (v1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (v1.LayoutSize.Equals (100, 10));
         }
@@ -34,7 +34,7 @@ namespace Unit
                 </vbox>
             ");
             Box v1 = top.Children[0];
-            top.Layout (100, 100);
+            Layout.Process (top, 100, 100);
             Assert.IsTrue (v1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (v1.LayoutSize.Equals (10, 100));
         }
