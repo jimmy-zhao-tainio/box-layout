@@ -23,7 +23,7 @@ namespace Unit
             Box h1 = top.Children[0];
             Box h2 = top.Children[1];
 
-            top.Layout (30, 20);
+            Layout.Run (top, 30, 20);
 
             Assert.IsTrue (h1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (h1.LayoutSize.Equals (10, 10));
@@ -42,7 +42,7 @@ namespace Unit
             ");
             Box v1 = top.Children[0];
             Box v2 = top.Children[1];
-            top.Layout (100, 100);
+            Layout.Run (top, 100, 100);
             Assert.IsTrue (v1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (v1.LayoutSize.Equals (10, 20));
             Assert.IsTrue (v2.LayoutPosition.Equals (10, 0));

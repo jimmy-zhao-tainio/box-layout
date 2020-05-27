@@ -7,64 +7,64 @@ namespace Boxing
 {
     public class Position
     {
-        static public void AlignMain (Box parent, List<Box> children, int lineSizeMain)
+        static public void AlignMain (Box parent, Line line)
         {
             int position;
 
             // Reset main positions
-            children.ForEach (c => c.LayoutPosition.SetMain (parent.Orientation, 0));
+            line.Children.ForEach (c => c.LayoutPosition.SetMain (parent.Orientation, 0));
 
             // Get used main length.
-            int usedMainLength = children.Sum (c => c.Computed.MainLength);
+            int usedMainLength = line.Children.Sum (c => c.Computed.MainLength);
 
             // Available main length.
-            int availableMainLength = lineSizeMain - usedMainLength;
+            int availableMainLength = line.FinalSize.Main - usedMainLength;
 
             if (parent.AlignMain == Align.Start || parent.AlignMain == Align.Center || parent.AlignMain == Align.End)
             {
                 if (parent.AlignMain == Align.Start)
                     position = 0;
                 else if (parent.AlignMain == Align.Center)
-                    position = Math.Max (0, lineSizeMain - usedMainLength) / 2;
+                    position = Math.Max (0, line.FinalSize.Main - usedMainLength) / 2;
                 else
-                    position = Math.Max (0, lineSizeMain - usedMainLength);
-                for (int i = 0; i < children.Count; i++)
+                    position = Math.Max (0, line.FinalSize.Main - usedMainLength);
+                for (int i = 0; i < line.Children.Count; i++)
                 {
-                    children[i].LayoutPosition.SetMain (parent.Orientation, position);
-                    position += children[i].Computed.MainLength;
+                    line.Children[i].LayoutPosition.SetMain (parent.Orientation, position);
+                    position += line.Children[i].Computed.MainLength;
                 }
             }
             else if (parent.AlignMain == Align.SpaceEvenly)
             {
-                Spacing spacing = Spacing.New (children.Count + 1, usedMainLength, lineSizeMain);
+                Spacing spacing = Spacing.New (line.Children.Count + 1, usedMainLength, line.FinalSize.Main);
                 position = spacing.Next ();
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < line.Children.Count; i++)
                 {
-                    children[i].LayoutPosition.SetMain (parent.Orientation, position);
-                    position += children[i].Computed.MainLength + spacing.Next ();
+                    line.Children[i].LayoutPosition.SetMain (parent.Orientation, position);
+                    position += line.Children[i].Computed.MainLength + spacing.Next ();
                 }
             }
             else if (parent.AlignMain == Align.SpaceBetween)
             {
-                Spacing spacing = Spacing.New (children.Count - 1, usedMainLength, lineSizeMain);
+                Spacing spacing = Spacing.New (line.Children.Count - 1, usedMainLength, line.FinalSize.Main);
                 position = 0;
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < line.Children.Count; i++)
                 {
-                    children[i].LayoutPosition.SetMain (parent.Orientation, position);
-                    position += children[i].Computed.MainLength + spacing.Next ();
+                    line.Children[i].LayoutPosition.SetMain (parent.Orientation, position);
+                    position += line.Children[i].Computed.MainLength + spacing.Next ();
                 }
             }
             else if (parent.AlignMain == Align.SpaceAround)
             {
-                Spacing spacing = Spacing.New (children.Count, usedMainLength, lineSizeMain);
+                Spacing spacing = Spacing.New (line.Children.Count, usedMainLength, line.FinalSize.Main);
                 int space;
 
                 position = 0;
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < line.Children.Count; i++)
                 {
                     space = spacing.Next ();
-                    children[i].LayoutPosition.SetMain (parent.Orientation, position + (space / 2));
-                    position += children[i].Computed.MainLength + space;
+                    line.Children[i].LayoutPosition.SetMain (parent.Orientation, position + (space / 2));
+                    position += line.Children[i].Computed.MainLength + space;
                 }
             }
         }
@@ -75,6 +75,12 @@ namespace Boxing
 
             if (parent.AlignCross == Align.Start)
             {
+                for (int i = 0; i < line.Children.Count; i++)
+                {
+                    Box child = line.Children[i];
+
+                    child.LayoutPosition.SetCross (parent.Orientation, line.FinalPosition.Cross);
+                }
             }
             else if (parent.AlignCross == Align.Center)
             {

@@ -20,6 +20,8 @@ namespace Boxing
         public BoxBase (Orientation orientation)
         {
             Orientation = orientation;
+            LayoutPosition = Point.New (Orientation);
+            LayoutSize = Size.New (Orientation);
             ActualSize = Size.New (Orientation);
             _userMinSize = Size.New (0, 0, Orientation);
             _userMaxSize = Size.New (int.MaxValue, int.MaxValue, Orientation);

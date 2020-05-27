@@ -66,7 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Box - Copy.backup" />
     <Compile Include="Layout.cs" />
     <Compile Include="BoxBase.cs" />
     <Compile Include="Box-Vertical.cs" />

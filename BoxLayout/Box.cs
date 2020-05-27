@@ -10,6 +10,22 @@ namespace Boxing
         {
         }
 
+        public void LayoutAlignMain ()
+        {
+            if (Lines == null)
+                return;
+            foreach (Line line in Lines)
+            {
+                Position.AlignMain (this, line);
+                foreach (Box box in line.Children)
+                {
+                    if (box.Lines == null)
+                        continue;
+                    box.LayoutAlignMain ();
+                }
+            }
+        }
+
         public void LayoutAlignCross ()
         {
             if (Lines == null)
@@ -28,11 +44,6 @@ namespace Boxing
 
         public void Layout (int width, int height)
         {
-            Layout (0, 0, width, height);
-        }
-
-        public void Layout (int x, int y, int width, int height)
-        {
             Size actualSize = Size.New (0, 0, Orientation);
 
             // Make sure layout size has been limited to UserMaxSize by the caller.
@@ -43,11 +54,10 @@ namespace Boxing
             if (Children.Count > 0)
             {
                 Size size = Size.New (width, height, Orientation);
-
                 actualSize = LayoutPass (size);
             }
-            LayoutPosition = Point.New (x, y, Orientation);
-            LayoutSize = Size.New (width, height, Orientation);
+            LayoutSize.Width = width;
+            LayoutSize.Height = height;
             // Make sure actual size isn't smaller than UserMinSize.
             ActualSize.Main = Math.Max (actualSize.Main, UserMinSize.Main);
             ActualSize.Cross = Math.Max (actualSize.Cross, UserMinSize.Cross);
@@ -78,6 +88,7 @@ namespace Boxing
             Size total = Size.New (Orientation);
 
             Lines.ForEach (line => {
+                // Move this to Layout.Run
                 line.FinalPosition = Point.New (position);
                 Size used = LayoutLine (line, line.FinalSize);
                 position.Cross += line.FinalSize.Cross;
@@ -92,7 +103,6 @@ namespace Boxing
         protected Size LayoutLine (Line line, Size lineSize)
         {
             Point offset = Point.New (Orientation);
-            Point point = Point.New (Orientation);
             Size usedTotal = Size.New (Orientation);
             Size size = Size.New (Orientation);
 
@@ -102,12 +112,10 @@ namespace Boxing
             {
                 Box child = line.Children[i];
 
-                point.Main = line.FinalPosition.Main + offset.Main;
-                point.Cross = line.FinalPosition.Cross;
                 size.Main = child.Computed.MainLength;
                 size.Cross = Math.Max (lineSize.Cross, line.MinSize.Cross);
 
-                child.Layout (point.X, point.Y, size.Width, size.Height);
+                child.Layout (size.Width, size.Height);
 
                 // Cross size is largest minimum for all children on this line, but it shouldn't be used unless cross expand is true.
                 if (child.Expand.GetCross (Orientation) == false &&
@@ -115,7 +123,7 @@ namespace Boxing
                 {
                     size.Main = child.Computed.MainLength;
                     size.Cross = child.ActualSize.GetCross (Orientation);
-                    child.Layout (point.X, point.Y, size.Width, size.Height);
+                    child.Layout (size.Width, size.Height);
                 }
 
                 if (child.ActualSize.GetMain (Orientation) > child.LayoutSize.GetMain (Orientation))
@@ -129,8 +137,6 @@ namespace Boxing
                     usedTotal.Cross = Math.Max (usedTotal.Cross, child.ActualSize.GetCross (Orientation));
                 offset.Main += size.Main;
             }
-            // Move this to Layout
-            Position.AlignMain (this, line.Children, lineSize.Main);
             return usedTotal;
         }
     }
