@@ -5,19 +5,36 @@ using System.Text;
 
 namespace Boxing
 {
-    public class BoxComputed
+    public class BoxHorizontal : Box
     {
-        // Uses parent orientation
-        public int MainLength;
-        public bool CanExpand;
+        public BoxHorizontal () : base (Orientation.Horizontal)
+        {
+        }
+
+        public BoxHorizontal (Size userMinSize) : base (Orientation.Horizontal)
+        {
+            UserMinSize = userMinSize;
+        }
     }
 
-    abstract public class BoxBase
+    public class BoxVertical : Box
+    {
+        public BoxVertical () : base (Orientation.Vertical)
+        {
+        }
+
+        public BoxVertical (Size userMinSize) : base (Orientation.Vertical)
+        {
+            UserMinSize = userMinSize;
+        }
+    }
+
+    public class Box
     {
         public event System.EventHandler OnMinSizeChanged;
         public Orientation Orientation;
 
-        public BoxBase (Orientation orientation)
+        public Box (Orientation orientation)
         {
             Orientation = orientation;
             LayoutPosition = Point.New (Orientation);

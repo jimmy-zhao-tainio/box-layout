@@ -67,20 +67,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Layout.cs" />
-    <Compile Include="BoxBase.cs" />
-    <Compile Include="Box-Vertical.cs" />
-    <Compile Include="Box-Horizontal.cs" />
+    <Compile Include="Structures\Line.cs" />
+    <Compile Include="Structures\BoxComputed.cs" />
+    <Compile Include="Structures\Box.cs" />
     <Compile Include="BoxCreate\BoxCreate.cs" />
     <Compile Include="Compute.cs" />
-    <Compile Include="Align.cs" />
+    <Compile Include="Structures\Align.cs" />
     <Compile Include="Positioning.cs" />
     <Compile Include="Spacing.cs" />
-    <Compile Include="Orientation.cs" />
-    <Compile Include="Point.cs" />
-    <Compile Include="Expand.cs" />
-    <Compile Include="Size.cs" />
-    <Compile Include="WrapAlgorithm.cs" />
-    <Compile Include="Box.cs" />
+    <Compile Include="Structures\Orientation.cs" />
+    <Compile Include="Structures\Point.cs" />
+    <Compile Include="Structures\Expand.cs" />
+    <Compile Include="Structures\Size.cs" />
+    <Compile Include="Wrapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
