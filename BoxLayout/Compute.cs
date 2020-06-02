@@ -7,7 +7,7 @@ namespace Boxing
 {
     public class Compute
     {
-        static public void MainLengths (Orientation orientation, List<Box> items, int availableLength)
+        static public void SetMainLengths (Orientation orientation, List<Box> items, int availableLength)
         {
             // Put boxes that expand in the expanding list and subtract min length from availableLength for those that don't.
             int expandCount = 0;

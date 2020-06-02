@@ -22,7 +22,7 @@ namespace Boxes
                                 <vbox expand-main=""true"">
                                     <hbox min-size=""80, 80"" expand-cross=""true"" />
                                 </vbox>
-                                <hbox expand=""true"" wrap=""true"">
+                                <hbox expand=""true"" wrap=""true"" line-align-cross=""SpaceAround"">
                                     <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
                                     <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
                                     <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />

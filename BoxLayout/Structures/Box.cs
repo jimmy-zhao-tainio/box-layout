@@ -40,6 +40,7 @@ namespace Boxing
             LayoutPosition = Point.New (Orientation);
             LayoutSize = Size.New (Orientation);
             ActualSize = Size.New (Orientation);
+            Computed = new BoxComputed ();
             _userMinSize = Size.New (0, 0, Orientation);
             _userMaxSize = Size.New (int.MaxValue, int.MaxValue, Orientation);
             _expand = Expand.New (Orientation);
@@ -115,8 +116,9 @@ namespace Boxing
             }
         }
 
-        public Align AlignMain = Align.Start;
-        public Align AlignCross = Align.Start;
+        public AlignMain AlignMain = AlignMain.Start;
+        public AlignCross AlignCross = AlignCross.Start;
+        public LineAlignCross LineAlignCross = LineAlignCross.Start;
         public SelfAlignCross SelfAlignCross = SelfAlignCross.Inherit;
 
         private Size _userMinSize;
@@ -150,6 +152,7 @@ namespace Boxing
         public Point LayoutPosition;
         public Size LayoutSize;
         public Size ActualSize;
+        public BoxComputed Computed;
 
         public List<Line> Lines;
         
@@ -208,7 +211,5 @@ namespace Boxing
                 MinIsValid = false;
             }
         }
-
-        public BoxComputed Computed = new BoxComputed ();
     }
 }

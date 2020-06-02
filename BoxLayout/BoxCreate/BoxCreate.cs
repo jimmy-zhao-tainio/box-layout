@@ -30,6 +30,8 @@ namespace Boxing
             public string AlignMain = "start";
             [XmlAttribute ("align-cross")]
             public string AlignCross = "start";
+            [XmlAttribute ("line-align-cross")]
+            public string LineAlignCross = "start";
 
             [XmlElement ("BoxGlue")]
             public List<BoxGlue> Children = new List<BoxGlue> ();
@@ -66,8 +68,9 @@ namespace Boxing
                 if (ExpandCross != null)
                     box.Expand.Cross = ExpandCross.ToLower() == "true" ? true : false;
 
-                box.AlignMain = (Align)Enum.Parse (typeof (Align), AlignMain, true);
-                box.AlignCross = (Align)Enum.Parse (typeof (Align), AlignCross, true);
+                box.AlignMain = (AlignMain)Enum.Parse (typeof (AlignMain), AlignMain, true);
+                box.AlignCross = (AlignCross)Enum.Parse (typeof (AlignCross), AlignCross, true);
+                box.LineAlignCross = (LineAlignCross)Enum.Parse (typeof (LineAlignCross), LineAlignCross, true);
 
                 for (int i = 0; i < Children.Count; i++)
                     box.Pack (Children[i].ToBox ());

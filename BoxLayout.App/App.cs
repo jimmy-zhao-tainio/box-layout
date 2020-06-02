@@ -31,6 +31,8 @@ namespace WindowsFormsApp1
             { "AlignCrossCenter", new Boxes.AlignCrossCenter() },
             { "ExpandMinMaxWrap", new Boxes.ExpandMinMaxWrap() },
             { "ExpandMinMaxWrapCrossAlign", new Boxes.ExpandMinMaxWrapCrossAlign() },
+            { "ExpandMinMaxWrapCrossAlignEnd", new Boxes.ExpandMinMaxWrapCrossAlignEnd() },
+            { "ExpandMinMaxWrapCrossAlignEndCenter", new Boxes.ExpandMinMaxWrapCrossAlignEndCenter() },
             { "NoExpandMinMaxWrap", new Boxes.NoExoandMinMaxWrap() },
             { "ExpandCenterHorizontal", new Boxes.ExpandCenterHorizontal() },
             { "ExpandCenterVertical", new Boxes.ExpandCenterVertical() },

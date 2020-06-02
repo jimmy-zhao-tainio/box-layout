@@ -74,7 +74,7 @@
     <Compile Include="Compute.cs" />
     <Compile Include="Structures\Align.cs" />
     <Compile Include="Positioning.cs" />
-    <Compile Include="Spacing.cs" />
+    <Compile Include="Utils\Spacing.cs" />
     <Compile Include="Structures\Orientation.cs" />
     <Compile Include="Structures\Point.cs" />
     <Compile Include="Structures\Expand.cs" />

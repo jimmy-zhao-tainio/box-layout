@@ -8,13 +8,13 @@ namespace Boxing
     {
         static public void Run (Box top, int width, int height)
         {
-            SetLines (top, width, height);
-            LayoutLinePositions (top);
-            LayoutAlignMain (top);
-            LayoutAlignCross (top);
+            LayoutLines (top, width, height);
+            SetLinePositions (top);
+            SetAlignMain (top);
+            SetAlignCross (top);
         }
 
-        static private void SetLines (Box box, int width, int height)
+        static private void LayoutLines (Box box, int width, int height)
         {
             Size actualSize = Size.New (0, 0, box.Orientation);
 
@@ -26,7 +26,31 @@ namespace Boxing
             if (box.Children.Count > 0)
             {
                 Size size = Size.New (width, height, box.Orientation);
-                actualSize = LayoutPass (box, size);
+
+                if (box.Wrap)
+                    box.Lines = Wrapping.GetLines (box.Orientation, box.Children, size.Main);
+                else
+                    box.Lines = Wrapping.GetLine (box.Orientation, box.Children);
+
+                // Find minimum cross length for each line.
+                Size min = Size.New (box.Orientation);
+                min.Main = size.Main;
+
+                box.Lines.ForEach (line => {
+                    // Can't be smaller than line.MinSize though.
+                    min.Cross = line.MinSize.Cross;
+                    line.ProbedUsedSize = LayoutLine (line, min);
+                });
+
+                Wrapping.SetLinesFinalSize (box.Lines, size);
+
+                box.Lines.ForEach (line => {
+                    // Layout with final cross lengths.
+                    Size used = LayoutLine (line, line.FinalSize);
+
+                    actualSize.Main = Math.Max (actualSize.Main, used.Main);
+                    actualSize.Cross += used.Cross;
+                });
             }
             box.LayoutSize.Width = width;
             box.LayoutSize.Height = height;
@@ -35,45 +59,13 @@ namespace Boxing
             box.ActualSize.Cross = Math.Max (actualSize.Cross, box.UserMinSize.Cross);
         }
 
-        static private Size LayoutPass (Box box, Size layoutSize)
-        {
-            if (box.Wrap)
-                box.Lines = Wrapping.GetLines (box.Orientation, box.Children, layoutSize.Main);
-            else
-                box.Lines = Wrapping.GetLine (box.Orientation, box.Children);
-
-            // Find minimum cross length for each line.
-            Size min = Size.New (box.Orientation);
-            min.Main = layoutSize.Main;
-
-            box.Lines.ForEach (line => {
-                // Can't be smaller than line.MinSize though.
-                min.Cross = line.MinSize.Cross;
-                line.ProbedUsedSize = LayoutLine (line, min);
-            });
-
-            Wrapping.SetLinesFinalSize (box.Lines, layoutSize);
-            
-            Size total = Size.New (box.Orientation);
-
-            box.Lines.ForEach (line => {
-                // Layout with final cross lengths.
-                Size used = LayoutLine (line, line.FinalSize);
-
-                total.Main = Math.Max (total.Main, used.Main);
-                total.Cross += used.Cross;
-            });
-
-            return total;
-        }
-
         static protected Size LayoutLine (Line line, Size lineSize)
         {
             Point offset = Point.New (line.Orientation);
             Size usedTotal = Size.New (line.Orientation);
             Size size = Size.New (line.Orientation);
 
-            Compute.MainLengths (line.Orientation, line.Children, lineSize.Main);
+            Compute.SetMainLengths (line.Orientation, line.Children, lineSize.Main);
 
             for (int i = 0; i < line.Children.Count; i++)
             {
@@ -82,7 +74,7 @@ namespace Boxing
                 size.Main = child.Computed.MainLength;
                 size.Cross = Math.Max (lineSize.Cross, line.MinSize.Cross);
 
-                SetLines (child, size.Width, size.Height);
+                LayoutLines (child, size.Width, size.Height);
 
                 // Cross size is largest minimum for all children on this line, but it shouldn't be used unless cross expand is true.
                 if (child.Expand.GetCross (line.Orientation) == false &&
@@ -90,7 +82,7 @@ namespace Boxing
                 {
                     size.Main = child.Computed.MainLength;
                     size.Cross = child.ActualSize.GetCross (line.Orientation);
-                    SetLines(child, size.Width, size.Height);
+                    LayoutLines(child, size.Width, size.Height);
                 }
 
                 if (child.ActualSize.GetMain (line.Orientation) > child.LayoutSize.GetMain (line.Orientation))
@@ -107,56 +99,49 @@ namespace Boxing
             return usedTotal;
         }
 
-        static private void LayoutLinePositions (Box box)
+        static private void SetLinePositions (Box box)
         {
-            int crossPosition = 0;
+            if (box.Lines == null)
+                return;
+            Positioning.LineAlignCross (box);
 
+            foreach (Box child in box.Children)
+            {
+                if (child.Lines == null)
+                    continue;
+                SetLinePositions (child);
+            }
+
+        }
+
+        static private void SetAlignMain (Box box)
+        {
             if (box.Lines == null)
                 return;
             foreach (Line line in box.Lines)
             {
-                line.FinalPosition = Point.New (box.Orientation);
-                line.FinalPosition.Main = 0;
-                line.FinalPosition.Cross = crossPosition;
-                crossPosition += line.FinalSize.Cross;
-
+                Positioning.AlignMain (box, line);
                 foreach (Box child in line.Children)
                 {
                     if (child.Lines == null)
                         continue;
-                    LayoutLinePositions(child);
+                    SetAlignMain (child);
                 }
             }
         }
 
-        static private void LayoutAlignMain (Box box)
+        static private void SetAlignCross (Box box)
         {
             if (box.Lines == null)
                 return;
             foreach (Line line in box.Lines)
             {
-                Position.AlignMain (box, line);
+                Positioning.AlignCross (box, line);
                 foreach (Box child in line.Children)
                 {
                     if (child.Lines == null)
                         continue;
-                    LayoutAlignMain (child);
-                }
-            }
-        }
-
-        static private void LayoutAlignCross (Box box)
-        {
-            if (box.Lines == null)
-                return;
-            foreach (Line line in box.Lines)
-            {
-                Position.AlignCross (box, line);
-                foreach (Box child in line.Children)
-                {
-                    if (child.Lines == null)
-                        continue;
-                    LayoutAlignCross (child);
+                    SetAlignCross (child);
                 }
             }
         }

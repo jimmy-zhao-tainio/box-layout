@@ -25,7 +25,7 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Compute.MainLengths(Orientation.Horizontal, list, 20);
+            Compute.SetMainLengths(Orientation.Horizontal, list, 20);
 
             Assert.IsTrue (h1.Computed.MainLength == 10);
             Assert.IsTrue (h2.Computed.MainLength == 10);
@@ -45,7 +45,7 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Compute.MainLengths(Orientation.Horizontal, list, 40);
+            Compute.SetMainLengths(Orientation.Horizontal, list, 40);
             
             Assert.IsTrue (h1.Computed.MainLength == 10);
             Assert.IsTrue (h2.Computed.MainLength == 30);
@@ -67,7 +67,7 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Compute.MainLengths(Orientation.Horizontal, list, 21);
+            Compute.SetMainLengths(Orientation.Horizontal, list, 21);
 
             Assert.IsTrue (h1.Computed.MainLength == 10);
             Assert.IsTrue (h2.Computed.MainLength == 11);
@@ -89,7 +89,7 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Compute.MainLengths(Orientation.Horizontal, list, 22);
+            Compute.SetMainLengths(Orientation.Horizontal, list, 22);
 
             Assert.IsTrue (h1.Computed.MainLength == 12);
             Assert.IsTrue (h2.Computed.MainLength == 10);
@@ -114,7 +114,7 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
-            Compute.MainLengths(Orientation.Horizontal, list, 300);
+            Compute.SetMainLengths(Orientation.Horizontal, list, 300);
 
             Assert.IsTrue (h1.Computed.MainLength == 140);
             Assert.IsTrue (h2.Computed.MainLength == 20);
@@ -137,7 +137,7 @@ namespace Unit
             }
             
             for (int i = 0; i < items; i++)
-                Compute.MainLengths(Orientation.Horizontal, list, items * 300);
+                Compute.SetMainLengths(Orientation.Horizontal, list, items * 300);
         }
 
         [TestMethod]
@@ -156,7 +156,7 @@ namespace Unit
             }
             
             for (int i = 0; i < items; i++)
-                Compute.MainLengths(Orientation.Horizontal, list, items * 300);
+                Compute.SetMainLengths(Orientation.Horizontal, list, items * 300);
         }
 
         [TestMethod]
@@ -182,7 +182,7 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
-            Compute.MainLengths(Orientation.Horizontal, list, 160);
+            Compute.SetMainLengths(Orientation.Horizontal, list, 160);
 
             Assert.IsTrue (h1.Computed.MainLength == 20);
             Assert.IsTrue (h2.Computed.MainLength == 60);
