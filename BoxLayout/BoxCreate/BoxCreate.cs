@@ -30,6 +30,8 @@ namespace Boxing
             public string AlignMain = "start";
             [XmlAttribute ("align-cross")]
             public string AlignCross = "start";
+            [XmlAttribute ("self-align-cross")]
+            public string SelfAlignCross = "inherit";
             [XmlAttribute ("line-align-cross")]
             public string LineAlignCross = "start";
 
@@ -71,6 +73,7 @@ namespace Boxing
                 box.AlignMain = (AlignMain)Enum.Parse (typeof (AlignMain), AlignMain, true);
                 box.AlignCross = (AlignCross)Enum.Parse (typeof (AlignCross), AlignCross, true);
                 box.LineAlignCross = (LineAlignCross)Enum.Parse (typeof (LineAlignCross), LineAlignCross, true);
+                box.SelfAlignCross = (SelfAlignCross)Enum.Parse (typeof (SelfAlignCross), SelfAlignCross, true);
 
                 for (int i = 0; i < Children.Count; i++)
                     box.Pack (Children[i].ToBox ());

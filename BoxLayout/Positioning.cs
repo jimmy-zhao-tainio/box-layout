@@ -73,31 +73,24 @@ namespace Boxing
         {
             int crossLength;
 
-            if (parent.AlignCross == Boxing.AlignCross.Start)
+            for (int i = 0; i < line.Children.Count; i++)
             {
-                for (int i = 0; i < line.Children.Count; i++)
-                {
-                    Box child = line.Children[i];
+                Box child = line.Children[i];
 
+                if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == Boxing.AlignCross.Start) ||
+                     child.SelfAlignCross == SelfAlignCross.Start)
+                {
                     child.LayoutPosition.SetCross (parent.Orientation, line.FinalPosition.Cross);
                 }
-            }
-            else if (parent.AlignCross == Boxing.AlignCross.Center)
-            {
-                for (int i = 0; i < line.Children.Count; i++)
+                else if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == Boxing.AlignCross.Center) ||
+                         child.SelfAlignCross == SelfAlignCross.Center)
                 {
-                    Box child = line.Children[i];
-
                     crossLength = child.LayoutSize.GetCross (parent.Orientation);
                     child.LayoutPosition.SetCross (parent.Orientation, line.FinalPosition.Cross + ((line.FinalSize.Cross - crossLength) / 2));
                 }
-            }
-            else if (parent.AlignCross == Boxing.AlignCross.End)
-            {
-                for (int i = 0; i < line.Children.Count; i++)
+                else if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == Boxing.AlignCross.End) ||
+                         child.SelfAlignCross == SelfAlignCross.End)
                 {
-                    Box child = line.Children[i];
-
                     crossLength = child.LayoutSize.GetCross (parent.Orientation);
                     child.LayoutPosition.SetCross (parent.Orientation, line.FinalPosition.Cross + (line.FinalSize.Cross - crossLength));
                 }

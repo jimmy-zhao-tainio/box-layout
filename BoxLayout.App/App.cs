@@ -30,6 +30,7 @@ namespace WindowsFormsApp1
             { "AlignMainSpaceAround", new Boxes.AlignMainSpaceAround() },
             { "AlignCrossCenter", new Boxes.AlignCrossCenter() },
             { "ExpandMinMaxWrap", new Boxes.ExpandMinMaxWrap() },
+            { "ExpandMinMaxWrapSelfCrossAlign", new Boxes.ExpandMinMaxWrapSelfCrossAlign() },
             { "ExpandMinMaxWrapCrossAlign", new Boxes.ExpandMinMaxWrapCrossAlign() },
             { "ExpandMinMaxWrapCrossAlignEnd", new Boxes.ExpandMinMaxWrapCrossAlignEnd() },
             { "ExpandMinMaxWrapCrossAlignEndCenter", new Boxes.ExpandMinMaxWrapCrossAlignEndCenter() },

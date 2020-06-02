@@ -104,14 +104,12 @@ namespace Boxing
             if (box.Lines == null)
                 return;
             Positioning.LineAlignCross (box);
-
             foreach (Box child in box.Children)
             {
                 if (child.Lines == null)
                     continue;
                 SetLinePositions (child);
             }
-
         }
 
         static private void SetAlignMain (Box box)
