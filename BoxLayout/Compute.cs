@@ -65,5 +65,56 @@ namespace Boxing
                 }
             }
         }
+
+        static public void SetLinesSize (List<Line> lines, Size layoutSize)
+        {
+            lines.ForEach (line => {
+                // For lines that cannot expand cross wise, use the probed cross size.
+                if (line.Expand.Cross == false)
+                {
+                    line.FinalSize = Size.New (line.Orientation);
+                    line.FinalSize.Main = layoutSize.Main;
+                    line.FinalSize.Cross = line.ProbedUsedSize.Cross;
+                }
+            });
+
+            // Find lines that can expand cross wise.
+            List<Line> expandingLines = lines.Where (line => line.Expand.Cross).ToList ();
+
+            while (expandingLines.Count != 0)
+            {
+                // Find minimum cross lengths for expanding lines.
+                int expandingMinCross = expandingLines.Sum (e => e.ProbedUsedSize.Cross);
+                // Calculate available cross length.
+                int availableCross = layoutSize.Cross - lines.Sum (e => e.FinalSize == null ? 0 : e.FinalSize.Cross);
+
+                Spacing spacing = Spacing.New (expandingLines.Count, expandingMinCross, availableCross);
+
+                // Set spacing
+                expandingLines.ForEach (line => {
+                    line.FinalSize = Size.New (line.Orientation);
+                    line.FinalSize.Main = layoutSize.Main;
+                    line.FinalSize.Cross = line.ProbedUsedSize.Cross + spacing.Next ();
+                });
+
+                // Find lines that hits UserMaxSize and expanded too much.
+                List<Line> hitUserMax = expandingLines.Where (line => line.FinalSize.Cross >= line.UserMaxSize.Cross).ToList ();
+
+                if (hitUserMax.Count > 0)
+                {
+                    // Correct the finalCross length for lines.
+                    hitUserMax.ForEach (line => line.FinalSize.Cross = line.UserMaxSize.Cross);
+                    // Remove them from the expandingLines list and re-run the loop if necessary.
+                    expandingLines = expandingLines.Except (hitUserMax).ToList ();
+                    // Reset expandingLines final cross length.
+                    expandingLines.ForEach (line => line.FinalSize = null);
+                }
+                else
+                {
+                    // If no line hit UserMax, then they've expanded as much as possible and we're done.
+                    expandingLines.Clear ();
+                }
+            }
+        }
     }
 }

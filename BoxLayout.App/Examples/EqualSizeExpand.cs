@@ -13,24 +13,11 @@ namespace Boxes
         public Box GetTop ()
         {
             Box top = BoxCreate.FromXml (@"
-                <vbox>
-                    <hbox expand=""true"">
-                        <vbox expand=""true"">
-                            <hbox min-size=""400, 400"" />
-                        </vbox>
-                        <vbox expand=""true"">
-                            <hbox min-size=""200, 400"" />
-                        </vbox>
-                    </hbox>
-                    <hbox expand=""true"" equal-size=""true"">
-                        <vbox expand=""true"">
-                            <hbox min-size=""400, 400"" />
-                        </vbox>
-                        <vbox expand=""true"">
-                            <hbox min-size=""200, 400"" />
-                        </vbox>
-                    </hbox>
-                </vbox>
+                <hbox equal-size=""true"">
+                    <hbox min-size=""200, 400"" />
+                    <hbox min-size=""300, 300"" />
+                    <hbox min-size=""400, 200"" />
+                </hbox>
             ");
             brushes.Clear ();
             CreateBrushForBox (top);

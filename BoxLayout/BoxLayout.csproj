@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Layout.cs" />
+    <Compile Include="Structures\EqualSize.cs" />
     <Compile Include="Structures\Line.cs" />
     <Compile Include="Structures\BoxComputed.cs" />
     <Compile Include="Structures\Box.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Structures\Point.cs" />
     <Compile Include="Structures\Expand.cs" />
     <Compile Include="Structures\Size.cs" />
-    <Compile Include="Wrapping.cs" />
+    <Compile Include="Lines.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

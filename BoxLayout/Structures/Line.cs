@@ -48,6 +48,13 @@ namespace Boxing
             return true;
         }
 
+        public bool CanAdd (int mainLength)
+        {
+            if (MinSize.Main + mainLength > MaxLength)
+                return false;
+            return true;
+        }
+
         public void Add (Box box)
         {
             Children.Add (box);

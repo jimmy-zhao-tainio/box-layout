@@ -116,6 +116,11 @@ namespace Boxing
             }
         }
 
+        public bool EqualSizeMain = false;
+        public bool EqualSizeCross = false;
+        public SelfEqualSize SelfEqualSizeMain = SelfEqualSize.Inherit;
+        public SelfEqualSize SelfEqualSizeCross = SelfEqualSize.Inherit;
+
         public AlignMain AlignMain = AlignMain.Start;
         public AlignCross AlignCross = AlignCross.Start;
         public LineAlignCross LineAlignCross = LineAlignCross.Start;

@@ -26,11 +26,12 @@ namespace Boxing
             if (box.Children.Count > 0)
             {
                 Size size = Size.New (width, height, box.Orientation);
+                Lines lines = new Lines ();
 
                 if (box.Wrap)
-                    box.Lines = Wrapping.GetLines (box.Orientation, box.Children, size.Main);
+                    box.Lines = lines.GetLines (box.Orientation, box.EqualSizeMain, box.Children, size.Main);
                 else
-                    box.Lines = Wrapping.GetLine (box.Orientation, box.Children);
+                    box.Lines = lines.GetLine (box.Orientation, box.Children);
 
                 // Find minimum cross length for each line.
                 Size min = Size.New (box.Orientation);
@@ -42,7 +43,7 @@ namespace Boxing
                     line.ProbedUsedSize = LayoutLine (line, min);
                 });
 
-                Wrapping.SetLinesFinalSize (box.Lines, size);
+                Compute.SetLinesSize (box.Lines, size);
 
                 box.Lines.ForEach (line => {
                     // Layout with final cross lengths.
