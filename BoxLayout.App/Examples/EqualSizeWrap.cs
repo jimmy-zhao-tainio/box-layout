@@ -8,15 +8,17 @@ using Boxing;
 
 namespace Boxes
 {
-    public class EqualSizeExpand : Example, IExample
+    public class EqualSizeWrap : Example, IExample
     {
         public Box GetTop ()
         {
             Box top = BoxCreate.FromXml (@"
-                <hbox equal-size=""true"">
-                    <hbox min-size=""200, 400"" />
-                    <hbox min-size=""300, 300"" />
-                    <hbox min-size=""400, 200"" />
+                <hbox wrap=""true"" equal-size-main=""true"">
+                    <hbox min-size=""200, 50"" />
+                    <hbox min-size=""10, 50"" />
+                    <hbox min-size=""10, 50"" />
+                    <hbox min-size=""10, 50"" />
+                    <hbox min-size=""10, 50"" />
                 </hbox>
             ");
             brushes.Clear ();

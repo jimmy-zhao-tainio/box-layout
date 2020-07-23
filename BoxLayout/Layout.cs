@@ -29,7 +29,7 @@ namespace Boxing
                 Lines lines = new Lines ();
 
                 if (box.Wrap)
-                    box.Lines = lines.GetLines (box.Orientation, box.EqualSizeMain, box.Children, size.Main);
+                    box.Lines = lines.GetLines (box, box.Children, size.Main);
                 else
                     box.Lines = lines.GetLine (box.Orientation, box.Children);
 

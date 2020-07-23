@@ -55,11 +55,11 @@ namespace Boxing
             return true;
         }
 
-        public void Add (Box box)
+        public void Add (Box box, int? equalSizeMain = null)
         {
             Children.Add (box);
 
-            MinSize.Main += box.Min.GetMain (Orientation);
+            MinSize.Main += equalSizeMain == null ? box.Min.GetMain (Orientation) : equalSizeMain.Value;
             MinSize.Cross = Math.Max (MinSize.Cross, box.Min.GetCross (Orientation));
 
             Expand.Main = Expand.Main || box.Expand.GetMain (Orientation);

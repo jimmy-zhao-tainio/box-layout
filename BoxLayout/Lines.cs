@@ -7,48 +7,70 @@ namespace Boxing
 {
     public class Lines
     {
-        public int EqualSizeMain = 0;
-        public int SelfEqualSizeMain = 0;
+        public int EqualSizeMainMax = 0;
+        public int SelfEqualSizeMainMax = 0;
 
-        public List<Line> GetLines (Orientation orientation, bool equalSizeMain, List<Box> children, int maxLength)
+        public List<Line> GetLines (Box parent, List<Box> children, int maxLength)
         {
             List<Line> lines = new List<Line> ();
             int index = 0;
 
-            if (equalSizeMain)
-            {
-                EqualSizeMain = children.Where (b => b.SelfEqualSizeMain == SelfEqualSize.Inherit ||
-                                                     b.SelfEqualSizeMain == SelfEqualSize.True)
-                                        .Max (b => b.Min.GetMain (orientation));
-            }
+            if (parent.EqualSizeMain)
+                EqualSizeMainMax = children.Max (b => b.SelfEqualSizeMain != SelfEqualSize.False ? b.Min.GetMain (parent.Orientation) : 0);
             else
-            {
-                SelfEqualSizeMain = children.Where (b => b.SelfEqualSizeMain == SelfEqualSize.True)
-                                            .Max (b => b.Min.GetMain (orientation));
-            }
+                SelfEqualSizeMainMax = children.Max (b => b.SelfEqualSizeMain == SelfEqualSize.True ? b.Min.GetMain (parent.Orientation) : 0);
 
             while (index < children.Count)
             {
-                Line line = new Line (orientation, maxLength);
+                Line line = new Line (parent.Orientation, maxLength);
                 lines.Add (line);
                 while (true)
                 {
-                    line.Add (children[index]);
+                    if (parent.EqualSizeMain)
+                    {
+                        if (children[index].SelfEqualSizeMain != SelfEqualSize.False)
+                            line.Add (children[index], EqualSizeMainMax);
+                        else
+                            line.Add (children[index]);
+                    }
+                    else
+                    {
+                        if (children[index].SelfEqualSizeMain == SelfEqualSize.True)
+                            line.Add (children[index], SelfEqualSizeMainMax);
+                        else
+                            line.Add (children[index]);
+                    }
+
                     index++;
 
                     if (index >= children.Count)
                         break;
-                    if (equalSizeMain)
+                    if (parent.EqualSizeMain)
                     {
-                        if (children[index].SelfEqualSizeMain == SelfEqualSize.Inherit ||
-                            children[index].SelfEqualSizeMain == SelfEqualSize.True)
+                        if (children[index].SelfEqualSizeMain != SelfEqualSize.False)
                         {
-                            if (line.CanAdd (EqualSizeMain) == false)
-                                continue;
+                            if (line.CanAdd (EqualSizeMainMax) == false)
+                                break;
+                        }
+                        else
+                        {
+                            if (line.CanAdd (children[index]) == false)
+                                break;
                         }
                     }
-                    if (line.CanAdd (children[index]) == false)
-                        break;
+                    else
+                    {
+                        if (children[index].SelfEqualSizeMain == SelfEqualSize.True)
+                        {
+                            if (line.CanAdd (EqualSizeMainMax) == false)
+                                break;
+                        }
+                        else
+                        {
+                            if (line.CanAdd (children[index]) == false)
+                                break;
+                        }
+                    }
                 }
             }
             return lines;
