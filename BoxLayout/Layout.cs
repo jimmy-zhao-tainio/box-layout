@@ -6,12 +6,53 @@ namespace Boxing
 {
     public class Layout
     {
-        static public void Run (Box top, int width, int height)
+        static public void Process(Box top, int width, int height)
         {
+            SetMinSizes (top);
             LayoutLines (top, width, height);
             SetLinePositions (top);
             SetAlignMain (top);
             SetAlignCross (top);
+        }
+
+        static private void SetMinSizes (Box box)
+        {
+            foreach (Box child in box.Children)
+                SetMinSizes (child);
+            box.ChildrenMin = GetChildrenMin (box);
+            box.Min = GetMin (box);
+        }
+
+        static private Size GetChildrenMin (Box box)
+        {
+            Size size = Size.New (box.Orientation);
+
+            foreach (Box child in box.Children)
+            {
+                if (size.Main < box.UserMaxSize.Main)
+                {
+                    if (box.Wrap == false)
+                        size.Main += child.Min.GetMain (box.Orientation);
+                    else
+                        size.Main = Math.Max (size.Main, child.Min.GetMain (box.Orientation));
+                }
+                if (size.Cross < box.UserMaxSize.Cross)
+                {
+                    size.Cross = Math.Max (size.Cross, child.Min.GetCross (box.Orientation));
+                }
+            }
+            return size;
+        }
+
+        static private Size GetMin (Box box)
+        {
+            Size size = Size.New (box.ChildrenMin.Width, box.ChildrenMin.Height, box.Orientation);
+
+            size.Main = Math.Max (size.Main, box.UserMinSize.Main);
+            size.Cross = Math.Max (size.Cross, box.UserMinSize.Cross);
+            size.Main = Math.Min (size.Main, box.UserMaxSize.Main);
+            size.Cross = Math.Min (size.Cross, box.UserMaxSize.Cross);
+            return size;
         }
 
         static private void LayoutLines (Box box, int width, int height)
@@ -20,12 +61,12 @@ namespace Boxing
 
             // Make sure layout size has been limited to UserMaxSize by the caller.
             // If it hasn't then it's an error by the caller and we'll limit ourselves.
-            width = Math.Min (width, box.UserMaxSize.Width);
-            height = Math.Min (height, box.UserMaxSize.Height);
+            box.LayoutSize.Width = Math.Min (width, box.UserMaxSize.Width);
+            box.LayoutSize.Height = Math.Min (height, box.UserMaxSize.Height);
 
             if (box.Children.Count > 0)
             {
-                Size size = Size.New (width, height, box.Orientation);
+                Size size = Size.New (box.LayoutSize.Width, box.LayoutSize.Height, box.Orientation);
                 Lines lines = new Lines ();
 
                 if (box.Wrap)
@@ -43,6 +84,10 @@ namespace Boxing
                     line.ProbedUsedSize = LayoutLine (line, min);
                 });
 
+                // if Wrap && SUM(box.Lines.ProbedUsedSize.Cross) > box.LayoutSize.Cross
+                // then set ScrollbarSizeCross = 10 and reset box.Lines with size.Main - ScrollbarCross
+                // Reprobe used size.
+
                 Compute.SetLinesSize (box.Lines, size);
 
                 box.Lines.ForEach (line => {
@@ -53,8 +98,6 @@ namespace Boxing
                     actualSize.Cross += used.Cross;
                 });
             }
-            box.LayoutSize.Width = width;
-            box.LayoutSize.Height = height;
             // Make sure actual size isn't smaller than UserMinSize.
             box.ActualSize.Main = Math.Max (actualSize.Main, box.UserMinSize.Main);
             box.ActualSize.Cross = Math.Max (actualSize.Cross, box.UserMinSize.Cross);

@@ -22,7 +22,7 @@ namespace Unit
             ");
             Box v1 = top.Children[0];
             Box v2 = top.Children[1];
-            Layout.Run (top, 100, 10);
+            Layout.Process (top, 100, 10);
             Assert.IsTrue (v1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (v1.LayoutSize.Equals (10, 10));
             Assert.IsTrue (v2.LayoutPosition.Equals (10, 0));
@@ -40,7 +40,7 @@ namespace Unit
             ");
             Box v1 = top.Children[0];
             Box v2 = top.Children[1];
-            Layout.Run (top, 100, 10);
+            Layout.Process (top, 100, 10);
             Assert.IsTrue (v1.LayoutPosition.Equals (40, 0));
             Assert.IsTrue (v1.LayoutSize.Equals (10, 10));
             Assert.IsTrue (v2.LayoutPosition.Equals (50, 0));
@@ -58,7 +58,7 @@ namespace Unit
             ");
             Box v1 = top.Children[0];
             Box v2 = top.Children[1];
-            Layout.Run (top, 100, 10);
+            Layout.Process (top, 100, 10);
             Assert.IsTrue (v1.LayoutPosition.Equals (80, 0));
             Assert.IsTrue (v1.LayoutSize.Equals (10, 10));
             Assert.IsTrue (v2.LayoutPosition.Equals (90, 0));

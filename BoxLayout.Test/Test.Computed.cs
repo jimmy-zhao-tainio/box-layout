@@ -17,14 +17,18 @@ namespace Unit
             Box h1;
             Box h2;
 
-            h1 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
-            h2 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+            h1 = new BoxHorizontal ();
+            h2 = new BoxHorizontal ();
+            h1.UserMaxSize = Size.New (10, 10, Orientation.Horizontal);
+            h2.UserMaxSize = Size.New (10, 10, Orientation.Horizontal);
 
             h1.Expand.Horizontal = true;
             h2.Expand.Horizontal = true;
 
             List<Box> list = new List<Box> () { h1, h2 };
 
+            Layout.Process (h1, 0, 0);
+            Layout.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 20);
 
             Assert.IsTrue (h1.Computed.MainLength == 10);
@@ -37,14 +41,20 @@ namespace Unit
             Box h1;
             Box h2;
 
-            h1 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
-            h2 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+            h1 = new BoxHorizontal ();
+            h2 = new BoxHorizontal ();
+            h1.UserMinSize.Width = 10;
+            h1.UserMinSize.Height = 10;
+            h2.UserMinSize.Width = 10;
+            h2.UserMinSize.Height = 10;
 
             h1.Expand.Horizontal = false;
             h2.Expand.Horizontal = true;
 
             List<Box> list = new List<Box> () { h1, h2 };
 
+            Layout.Process (h1, 0, 0);
+            Layout.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 40);
             
             Assert.IsTrue (h1.Computed.MainLength == 10);
@@ -57,16 +67,22 @@ namespace Unit
             Box h1;
             Box h2;
 
-            h1 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
-            h2 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+            h1 = new BoxHorizontal ();
+            h2 = new BoxHorizontal ();
+            h1.UserMinSize.Width = 10;
+            h1.UserMinSize.Height = 10;
+            h2.UserMinSize.Width = 10;
+            h2.UserMinSize.Height = 10;
 
             h1.Expand.Horizontal = true;
             h2.Expand.Horizontal = true;
 
-            h1.UserMaxSize.Main = 10;
+            h1.UserMaxSize.Width = 10;
 
             List<Box> list = new List<Box> () { h1, h2 };
 
+            Layout.Process (h1, 0, 0);
+            Layout.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 21);
 
             Assert.IsTrue (h1.Computed.MainLength == 10);
@@ -79,8 +95,10 @@ namespace Unit
             Box h1;
             Box h2;
 
-            h1 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
-            h2 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+            h1 = new BoxHorizontal ();
+            h2 = new BoxHorizontal ();
+            h1.UserMinSize = Size.New (10, 10, Orientation.Horizontal);
+            h2.UserMinSize = Size.New (10, 10, Orientation.Horizontal);
 
             h1.Expand.Horizontal = true;
             h2.Expand.Horizontal = true;
@@ -89,6 +107,8 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
+            Layout.Process (h1, 0, 0);
+            Layout.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 22);
 
             Assert.IsTrue (h1.Computed.MainLength == 12);
@@ -102,9 +122,12 @@ namespace Unit
             Box h2;
             Box h3;
 
-            h1 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
-            h2 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
-            h3 = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+            h1 = new BoxHorizontal ();
+            h2 = new BoxHorizontal ();
+            h3 = new BoxHorizontal ();
+            h1.UserMinSize = Size.New (10, 10, Orientation.Horizontal);
+            h2.UserMinSize = Size.New (10, 10, Orientation.Horizontal);
+            h3.UserMinSize = Size.New (10, 10, Orientation.Horizontal);
 
             h1.Expand.Horizontal = true;
             h2.Expand.Horizontal = true;
@@ -114,6 +137,9 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
+            Layout.Process (h1, 0, 0);
+            Layout.Process (h2, 0, 0);
+            Layout.Process (h3, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 300);
 
             Assert.IsTrue (h1.Computed.MainLength == 140);
@@ -129,15 +155,18 @@ namespace Unit
 
             for (int i = 0; i < items; i++)
             {
-                Box box = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+                Box box = new BoxHorizontal ();
+                box.UserMaxSize = Size.New (10, 10, Orientation.Horizontal);
                 box.Expand.Horizontal = true;
                 if (i % 3 == 0)
                     box.UserMaxSize.Main = 20;
                 list.Add (box);
             }
-            
+
             for (int i = 0; i < items; i++)
-                Compute.SetMainLengths(Orientation.Horizontal, list, items * 300);
+                Layout.Process (list[i], 0, 0);
+            for (int i = 0; i < items; i++)
+                Compute.SetMainLengths (Orientation.Horizontal, list, items * 300);
         }
 
         [TestMethod]
@@ -148,15 +177,18 @@ namespace Unit
 
             for (int i = 0; i < items; i++)
             {
-                Box box = new BoxHorizontal (Size.New (10, 10, Orientation.Horizontal));
+                Box box = new BoxHorizontal ();
+                box.UserMaxSize = Size.New (10, 10, Orientation.Horizontal);
                 box.Expand.Horizontal = true;
                 if (i % 3 == 0)
                     box.UserMaxSize.Main = 20;
                 list.Add (box);
             }
-            
+
             for (int i = 0; i < items; i++)
-                Compute.SetMainLengths(Orientation.Horizontal, list, items * 300);
+                Layout.Process (list[i], 0, 0);
+            for (int i = 0; i < items; i++)
+                Compute.SetMainLengths (Orientation.Horizontal, list, items * 300);
         }
 
         [TestMethod]
@@ -166,9 +198,12 @@ namespace Unit
             Box h2;
             Box h3;
 
-            h1 = new BoxHorizontal (Size.New (10, 1, Orientation.Horizontal));
-            h2 = new BoxHorizontal (Size.New (10, 1, Orientation.Horizontal));
-            h3 = new BoxHorizontal (Size.New (10, 1, Orientation.Horizontal));
+            h1 = new BoxHorizontal ();
+            h2 = new BoxHorizontal ();
+            h3 = new BoxHorizontal ();
+            h1.UserMaxSize = Size.New (10, 1, Orientation.Horizontal);
+            h2.UserMaxSize = Size.New (10, 1, Orientation.Horizontal);
+            h3.UserMaxSize = Size.New (10, 1, Orientation.Horizontal);
 
             h1.Expand.Horizontal = true;
             h2.Expand.Horizontal = true;
@@ -182,6 +217,9 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
+            Layout.Process (h1, 0, 0);
+            Layout.Process (h2, 0, 0);
+            Layout.Process (h3, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 160);
 
             Assert.IsTrue (h1.Computed.MainLength == 20);

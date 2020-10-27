@@ -16,9 +16,10 @@ namespace Unit
         {
             Box top = new BoxHorizontal ();
 
-            top.UserMinSize = new Size (100, 100);
+            top.UserMinSize.Width = 100;
+            top.UserMinSize.Height = 100;
 
-            Layout.Run (top, 200, 200);
+            Layout.Process (top, 200, 200);
 
             Assert.IsTrue (top.LayoutSize.Equals (200, 200));
             Assert.IsTrue (top.ActualSize.Equals (100, 100));
@@ -29,9 +30,10 @@ namespace Unit
         {
             Box top = new BoxHorizontal ();
 
-            top.UserMinSize = new Size (200, 200);
+            top.UserMinSize.Width = 200;
+            top.UserMinSize.Height = 200;
 
-            Layout.Run (top, 100, 100);
+            Layout.Process (top, 100, 100);
 
             Assert.IsTrue (top.LayoutSize.Equals (100, 100));
             Assert.IsTrue (top.ActualSize.Equals (200, 200));

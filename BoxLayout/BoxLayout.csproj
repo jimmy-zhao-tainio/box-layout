@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Layout.cs" />
+    <Compile Include="Structures\Scrollbar.cs" />
     <Compile Include="Structures\EqualSize.cs" />
     <Compile Include="Structures\Line.cs" />
     <Compile Include="Structures\BoxComputed.cs" />

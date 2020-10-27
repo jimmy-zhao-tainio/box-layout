@@ -33,6 +33,28 @@ namespace Boxing
             // Boxes may expand until they reach UserMaxSize and no further.
             // When UserMaxSize is reached, Spacing.New needs to run again since more space will be available for other items.
             // If no box reaches UserMaxSize, a second run will not be necessary.
+            //
+            // For lengths of N, worst case is O(N), for N-1 boxes.
+            //
+            // Examples of iterations, where X denotes overflowing usermax
+            //
+            // Even length = 6
+            //
+            //     Max  i1  i2  i3  i4  i5  i6
+            //     1    .X  .   .   .   .   .
+            //     1    .   .X  .   .   .   .
+            //     1    .   .   .X  .   .   .
+            //     1    .   .   .   .X  .   .
+            //     1    .   .   .   .   .X  .
+            //
+            // Odd length = 5
+            //
+            //     Max  i1  i2  i3  i4  i5
+            //     1    .X  .   .   .   .
+            //     1    .   .X  .   .   .
+            //     1    .   .   .X  .   .
+            //     1    .   .   .   .X  .
+
             bool reachedUserMax = true;
             while (expandCount > 0 && reachedUserMax == true)
             {

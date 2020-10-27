@@ -22,7 +22,7 @@ namespace Unit
             ");
             Box h1 = top.Children[0];
             Box h2 = top.Children[1];
-            Layout.Run (top, 50, 10);
+            Layout.Process (top, 50, 10);
             Assert.IsTrue (h1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (h1.LayoutSize.Equals (20, 10));
             Assert.IsTrue (h2.LayoutPosition.Equals (20, 0));

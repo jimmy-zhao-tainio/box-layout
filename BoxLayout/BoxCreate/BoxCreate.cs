@@ -66,13 +66,11 @@ namespace Boxing
                     box = new BoxVertical ();
                 if (MinSize != null)
                 {
-                    box.UserMinSize = new Size (0, 0);
                     box.UserMinSize.Width = Convert.ToInt32 (MinSize.Split (",".ToCharArray ())[0]);
                     box.UserMinSize.Height = Convert.ToInt32 (MinSize.Split (",".ToCharArray ())[1]);
                 }
                 if (MaxSize != null)
                 {
-                    box.UserMaxSize = new Size (0, 0);
                     box.UserMaxSize.Width = Convert.ToInt32 (MaxSize.Split (",".ToCharArray ())[0]);
                     box.UserMaxSize.Height = Convert.ToInt32 (MaxSize.Split (",".ToCharArray ())[1]);
                 }

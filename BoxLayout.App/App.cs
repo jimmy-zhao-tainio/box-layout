@@ -73,7 +73,7 @@ namespace WindowsFormsApp1
 
         private void Form1_Resize (object sender, EventArgs e)
         {
-            Boxing.Layout.Run (top, this.ClientSize.Width - listBoxWidth, this.ClientSize.Height);
+            Boxing.Layout.Process (top, this.ClientSize.Width - listBoxWidth, this.ClientSize.Height);
             this.Invalidate ();
         }
 

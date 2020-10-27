@@ -18,6 +18,7 @@ namespace Unit
             Box child = new BoxHorizontal ();
 
             top.Pack(child);
+            Layout.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (0, 0));
         }
 
@@ -27,8 +28,10 @@ namespace Unit
             Box top = new BoxHorizontal ();
             Box child = new BoxHorizontal ();
 
-            child.UserMinSize = new Size (7, 11);
+            child.UserMinSize.Width = 7;
+            child.UserMinSize.Height = 11;
             top.Pack(child);
+            Layout.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (7, 11));
         }
 
@@ -39,10 +42,13 @@ namespace Unit
             Box child1 = new BoxVertical ();
             Box child2 = new BoxVertical ();
 
-            child1.UserMinSize = new Size (7, 11);
+            child1.UserMinSize.Width = 7;
+            child1.UserMinSize.Height = 11;
             top.Pack(child1);
-            child2.UserMinSize = new Size (13, 17);
+            child2.UserMinSize.Width = 13;
+            child2.UserMinSize.Height = 17;
             top.Pack(child2);
+            Layout.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (7 + 13, 17));
         }
 
@@ -53,10 +59,13 @@ namespace Unit
             Box child1 = new BoxHorizontal ();
             Box child2 = new BoxHorizontal ();
 
-            child1.UserMinSize = new Size (7, 11);
+            child1.UserMinSize.Width = 7;
+            child1.UserMinSize.Height = 11;
             top.Pack(child1);
-            child2.UserMinSize = new Size (13, 17);
+            child2.UserMinSize.Width = 13;
+            child2.UserMinSize.Height = 17;
             top.Pack(child2);
+            Layout.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (13, 11 + 17));
         }
 
@@ -71,10 +80,14 @@ namespace Unit
             Box h3 = new BoxHorizontal ();
             Box h4 = new BoxHorizontal ();
 
-            h1.UserMinSize = new Size (10, 10);
-            h2.UserMinSize = new Size (30, 30);
-            h3.UserMinSize = new Size (50, 50);
-            h4.UserMinSize = new Size (70, 70);
+            h1.UserMinSize.Width = 10;
+            h1.UserMinSize.Height = 10;
+            h2.UserMinSize.Width = 30;
+            h2.UserMinSize.Height = 30;
+            h3.UserMinSize.Width = 50;
+            h3.UserMinSize.Height = 50;
+            h4.UserMinSize.Width = 70;
+            h4.UserMinSize.Height = 70;
 
             top.Pack(v1);
             top.Pack(v2);
@@ -82,6 +95,7 @@ namespace Unit
             v1.Pack(h2);
             v2.Pack(h3);
             v2.Pack(h4);
+            Layout.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (30 + 70, 50 + 70));
         }
 
@@ -93,6 +107,7 @@ namespace Unit
                     <vbox min-size=""100, 100"" />
                 </hbox>
             ");
+            Layout.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (10, 20));
         }
     }

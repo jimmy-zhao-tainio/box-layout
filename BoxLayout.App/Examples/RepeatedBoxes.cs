@@ -14,7 +14,8 @@ namespace Boxes
         {
             for (int i = 0; i < amount; i++)
             {
-                Box box = new BoxHorizontal (new Boxing.Size (6, 6));
+                Box box = new BoxHorizontal ();
+                box.UserMinSize = Boxing.Size.New (6, 6, Orientation.Horizontal);
                 box.Expand.Main = true;
                 box.Expand.Cross = true;
                 parent.Pack (box);

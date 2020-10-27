@@ -23,7 +23,7 @@ namespace Unit
                 </hbox>
             ");
 
-            Layout.Run (top, 1000, 1000);
+            Layout.Process (top, 1000, 1000);
             Box max = top.Children[0];
 
             Assert.IsTrue (top.LayoutSize.Equals (1000, 1000));
