@@ -78,7 +78,6 @@
     <Compile Include="Examples\Align-Main-End.cs" />
     <Compile Include="Examples\Example.cs" />
     <Compile Include="Examples\Expand-Cross.cs" />
-    <Compile Include="Examples\EqualSizeWrap.cs" />
     <Compile Include="Examples\Expand-MinMaxWrapSelfCrossAlign.cs" />
     <Compile Include="Examples\Expand-MinMaxWrapCrossAlign-End-Center.cs" />
     <Compile Include="Examples\Expand-MinMaxWrapCrossAlign-End.cs" />
@@ -91,6 +90,7 @@
     <Compile Include="Examples\Expand-Center-Horizontal.cs" />
     <Compile Include="Examples\NoExpandMinMaxWrap.cs" />
     <Compile Include="Examples\Expand-MinMaxWrap.cs" />
+    <Compile Include="Examples\ScrollHorizontal-Simple.cs" />
     <Compile Include="Examples\Wrap-MinSizesWithoutExpand.cs" />
     <Compile Include="Examples\Wrap-NoWrap.cs" />
     <Compile Include="Examples\Wrap-MinMaxSizes.cs" />

@@ -39,20 +39,6 @@ namespace Boxing
             [XmlAttribute ("line-align-cross")]
             public string LineAlignCross = "start";
 
-            [XmlAttribute ("equal-size")]
-            public string EqualSize = "false";
-            [XmlAttribute ("equal-size-main")]
-            public string EqualSizeMain = null;
-            [XmlAttribute ("equal-size-cross")]
-            public string EqualSizeCross = null;
-
-            [XmlAttribute ("self-equal-size")]
-            public string SelfEqualSize = "inherit";
-            [XmlAttribute ("self-equal-size-main")]
-            public string SelfEqualSizeMain = null;
-            [XmlAttribute ("self-equal-size-cross")]
-            public string SelfEqualSizeCross = null;
-
             [XmlElement ("BoxGlue")]
             public List<BoxGlue> Children = new List<BoxGlue> ();
 
@@ -85,23 +71,6 @@ namespace Boxing
                     box.Expand.Main = ExpandMain.ToLower () == "true" ? true : false;
                 if (ExpandCross != null)
                     box.Expand.Cross = ExpandCross.ToLower() == "true" ? true : false;
-
-                if (EqualSize.ToLower () == "true")
-                {
-                    box.EqualSizeMain = true;
-                    box.EqualSizeCross = true;
-                }
-                if (EqualSizeMain != null)
-                    box.EqualSizeMain = EqualSizeMain.ToLower () == "true" ? true : false;
-                if (EqualSizeCross != null)
-                    box.EqualSizeCross = EqualSizeCross.ToLower() == "true" ? true : false;
-
-                box.SelfEqualSizeMain = (SelfEqualSize)Enum.Parse (typeof (SelfEqualSize), SelfEqualSize, true);
-                box.SelfEqualSizeCross = (SelfEqualSize)Enum.Parse (typeof (SelfEqualSize), SelfEqualSize, true);
-                if (SelfEqualSizeMain != null)
-                    box.SelfEqualSizeMain = (SelfEqualSize)Enum.Parse (typeof (SelfEqualSize), SelfEqualSizeMain, true);
-                if (SelfEqualSizeCross != null)
-                    box.SelfEqualSizeCross = (SelfEqualSize)Enum.Parse (typeof (SelfEqualSize), SelfEqualSizeCross, true);
 
                 box.AlignMain = (AlignMain)Enum.Parse (typeof (AlignMain), AlignMain, true);
                 box.AlignCross = (AlignCross)Enum.Parse (typeof (AlignCross), AlignCross, true);

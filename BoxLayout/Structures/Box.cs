@@ -31,11 +31,6 @@ namespace Boxing
         public bool Wrap = false;
         public Expand Expand;
 
-        public bool EqualSizeMain = false;
-        public bool EqualSizeCross = false;
-        public SelfEqualSize SelfEqualSizeMain = SelfEqualSize.Inherit;
-        public SelfEqualSize SelfEqualSizeCross = SelfEqualSize.Inherit;
-
         public AlignMain AlignMain = AlignMain.Start;
         public AlignCross AlignCross = AlignCross.Start;
         public LineAlignCross LineAlignCross = LineAlignCross.Start;
@@ -49,12 +44,8 @@ namespace Boxing
         public Size ActualSize;
         public BoxComputed Computed;
 
-        public Scrollbar ScrollbarHorizontal = Scrollbar.Auto;
-        public Scrollbar ScrollbarVertical = Scrollbar.Auto;
-        public Point ScrollbarHorizontalPosition;
-        public Size ScrollbarHorizontalSize;
-        public Point ScrollbarVerticalPosition;
-        public Size ScrollbarVerticalSize;
+        public HScrollbar HorizontalScrollbar;
+        public VScrollbar VerticalScrollbar;
 
         public List<Line> Lines;
 
@@ -68,6 +59,8 @@ namespace Boxing
             UserMinSize = Size.New (0, 0, Orientation);
             UserMaxSize = Size.New (int.MaxValue, int.MaxValue, Orientation);
             Expand = Expand.New (Orientation);
+            HorizontalScrollbar = new HScrollbar(ScrollbarMode.Auto);
+            VerticalScrollbar = new VScrollbar(ScrollbarMode.Auto);
         }
 
         public void Pack (Box child)

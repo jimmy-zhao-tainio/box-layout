@@ -8,54 +8,112 @@ namespace Boxing
     {
         static public void Process(Box top, int width, int height)
         {
-            SetMinSizes (top);
-            LayoutLines (top, width, height);
+            SetMinMainCrossSizes (top);
+            LayoutScrolling (top, width, height);
             SetLinePositions (top);
             SetAlignMain (top);
             SetAlignCross (top);
         }
 
-        static private void SetMinSizes (Box box)
+        static private void SetMinMainCrossSizes (Box box)
         {
+            // Find minimum recursive main and cross lengths. 
             foreach (Box child in box.Children)
-                SetMinSizes (child);
-            box.ChildrenMin = GetChildrenMin (box);
-            box.Min = GetMin (box);
-        }
+                SetMinMainCrossSizes (child);
 
-        static private Size GetChildrenMin (Box box)
-        {
-            Size size = Size.New (box.Orientation);
-
+            box.ChildrenMin = Size.New (box.Orientation);
             foreach (Box child in box.Children)
             {
-                if (size.Main < box.UserMaxSize.Main)
+                // Catch anything that sticks out in either direction.
+                if (box.ChildrenMin.Main < box.UserMaxSize.Main)
                 {
                     if (box.Wrap == false)
-                        size.Main += child.Min.GetMain (box.Orientation);
+                        box.ChildrenMin.Main += child.Min.GetMain (box.Orientation);
                     else
-                        size.Main = Math.Max (size.Main, child.Min.GetMain (box.Orientation));
+                        box.ChildrenMin.Main = Math.Max (box.ChildrenMin.Main, child.Min.GetMain (box.Orientation));
                 }
-                if (size.Cross < box.UserMaxSize.Cross)
+                if (box.ChildrenMin.Cross < box.UserMaxSize.Cross)
                 {
-                    size.Cross = Math.Max (size.Cross, child.Min.GetCross (box.Orientation));
+                    box.ChildrenMin.Cross = Math.Max (box.ChildrenMin.Cross, child.Min.GetCross (box.Orientation));
                 }
             }
-            return size;
+            box.Min = Size.New (box.ChildrenMin.Width, box.ChildrenMin.Height, box.Orientation);
+
+            // Check if minimum possible main is smaller than user set minimum. If so use UserMinimum.
+            box.Min.Main = Math.Max (box.Min.Main, box.UserMinSize.Main);
+            // Check if minimum main is larger than UserMaximum. If so use UserMaximum.
+            box.Min.Main = Math.Min (box.Min.Main, box.UserMaxSize.Main);
+            // Same as above.
+            box.Min.Cross = Math.Max (box.Min.Cross, box.UserMinSize.Cross);
+            box.Min.Cross = Math.Min (box.Min.Cross, box.UserMaxSize.Cross);
         }
 
-        static private Size GetMin (Box box)
+        static private void LayoutScrolling(Box box, int width, int height)
         {
-            Size size = Size.New (box.ChildrenMin.Width, box.ChildrenMin.Height, box.Orientation);
+            int scrollbarThickness = 20;
+            LayoutLines(box, width, height, 0, 0);
 
-            size.Main = Math.Max (size.Main, box.UserMinSize.Main);
-            size.Cross = Math.Max (size.Cross, box.UserMinSize.Cross);
-            size.Main = Math.Min (size.Main, box.UserMaxSize.Main);
-            size.Cross = Math.Min (size.Cross, box.UserMaxSize.Cross);
-            return size;
+            SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, height);
+            SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, width);
+
+            if (box.HorizontalScrollbar.Visible && box.VerticalScrollbar.Visible)
+            {
+                LayoutLines(box, width, height, scrollbarThickness, scrollbarThickness);
+            }
+            else if (box.VerticalScrollbar.Visible)
+            {
+                LayoutLines(box, width, height, 0, scrollbarThickness);
+                SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, width - scrollbarThickness);
+                if (box.HorizontalScrollbar.Visible)
+                    LayoutLines(box, width, height, scrollbarThickness, scrollbarThickness);
+            }
+            else if (box.HorizontalScrollbar.Visible)
+            {
+                LayoutLines(box, width, height, scrollbarThickness, 0);
+                SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, height - scrollbarThickness);
+                if (box.VerticalScrollbar.Visible)
+                    LayoutLines(box, width, height, scrollbarThickness, scrollbarThickness);
+            }
+            SetScrollbarGeometry(box.VerticalScrollbar, box.LayoutSize, scrollbarThickness);
+            SetScrollbarGeometry(box.HorizontalScrollbar, box.LayoutSize, scrollbarThickness);
         }
 
-        static private void LayoutLines (Box box, int width, int height)
+        static private void SetScrollbarGeometry(Scrollbar scrollbar, Size layoutSize, int scrollbarThickness)
+        {
+            if (scrollbar.Visible == false)
+            {
+                scrollbar.Position.X = 0;
+                scrollbar.Position.Y = 0;
+                scrollbar.Size.Width = 0;
+                scrollbar.Size.Height = 0;
+            }
+            else if (scrollbar is HScrollbar)
+            {
+                scrollbar.Position.X = 0;
+                scrollbar.Position.Y = layoutSize.Height - scrollbarThickness;
+                scrollbar.Size.Width = layoutSize.Width;
+                scrollbar.Size.Height = scrollbarThickness;
+            }
+            else if (scrollbar is VScrollbar)
+            { 
+                scrollbar.Position.X = layoutSize.Width - scrollbarThickness;
+                scrollbar.Position.Y = 0;
+                scrollbar.Size.Width = scrollbarThickness;
+                scrollbar.Size.Height = layoutSize.Height;
+            }
+        }
+
+        static private void SetScrollbarVisibility(Scrollbar scrollbar, int actualLength, int layoutLength)
+        {
+            if (scrollbar.Mode == ScrollbarMode.Hidden)
+                scrollbar.Visible = false;
+            else if (scrollbar.Mode == ScrollbarMode.Visible)
+                scrollbar.Visible = true;
+            else //if (scrollbar.Mode == Scrollbar.Auto)
+                scrollbar.Visible = actualLength > layoutLength;
+        }
+
+        static private void LayoutLines (Box box, int width, int height, int horizontalScrollbarThickness, int verticalScrollbarThickness)
         {
             Size actualSize = Size.New (0, 0, box.Orientation);
 
@@ -63,6 +121,10 @@ namespace Boxing
             // If it hasn't then it's an error by the caller and we'll limit ourselves.
             box.LayoutSize.Width = Math.Min (width, box.UserMaxSize.Width);
             box.LayoutSize.Height = Math.Min (height, box.UserMaxSize.Height);
+
+            // Temporarily reduce available LayoutSize with scrollbar thickness.
+            box.LayoutSize.Width -= verticalScrollbarThickness;
+            box.LayoutSize.Height -= horizontalScrollbarThickness;
 
             if (box.Children.Count > 0)
             {
@@ -79,14 +141,11 @@ namespace Boxing
                 min.Main = size.Main;
 
                 box.Lines.ForEach (line => {
-                    // Can't be smaller than line.MinSize though.
                     min.Cross = line.MinSize.Cross;
+
+                    // Layout with minimum line cross length.
                     line.ProbedUsedSize = LayoutLine (line, min);
                 });
-
-                // if Wrap && SUM(box.Lines.ProbedUsedSize.Cross) > box.LayoutSize.Cross
-                // then set ScrollbarSizeCross = 10 and reset box.Lines with size.Main - ScrollbarCross
-                // Reprobe used size.
 
                 Compute.SetLinesSize (box.Lines, size);
 
@@ -101,6 +160,9 @@ namespace Boxing
             // Make sure actual size isn't smaller than UserMinSize.
             box.ActualSize.Main = Math.Max (actualSize.Main, box.UserMinSize.Main);
             box.ActualSize.Cross = Math.Max (actualSize.Cross, box.UserMinSize.Cross);
+
+            box.LayoutSize.Width += verticalScrollbarThickness;
+            box.LayoutSize.Height += horizontalScrollbarThickness;
         }
 
         static protected Size LayoutLine (Line line, Size lineSize)
@@ -118,7 +180,7 @@ namespace Boxing
                 size.Main = child.Computed.MainLength;
                 size.Cross = Math.Max (lineSize.Cross, line.MinSize.Cross);
 
-                LayoutLines (child, size.Width, size.Height);
+                LayoutScrolling(child, size.Width, size.Height);
 
                 // Cross size is largest minimum for all children on this line, but it shouldn't be used unless cross expand is true.
                 if (child.Expand.GetCross (line.Orientation) == false &&
@@ -126,7 +188,7 @@ namespace Boxing
                 {
                     size.Main = child.Computed.MainLength;
                     size.Cross = child.ActualSize.GetCross (line.Orientation);
-                    LayoutLines(child, size.Width, size.Height);
+                    LayoutScrolling(child, size.Width, size.Height);
                 }
 
                 if (child.ActualSize.GetMain (line.Orientation) > child.LayoutSize.GetMain (line.Orientation))
@@ -143,6 +205,43 @@ namespace Boxing
             return usedTotal;
         }
 
+        /*
+        static private void LayoutScrollbars (Box box)
+        {
+            int scrollbarThickness = 20;
+
+            SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width);
+            SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height);
+
+            if (box.HorizontalScrollbar.Visible == true || box.VerticalScrollbar.Visible == true)
+            {
+                LayoutLines(box,
+                            box.LayoutSize.Width - (box.HorizontalScrollbar.Visible ? scrollbarThickness : 0),
+                            box.LayoutSize.Height - (box.VerticalScrollbar.Visible ? scrollbarThickness : 0));
+
+                if ((box.HorizontalScrollbar.Visible == false && GetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width) == true) ||
+                    (box.VerticalScrollbar.Visible == false && GetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height) == true))
+                {
+                    // Scrollbar in one direction caused the need for a scrollbar in the other direction.
+                    SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width);
+                    SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height);
+                    // LayoutSize is decreased twice for at least one of them!!!
+                    LayoutLines(box,
+                                box.LayoutSize.Width - (box.HorizontalScrollbar.Visible ? scrollbarThickness : 0),
+                                box.LayoutSize.Height - (box.VerticalScrollbar.Visible ? scrollbarThickness : 0));
+                }
+                SetScrollbarGeometry(box.HorizontalScrollbar, 0, box.LayoutSize.Height, box.LayoutSize.Width, scrollbarThickness);
+                SetScrollbarGeometry(box.VerticalScrollbar, box.LayoutSize.Width, 0, scrollbarThickness, box.LayoutSize.Height);
+            }
+
+            foreach (Box child in box.Children)
+            {
+                if (child.Lines == null)
+                    continue;
+                LayoutScrollbars(child);
+            }
+        }
+        */
         static private void SetLinePositions (Box box)
         {
             if (box.Lines == null)

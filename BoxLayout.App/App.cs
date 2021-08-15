@@ -21,7 +21,6 @@ namespace WindowsFormsApp1
             { "ExpandCross", new Boxes.ExpandCross() },
             { "ExpandCrossWrap", new Boxes.ExpandCrossWrap() },
             { "ExpandMainMinMax", new Boxes.ExpandMainMinMax() },
-            { "EqualSizeWrap", new Boxes.EqualSizeWrap() },
             { "AlignMainLeft", new Boxes.AlignMainStart () },
             { "AlignMainCenter", new Boxes.AlignMainCenter() },
             { "AlignMainRight", new Boxes.AlignMainEnd() },
@@ -46,6 +45,7 @@ namespace WindowsFormsApp1
             { "RepeatedBoxes", new Boxes.RepeatedBoxes () },
             { "RandomBoxes", new Boxes.RandomBoxes () },
             { "TypicalSite", new Boxes.TypicalSite () },
+            { "ScrollHorizontalSimple", new Boxes.ScrollHorizontalSimple() }
         };
         Box top;
         Dictionary<Box, SolidBrush> brushes;
@@ -98,6 +98,18 @@ namespace WindowsFormsApp1
                                         box.LayoutSize.Height);
             for (int i = 0; i < box.Children.Count; i++)
                 DrawBox (absolute, box.Children[i], graphics);
+            if (box.HorizontalScrollbar.Visible)
+                graphics.FillRectangle (new SolidBrush (Color.Magenta), 
+                                        absolute.X + listBoxWidth + box.HorizontalScrollbar.Position.X, 
+                                        absolute.Y + box.HorizontalScrollbar.Position.Y, 
+                                        box.HorizontalScrollbar.Size.Width, 
+                                        box.HorizontalScrollbar.Size.Height);
+            if (box.VerticalScrollbar.Visible)
+                graphics.FillRectangle (new SolidBrush (Color.Magenta), 
+                                        absolute.X + listBoxWidth + box.VerticalScrollbar.Position.X, 
+                                        absolute.Y + box.VerticalScrollbar.Position.Y, 
+                                        box.VerticalScrollbar.Size.Width, 
+                                        box.VerticalScrollbar.Size.Height);
         }
 
         private void listBox1_SelectedIndexChanged (object sender, EventArgs e)
