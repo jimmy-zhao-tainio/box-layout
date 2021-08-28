@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Boxing;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UI.Layout;
+using UI.Controls;
 
 namespace Unit
 {
@@ -18,7 +14,7 @@ namespace Unit
             Box child = new BoxHorizontal ();
 
             top.Pack(child);
-            Layout.Process (top, 0, 0);
+            LayoutManager.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (0, 0));
         }
 
@@ -31,7 +27,7 @@ namespace Unit
             child.UserMinSize.Width = 7;
             child.UserMinSize.Height = 11;
             top.Pack(child);
-            Layout.Process (top, 0, 0);
+            LayoutManager.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (7, 11));
         }
 
@@ -48,7 +44,7 @@ namespace Unit
             child2.UserMinSize.Width = 13;
             child2.UserMinSize.Height = 17;
             top.Pack(child2);
-            Layout.Process (top, 0, 0);
+            LayoutManager.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (7 + 13, 17));
         }
 
@@ -65,7 +61,7 @@ namespace Unit
             child2.UserMinSize.Width = 13;
             child2.UserMinSize.Height = 17;
             top.Pack(child2);
-            Layout.Process (top, 0, 0);
+            LayoutManager.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (13, 11 + 17));
         }
 
@@ -95,7 +91,7 @@ namespace Unit
             v1.Pack(h2);
             v2.Pack(h3);
             v2.Pack(h4);
-            Layout.Process (top, 0, 0);
+            LayoutManager.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (30 + 70, 50 + 70));
         }
 
@@ -107,7 +103,7 @@ namespace Unit
                     <vbox min-size=""100, 100"" />
                 </hbox>
             ");
-            Layout.Process (top, 0, 0);
+            LayoutManager.Process (top, 0, 0);
             Assert.IsTrue (top.Min.Equals (10, 20));
         }
     }

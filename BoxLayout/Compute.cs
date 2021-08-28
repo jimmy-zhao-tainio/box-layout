@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using UI.Structures;
+using UI.Controls;
 
-namespace Boxing 
+namespace UI.Layout
 {
     public class Compute
     {

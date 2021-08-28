@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Boxing;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UI.Layout;
+using UI.Controls;
 
 namespace Unit
 {
@@ -19,7 +15,7 @@ namespace Unit
             top.UserMinSize.Width = 100;
             top.UserMinSize.Height = 100;
 
-            Layout.Process (top, 200, 200);
+            LayoutManager.Process (top, 200, 200);
 
             Assert.IsTrue (top.LayoutSize.Equals (200, 200));
             Assert.IsTrue (top.ActualSize.Equals (100, 100));
@@ -33,7 +29,7 @@ namespace Unit
             top.UserMinSize.Width = 200;
             top.UserMinSize.Height = 200;
 
-            Layout.Process (top, 100, 100);
+            LayoutManager.Process (top, 100, 100);
 
             Assert.IsTrue (top.LayoutSize.Equals (100, 100));
             Assert.IsTrue (top.ActualSize.Equals (200, 200));

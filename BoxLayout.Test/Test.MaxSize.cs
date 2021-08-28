@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Boxing;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UI.Layout;
+using UI.Controls;
 
 namespace Unit
 {
@@ -23,7 +19,7 @@ namespace Unit
                 </hbox>
             ");
 
-            Layout.Process (top, 1000, 1000);
+            LayoutManager.Process (top, 1000, 1000);
             Box max = top.Children[0];
 
             Assert.IsTrue (top.LayoutSize.Equals (1000, 1000));

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using UI.Structures;
+using UI.Controls;
 
-namespace Boxing
+namespace UI.Layout
 {
     public class Positioning
     {
-        static public void AlignMain (Box parent, Line line)
+        static public void SetAlignMain (Box parent, Line line)
         {
             int position;
 
@@ -20,11 +20,11 @@ namespace Boxing
             // Available main length.
             int availableMainLength = line.FinalSize.Main - usedMainLength;
 
-            if (parent.AlignMain == Boxing.AlignMain.Start || parent.AlignMain == Boxing.AlignMain.Center || parent.AlignMain == Boxing.AlignMain.End)
+            if (parent.AlignMain == AlignMain.Start || parent.AlignMain == AlignMain.Center || parent.AlignMain == AlignMain.End)
             {
-                if (parent.AlignMain == Boxing.AlignMain.Start)
+                if (parent.AlignMain == AlignMain.Start)
                     position = 0;
-                else if (parent.AlignMain == Boxing.AlignMain.Center)
+                else if (parent.AlignMain == AlignMain.Center)
                     position = Math.Max (0, line.FinalSize.Main - usedMainLength) / 2;
                 else
                     position = Math.Max (0, line.FinalSize.Main - usedMainLength);
@@ -34,7 +34,7 @@ namespace Boxing
                     position += line.Children[i].Computed.MainLength;
                 }
             }
-            else if (parent.AlignMain == Boxing.AlignMain.SpaceEvenly)
+            else if (parent.AlignMain == AlignMain.SpaceEvenly)
             {
                 Spacing spacing = Spacing.New (line.Children.Count + 1, usedMainLength, line.FinalSize.Main);
                 position = spacing.Next ();
@@ -44,7 +44,7 @@ namespace Boxing
                     position += line.Children[i].Computed.MainLength + spacing.Next ();
                 }
             }
-            else if (parent.AlignMain == Boxing.AlignMain.SpaceBetween)
+            else if (parent.AlignMain == AlignMain.SpaceBetween)
             {
                 Spacing spacing = Spacing.New (line.Children.Count - 1, usedMainLength, line.FinalSize.Main);
                 position = 0;
@@ -54,7 +54,7 @@ namespace Boxing
                     position += line.Children[i].Computed.MainLength + spacing.Next ();
                 }
             }
-            else if (parent.AlignMain == Boxing.AlignMain.SpaceAround)
+            else if (parent.AlignMain == AlignMain.SpaceAround)
             {
                 Spacing spacing = Spacing.New (line.Children.Count, usedMainLength, line.FinalSize.Main);
                 int space;
@@ -77,18 +77,18 @@ namespace Boxing
             {
                 Box child = line.Children[i];
 
-                if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == Boxing.AlignCross.Start) ||
+                if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == UI.Structures.AlignCross.Start) ||
                      child.SelfAlignCross == SelfAlignCross.Start)
                 {
                     child.LayoutPosition.SetCross (parent.Orientation, line.FinalPosition.Cross);
                 }
-                else if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == Boxing.AlignCross.Center) ||
+                else if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == UI.Structures.AlignCross.Center) ||
                          child.SelfAlignCross == SelfAlignCross.Center)
                 {
                     crossLength = child.LayoutSize.GetCross (parent.Orientation);
                     child.LayoutPosition.SetCross (parent.Orientation, line.FinalPosition.Cross + ((line.FinalSize.Cross - crossLength) / 2));
                 }
-                else if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == Boxing.AlignCross.End) ||
+                else if ((child.SelfAlignCross == SelfAlignCross.Inherit && parent.AlignCross == UI.Structures.AlignCross.End) ||
                          child.SelfAlignCross == SelfAlignCross.End)
                 {
                     crossLength = child.LayoutSize.GetCross (parent.Orientation);
@@ -99,16 +99,16 @@ namespace Boxing
 
         static public void LineAlignCross (Box box)
         {
-            if (box.LineAlignCross == Boxing.LineAlignCross.Start ||
-                box.LineAlignCross == Boxing.LineAlignCross.Center ||
-                box.LineAlignCross == Boxing.LineAlignCross.End)
+            if (box.LineAlignCross == UI.Structures.LineAlignCross.Start ||
+                box.LineAlignCross == UI.Structures.LineAlignCross.Center ||
+                box.LineAlignCross == UI.Structures.LineAlignCross.End)
             {
                 int crossPosition;
                 int usedCrossLength = box.Lines.Sum (i => i.FinalSize.Cross);
 
-                if (box.LineAlignCross == Boxing.LineAlignCross.Start)
+                if (box.LineAlignCross == UI.Structures.LineAlignCross.Start)
                     crossPosition = 0;
-                else if (box.LineAlignCross == Boxing.LineAlignCross.Center)
+                else if (box.LineAlignCross == UI.Structures.LineAlignCross.Center)
                     crossPosition = Math.Max (0, box.LayoutSize.Cross - usedCrossLength) / 2;
                 else
                     crossPosition = Math.Max (0, box.LayoutSize.Cross - usedCrossLength);
@@ -121,7 +121,7 @@ namespace Boxing
                     crossPosition += line.FinalSize.Cross;
                 }
             }
-            else if (box.LineAlignCross == Boxing.LineAlignCross.SpaceEvenly)
+            else if (box.LineAlignCross == UI.Structures.LineAlignCross.SpaceEvenly)
             {
                 int usedCrossLength = box.Lines.Sum (i => i.FinalSize.Cross);
                 Spacing spacing = Spacing.New (box.Lines.Count + 1, usedCrossLength, box.LayoutSize.Cross);
@@ -136,7 +136,7 @@ namespace Boxing
                     crossPosition += line.FinalSize.Cross + spacing.Next ();
                 }
             }
-            else if (box.LineAlignCross == Boxing.LineAlignCross.SpaceBetween)
+            else if (box.LineAlignCross == UI.Structures.LineAlignCross.SpaceBetween)
             {
                 int usedCrossLength = box.Lines.Sum (i => i.FinalSize.Cross);
                 Spacing spacing = Spacing.New (box.Lines.Count - 1, usedCrossLength, box.LayoutSize.Cross);
@@ -151,7 +151,7 @@ namespace Boxing
                     crossPosition += line.FinalSize.Cross + spacing.Next ();
                 }
             }
-            else if (box.LineAlignCross == Boxing.LineAlignCross.SpaceAround)
+            else if (box.LineAlignCross == UI.Structures.LineAlignCross.SpaceAround)
             {
                 int usedCrossLength = box.Lines.Sum (i => i.FinalSize.Cross);
                 Spacing spacing = Spacing.New (box.Lines.Count, usedCrossLength, box.LayoutSize.Cross);

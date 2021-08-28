@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Boxing;
+using UI.Layout;
+using UI.Structures;
+using UI.Controls;
 
 namespace Unit
 {
@@ -27,8 +25,8 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Layout.Process (h1, 0, 0);
-            Layout.Process (h2, 0, 0);
+            LayoutManager.Process (h1, 0, 0);
+            LayoutManager.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 20);
 
             Assert.IsTrue (h1.Computed.MainLength == 10);
@@ -53,8 +51,8 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Layout.Process (h1, 0, 0);
-            Layout.Process (h2, 0, 0);
+            LayoutManager.Process (h1, 0, 0);
+            LayoutManager.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 40);
             
             Assert.IsTrue (h1.Computed.MainLength == 10);
@@ -81,8 +79,8 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Layout.Process (h1, 0, 0);
-            Layout.Process (h2, 0, 0);
+            LayoutManager.Process (h1, 0, 0);
+            LayoutManager.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 21);
 
             Assert.IsTrue (h1.Computed.MainLength == 10);
@@ -107,8 +105,8 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2 };
 
-            Layout.Process (h1, 0, 0);
-            Layout.Process (h2, 0, 0);
+            LayoutManager.Process (h1, 0, 0);
+            LayoutManager.Process (h2, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 22);
 
             Assert.IsTrue (h1.Computed.MainLength == 12);
@@ -137,9 +135,9 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
-            Layout.Process (h1, 0, 0);
-            Layout.Process (h2, 0, 0);
-            Layout.Process (h3, 0, 0);
+            LayoutManager.Process (h1, 0, 0);
+            LayoutManager.Process (h2, 0, 0);
+            LayoutManager.Process (h3, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 300);
 
             Assert.IsTrue (h1.Computed.MainLength == 140);
@@ -164,7 +162,7 @@ namespace Unit
             }
 
             for (int i = 0; i < items; i++)
-                Layout.Process (list[i], 0, 0);
+                LayoutManager.Process (list[i], 0, 0);
             for (int i = 0; i < items; i++)
                 Compute.SetMainLengths (Orientation.Horizontal, list, items * 300);
         }
@@ -186,7 +184,7 @@ namespace Unit
             }
 
             for (int i = 0; i < items; i++)
-                Layout.Process (list[i], 0, 0);
+                LayoutManager.Process (list[i], 0, 0);
             for (int i = 0; i < items; i++)
                 Compute.SetMainLengths (Orientation.Horizontal, list, items * 300);
         }
@@ -217,9 +215,9 @@ namespace Unit
 
             List<Box> list = new List<Box> () { h1, h2, h3 };
 
-            Layout.Process (h1, 0, 0);
-            Layout.Process (h2, 0, 0);
-            Layout.Process (h3, 0, 0);
+            LayoutManager.Process (h1, 0, 0);
+            LayoutManager.Process (h2, 0, 0);
+            LayoutManager.Process (h3, 0, 0);
             Compute.SetMainLengths(Orientation.Horizontal, list, 160);
 
             Assert.IsTrue (h1.Computed.MainLength == 20);

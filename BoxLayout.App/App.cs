@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Boxing;
+using UI.Controls;
+using UI.Structures;
 
 namespace WindowsFormsApp1
 {
@@ -73,23 +69,23 @@ namespace WindowsFormsApp1
 
         private void Form1_Resize (object sender, EventArgs e)
         {
-            Boxing.Layout.Process (top, this.ClientSize.Width - listBoxWidth, this.ClientSize.Height);
+            UI.Layout.LayoutManager.Process (top, this.ClientSize.Width - listBoxWidth, this.ClientSize.Height);
             this.Invalidate ();
         }
 
         private void Form1_Paint (object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-            DrawBox (Boxing.Point.New (0, 0, Boxing.Orientation.Horizontal), top, e.Graphics);
+            DrawBox (UI.Structures.Point.New (0, 0, UI.Structures.Orientation.Horizontal), top, e.Graphics);
         }
 
-        private void DrawBox (Boxing.Point position, Box box, Graphics graphics)
+        private void DrawBox (UI.Structures.Point position, Box box, Graphics graphics)
         {
             if (box.LayoutSize.Width == 0 || box.LayoutSize.Height == 0)
                 return;
-            Boxing.Point absolute = Boxing.Point.New (position.X + box.LayoutPosition.X,
+            UI.Structures.Point absolute = UI.Structures.Point.New (position.X + box.LayoutPosition.X,
                                                       position.Y + box.LayoutPosition.Y,
-                                                      Boxing.Orientation.Horizontal);
+                                                      UI.Structures.Orientation.Horizontal);
             if (brushes.TryGetValue (box, out SolidBrush brush))
                 graphics.FillRectangle (brush, 
                                         absolute.X + listBoxWidth, 
@@ -99,17 +95,27 @@ namespace WindowsFormsApp1
             for (int i = 0; i < box.Children.Count; i++)
                 DrawBox (absolute, box.Children[i], graphics);
             if (box.HorizontalScrollbar.Visible)
-                graphics.FillRectangle (new SolidBrush (Color.Magenta), 
-                                        absolute.X + listBoxWidth + box.HorizontalScrollbar.Position.X, 
-                                        absolute.Y + box.HorizontalScrollbar.Position.Y, 
-                                        box.HorizontalScrollbar.Size.Width, 
-                                        box.HorizontalScrollbar.Size.Height);
+                DrawHorizontalScrollbar (graphics, absolute.X + listBoxWidth, absolute.Y, box.HorizontalScrollbar);
             if (box.VerticalScrollbar.Visible)
-                graphics.FillRectangle (new SolidBrush (Color.Magenta), 
-                                        absolute.X + listBoxWidth + box.VerticalScrollbar.Position.X, 
-                                        absolute.Y + box.VerticalScrollbar.Position.Y, 
-                                        box.VerticalScrollbar.Size.Width, 
-                                        box.VerticalScrollbar.Size.Height);
+                DrawVerticalScrollbar (graphics, absolute.X + listBoxWidth, absolute.Y, box.VerticalScrollbar);
+        }
+
+        private void DrawHorizontalScrollbar(Graphics graphics, int offsetX, int offsetY, HScrollbar scrollbar)
+        {
+            graphics.FillRectangle (new SolidBrush (Color.Magenta), 
+                                    offsetX + scrollbar.Position.X, 
+                                    offsetY + scrollbar.Position.Y, 
+                                    scrollbar.Size.Width, 
+                                    scrollbar.Size.Height);
+        }
+
+        private void DrawVerticalScrollbar(Graphics graphics, int offsetX, int offsetY, VScrollbar scrollbar)
+        {
+            graphics.FillRectangle (new SolidBrush (Color.Magenta), 
+                                    offsetX + scrollbar.Position.X, 
+                                    offsetY + scrollbar.Position.Y, 
+                                    scrollbar.Size.Width, 
+                                    scrollbar.Size.Height);
         }
 
         private void listBox1_SelectedIndexChanged (object sender, EventArgs e)

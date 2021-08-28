@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using UI.Structures;
+using UI.Controls;
 
-namespace Boxing
+namespace UI.Layout
 {
-    public class Layout
+    public class LayoutManager
     {
         static public void Process(Box top, int width, int height)
         {
@@ -17,7 +17,7 @@ namespace Boxing
 
         static private void SetMinMainCrossSizes (Box box)
         {
-            // Find minimum recursive main and cross lengths. 
+            // Recursively set minimum main and cross lengths. 
             foreach (Box child in box.Children)
                 SetMinMainCrossSizes (child);
 
@@ -74,11 +74,11 @@ namespace Boxing
                 if (box.VerticalScrollbar.Visible)
                     LayoutLines(box, width, height, scrollbarThickness, scrollbarThickness);
             }
-            SetScrollbarGeometry(box.VerticalScrollbar, box.LayoutSize, scrollbarThickness);
-            SetScrollbarGeometry(box.HorizontalScrollbar, box.LayoutSize, scrollbarThickness);
+            SetScrollbarGeometry(box.VerticalScrollbar, box.LayoutSize, scrollbarThickness, box.HorizontalScrollbar.Visible);
+            SetScrollbarGeometry(box.HorizontalScrollbar, box.LayoutSize, scrollbarThickness, box.VerticalScrollbar.Visible);
         }
 
-        static private void SetScrollbarGeometry(Scrollbar scrollbar, Size layoutSize, int scrollbarThickness)
+        static private void SetScrollbarGeometry(Scrollbar scrollbar, Size layoutSize, int scrollbarThickness, bool oppositeVisible)
         {
             if (scrollbar.Visible == false)
             {
@@ -91,7 +91,7 @@ namespace Boxing
             {
                 scrollbar.Position.X = 0;
                 scrollbar.Position.Y = layoutSize.Height - scrollbarThickness;
-                scrollbar.Size.Width = layoutSize.Width;
+                scrollbar.Size.Width = layoutSize.Width - (oppositeVisible ? scrollbarThickness : 0);
                 scrollbar.Size.Height = scrollbarThickness;
             }
             else if (scrollbar is VScrollbar)
@@ -99,7 +99,7 @@ namespace Boxing
                 scrollbar.Position.X = layoutSize.Width - scrollbarThickness;
                 scrollbar.Position.Y = 0;
                 scrollbar.Size.Width = scrollbarThickness;
-                scrollbar.Size.Height = layoutSize.Height;
+                scrollbar.Size.Height = layoutSize.Height - (oppositeVisible ? scrollbarThickness : 0);
             }
         }
 
@@ -109,7 +109,7 @@ namespace Boxing
                 scrollbar.Visible = false;
             else if (scrollbar.Mode == ScrollbarMode.Visible)
                 scrollbar.Visible = true;
-            else //if (scrollbar.Mode == Scrollbar.Auto)
+            else if (scrollbar.Mode == ScrollbarMode.Auto)
                 scrollbar.Visible = actualLength > layoutLength;
         }
 
@@ -205,43 +205,6 @@ namespace Boxing
             return usedTotal;
         }
 
-        /*
-        static private void LayoutScrollbars (Box box)
-        {
-            int scrollbarThickness = 20;
-
-            SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width);
-            SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height);
-
-            if (box.HorizontalScrollbar.Visible == true || box.VerticalScrollbar.Visible == true)
-            {
-                LayoutLines(box,
-                            box.LayoutSize.Width - (box.HorizontalScrollbar.Visible ? scrollbarThickness : 0),
-                            box.LayoutSize.Height - (box.VerticalScrollbar.Visible ? scrollbarThickness : 0));
-
-                if ((box.HorizontalScrollbar.Visible == false && GetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width) == true) ||
-                    (box.VerticalScrollbar.Visible == false && GetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height) == true))
-                {
-                    // Scrollbar in one direction caused the need for a scrollbar in the other direction.
-                    SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width);
-                    SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height);
-                    // LayoutSize is decreased twice for at least one of them!!!
-                    LayoutLines(box,
-                                box.LayoutSize.Width - (box.HorizontalScrollbar.Visible ? scrollbarThickness : 0),
-                                box.LayoutSize.Height - (box.VerticalScrollbar.Visible ? scrollbarThickness : 0));
-                }
-                SetScrollbarGeometry(box.HorizontalScrollbar, 0, box.LayoutSize.Height, box.LayoutSize.Width, scrollbarThickness);
-                SetScrollbarGeometry(box.VerticalScrollbar, box.LayoutSize.Width, 0, scrollbarThickness, box.LayoutSize.Height);
-            }
-
-            foreach (Box child in box.Children)
-            {
-                if (child.Lines == null)
-                    continue;
-                LayoutScrollbars(child);
-            }
-        }
-        */
         static private void SetLinePositions (Box box)
         {
             if (box.Lines == null)
@@ -261,7 +224,7 @@ namespace Boxing
                 return;
             foreach (Line line in box.Lines)
             {
-                Positioning.AlignMain (box, line);
+                Positioning.SetAlignMain (box, line);
                 foreach (Box child in line.Children)
                 {
                     if (child.Lines == null)

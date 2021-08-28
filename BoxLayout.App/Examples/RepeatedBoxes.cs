@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using Boxing;
+﻿using UI.Structures;
+using UI.Controls;
 
 namespace Boxes
 {
@@ -15,7 +10,7 @@ namespace Boxes
             for (int i = 0; i < amount; i++)
             {
                 Box box = new BoxHorizontal ();
-                box.UserMinSize = Boxing.Size.New (6, 6, Orientation.Horizontal);
+                box.UserMinSize = UI.Structures.Size.New (6, 6, Orientation.Horizontal);
                 box.Expand.Main = true;
                 box.Expand.Cross = true;
                 parent.Pack (box);

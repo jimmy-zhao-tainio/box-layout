@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Boxing;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UI.Layout;
+using UI.Controls;
 
 namespace Unit
 {
@@ -22,7 +18,7 @@ namespace Unit
             ");
             Box h1 = top.Children[0];
             Box h2 = top.Children[1];
-            Layout.Process (top, 50, 10);
+            LayoutManager.Process (top, 50, 10);
             Assert.IsTrue (h1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (h1.LayoutSize.Equals (20, 10));
             Assert.IsTrue (h2.LayoutPosition.Equals (20, 0));
