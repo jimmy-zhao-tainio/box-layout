@@ -132,7 +132,7 @@ namespace UI.Layout
                 Lines lines = new Lines ();
 
                 if (box.Wrap)
-                    box.Lines = lines.GetLines (box, box.Children, size.Main);
+                    box.Lines = lines.GetLines (box, box.Children, Math.Max (box.ChildrenMin.Main, size.Main));
                 else
                     box.Lines = lines.GetLine (box.Orientation, box.Children);
 
