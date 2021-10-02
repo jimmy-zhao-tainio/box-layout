@@ -4,25 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using UI.Structures;
 
 namespace UI
 {
     public class Render
     {
-        static Dictionary<Controls.Box, SolidBrush> brushes = null;
+        static Dictionary<Controls.Box, SolidBrush> brushes = new Dictionary<Controls.Box, SolidBrush> ();
 
         static Random random = new Random ();
-        static void CreateBrushForBox (Controls.Box box)
+
+        static SolidBrush CreateBrushForBox (Controls.Box box)
         {
+            SolidBrush brush = null;
+
             if (box.Children.Count == 0)
             {
                 int r = random.Next (256 - 50) + 50;
                 int g = random.Next (256 - 50) + 50;
                 int b = random.Next (256 - 50) + 50;
-                brushes.Add (box, new SolidBrush (Color.FromArgb (r, g, b)));
+                brush = new SolidBrush(Color.FromArgb(r, g, b));
             }
             for (int i = 0; i < box.Children.Count; i++)
                 CreateBrushForBox (box.Children[i]);
+            return brush;
         }
 
         static public void Box(Structures.Point position, Controls.Box box, Graphics graphics)
@@ -33,12 +38,10 @@ namespace UI
                                                                     position.Y + box.LayoutPosition.Y,
                                                                     UI.Structures.Orientation.Horizontal);
 
-            if (brushes == null)
-            {
-                brushes = new Dictionary<Controls.Box, SolidBrush>();
-                CreateBrushForBox(box);
-            }
-            if (brushes.TryGetValue (box, out SolidBrush brush))
+            if (brushes.TryGetValue (box, out SolidBrush brush) == false)
+                brushes[box] = brush = CreateBrushForBox(box);
+
+            if (brush != null)
                 graphics.FillRectangle (brush, 
                                         absolute.X, 
                                         absolute.Y, 
@@ -57,7 +60,8 @@ namespace UI
         static private void HorizontalScrollbar(Graphics graphics, Structures.Point offset, Controls.Box box)
         {
             Structures.HScrollbar scrollbar = box.HorizontalScrollbar;
-            int handleLength = (scrollbar.Size.Width * (box.LayoutSize.Width - (box.VerticalScrollbar.Visible ? 20 : 0)) / box.ActualSize.Width) - 6;
+            int handleLength = ScrollbarHandleLength(scrollbar.Size.Width, box.LayoutSize.Width, box.ActualSize.Width, 
+                                                     box.VerticalScrollbar.Visible);
 
             graphics.FillRectangle (new SolidBrush (Color.LightGray), 
                                     scrollbar.Position.X + offset.X, 
@@ -65,16 +69,17 @@ namespace UI
                                     scrollbar.Size.Width, 
                                     scrollbar.Size.Height);
             graphics.FillRectangle (new SolidBrush (Color.Gray), 
-                                    scrollbar.Position.X + offset.X + 3, 
-                                    scrollbar.Position.Y + offset.Y + 2, 
+                                    scrollbar.Position.X + offset.X + ScrollbarSettings.LengthPadding, 
+                                    scrollbar.Position.Y + offset.Y + ScrollbarSettings.SidePadding, 
                                     handleLength, 
-                                    scrollbar.Size.Height - 4);
+                                    scrollbar.Size.Height - ScrollbarSettings.SidePadding * 2);
         }
 
         static private void VerticalScrollbar(Graphics graphics, Structures.Point offset, Controls.Box box)
         {
             Structures.VScrollbar scrollbar = box.VerticalScrollbar;
-            int handleLength = (scrollbar.Size.Height * (box.LayoutSize.Height - (box.HorizontalScrollbar.Visible ? 20 : 0)) / box.ActualSize.Height) - 6;
+            int handleLength = ScrollbarHandleLength(scrollbar.Size.Height, box.LayoutSize.Height, box.ActualSize.Height, 
+                                                     box.HorizontalScrollbar.Visible);
 
             graphics.FillRectangle (new SolidBrush (Color.LightGray), 
                                     scrollbar.Position.X + offset.X, 
@@ -82,10 +87,28 @@ namespace UI
                                     scrollbar.Size.Width, 
                                     scrollbar.Size.Height);
             graphics.FillRectangle (new SolidBrush (Color.Gray), 
-                                    scrollbar.Position.X + offset.X + 2, 
-                                    scrollbar.Position.Y + offset.Y + 3, 
-                                    scrollbar.Size.Width - 4, 
+                                    scrollbar.Position.X + offset.X + ScrollbarSettings.SidePadding, 
+                                    scrollbar.Position.Y + offset.Y + ScrollbarSettings.LengthPadding, 
+                                    scrollbar.Size.Width - ScrollbarSettings.SidePadding * 2, 
                                     handleLength);
+        }
+
+        static private int ScrollbarHandleLength(int scrollbarLength, int boxLayoutLength, int boxActualLength, bool oppositeScrollbar)
+        {
+            int handleLength;
+
+            handleLength = scrollbarLength * (boxLayoutLength - (oppositeScrollbar ? ScrollbarSettings.Thickness : 0));
+            handleLength /= boxActualLength;
+            handleLength -= ScrollbarSettings.LengthPadding * 2;
+
+            if (handleLength < ScrollbarSettings.Thickness)
+            {
+                if (scrollbarLength >= ScrollbarSettings.MinHandleLength + ScrollbarSettings.LengthPadding * 2)
+                    handleLength = ScrollbarSettings.Thickness;
+                else
+                    handleLength = scrollbarLength - ScrollbarSettings.LengthPadding * 2;
+            }
+            return handleLength;
         }
 
         static private void CornerScrollbar(Graphics graphics, Structures.Point offset, Controls.Box box)

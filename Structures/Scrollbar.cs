@@ -13,12 +13,14 @@
         public Point Position;
         public Size Size;
         public bool Visible;
+        public int Offset; // Amount of pixels scrolled.
 
         public Scrollbar(ScrollbarMode mode)
         {
             Mode = mode;
             Position = Point.New(Orientation.Horizontal);
             Size = new Size(0, 0);
+            Offset = 0;
         }
     }
 

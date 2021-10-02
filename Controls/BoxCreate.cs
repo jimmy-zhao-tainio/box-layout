@@ -37,6 +37,8 @@ namespace UI.Controls
             public string SelfAlignCross = "inherit";
             [XmlAttribute ("line-align-cross")]
             public string LineAlignCross = "start";
+            [XmlAttribute ("scroll-offset-y")]
+            public string ScrollOffsetY = "0";
 
             [XmlElement ("BoxGlue")]
             public List<BoxGlue> Children = new List<BoxGlue> ();
@@ -75,6 +77,7 @@ namespace UI.Controls
                 box.AlignCross = (AlignCross)Enum.Parse (typeof (AlignCross), AlignCross, true);
                 box.LineAlignCross = (LineAlignCross)Enum.Parse (typeof (LineAlignCross), LineAlignCross, true);
                 box.SelfAlignCross = (SelfAlignCross)Enum.Parse (typeof (SelfAlignCross), SelfAlignCross, true);
+                box.VerticalScrollbar.Offset = Int32.Parse(ScrollOffsetY);
 
                 for (int i = 0; i < Children.Count; i++)
                     box.Pack (Children[i].ToBox ());

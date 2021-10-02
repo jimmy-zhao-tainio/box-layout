@@ -6,6 +6,7 @@ using UI.Layout;
 using UI.Controls;
 using UI.Structures;
 using System;
+using System.Diagnostics;
 
 namespace UI
 {
@@ -39,8 +40,16 @@ namespace UI
                 window.Form.Load += Form_Load;
                 window.Form.Paint += Form_Paint;
                 window.Form.Resize += Form_Resize;
+                window.Form.MouseMove += Form_MouseMove;
                 window.Form.Show();
                 window.Form.ResumeLayout();
+            }
+
+            private void Form_MouseMove(object sender, MouseEventArgs e)
+            {
+                Window window = GetWindow(sender);
+
+                Events.RegisterMouseMove(e.X, e.Y, window.Top);
             }
 
             private void Form_Load(object sender, System.EventArgs e)
