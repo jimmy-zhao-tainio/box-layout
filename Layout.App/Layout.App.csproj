@@ -77,13 +77,13 @@
     <Compile Include="Examples\Align-Main-SpaceEvenly.cs" />
     <Compile Include="Examples\Align-Main-Center.cs" />
     <Compile Include="Examples\Align-Main-End.cs" />
-    <Compile Include="Examples\Example.cs" />
     <Compile Include="Examples\Expand-Cross.cs" />
     <Compile Include="Examples\Expand-MinMaxWrap-Scroll.cs" />
     <Compile Include="Examples\Expand-MinMaxWrapSelfCrossAlign.cs" />
     <Compile Include="Examples\Expand-MinMaxWrapCrossAlign-End-Center.cs" />
     <Compile Include="Examples\Expand-MinMaxWrapCrossAlign-End.cs" />
     <Compile Include="Examples\Expand-MinMaxWrapCrossAlign.cs" />
+    <Compile Include="Examples\ScrollHorizontal-Offset.cs" />
     <Compile Include="Examples\TypicalSite.cs" />
     <Compile Include="Examples\Expand-MainMinMax.cs" />
     <Compile Include="Examples\Expand-Main.cs" />

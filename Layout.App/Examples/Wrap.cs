@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class Wrap : Example, IExample
+    public class Wrap : IExample
     {
         public Box GetTop ()
         {
@@ -32,8 +32,6 @@ namespace Boxes
                     </hbox>
                 </hbox>
             ");
-            brushes.Clear ();
-            CreateBrushForBox (top);
             return top;
         }
     }

@@ -3,7 +3,7 @@ using UI.Controls;
 
 namespace Boxes
 {
-    public class RepeatedBoxes : Example, IExample
+    public class RepeatedBoxes : IExample
     {
         private void Repeat (Box parent, int amount)
         {
@@ -59,9 +59,6 @@ namespace Boxes
             top.Pack (top1);
             top.Pack (top2);
 
-            brushes.Clear ();
-
-            CreateBrushForBox (top);
             return top;
         }
     }

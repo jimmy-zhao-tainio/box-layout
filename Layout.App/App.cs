@@ -42,10 +42,10 @@ namespace WindowsFormsApp1
             { "RandomBoxes", new Boxes.RandomBoxes () },
             { "TypicalSite", new Boxes.TypicalSite () },
             { "ExpandMinMaxWrapScroll", new Boxes.ExpandMinMaxWrapScroll() },
-            { "ScrollHorizontalSimple", new Boxes.ScrollHorizontalSimple() }
+            { "ScrollHorizontalSimple", new Boxes.ScrollHorizontalSimple() },
+            { "ScrollHorizontalOffset", new Boxes.ScrollHorizontalOffset() }
         };
         Box top;
-        Dictionary<Box, SolidBrush> brushes;
 
         public Form1 ()
         {
@@ -77,14 +77,13 @@ namespace WindowsFormsApp1
         private void Form1_Paint (object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-            UI.Render.Box(UI.Structures.Point.New(listBoxWidth, 0, UI.Structures.Orientation.Horizontal), top, e.Graphics);
+            UI.Render.RenderBox(UI.Structures.Point.New(listBoxWidth, 0, UI.Structures.Orientation.Horizontal), top, e.Graphics);
         }
 
         private void listBox1_SelectedIndexChanged (object sender, EventArgs e)
         {
             ibox = iboxes[(string)listBox1.SelectedItem];
             top = ibox.GetTop ();
-            brushes = ibox.GetBrushes ();
             Form1_Load (null, null);
         }
 

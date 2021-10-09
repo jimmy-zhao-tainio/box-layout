@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class RandomBoxes : Example, IExample
+    public class RandomBoxes : IExample
     {
         int boxCount;
 
@@ -12,14 +12,13 @@ namespace Boxes
             top.Expand.Main = true;
             top.Expand.Cross = true;
             boxCount = 1;
-            brushes.Clear ();
             Randomize (top, 12, 20);
-            CreateBrushForBox (top);
             return top;
         }
 
         private void Randomize (Box parent, int level, int maxLevel)
         {
+            System.Random random = new System.Random();
             if (level > maxLevel)
                 return;
             for (int i = 0; i < level; i++)

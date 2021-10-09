@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class ExpandMinMaxWrapScroll : Example, IExample
+    public class ExpandMinMaxWrapScroll : IExample
     {
         public Box GetTop ()
         {
@@ -13,8 +13,6 @@ namespace Boxes
                         <vbox min-size=""50,50"" max-size=""50, 50"" expand=""true"" />
                     </hbox>
             ");
-            brushes.Clear ();
-            CreateBrushForBox (top);
             return top;
         }
     }

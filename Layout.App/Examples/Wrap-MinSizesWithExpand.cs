@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class WrapMinSizesWithExpand : Example, IExample
+    public class WrapMinSizesWithExpand : IExample
     {
         public Box GetTop ()
         {
@@ -14,8 +14,6 @@ namespace Boxes
                         <vbox min-size=""300, 300"" expand=""true"" />
                     </hbox>
             ");
-            brushes.Clear ();
-            CreateBrushForBox (top);
             return top;
         }
     }

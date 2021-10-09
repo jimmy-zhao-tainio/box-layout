@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class ExpandCrossWrap : Example, IExample
+    public class ExpandCrossWrap : IExample
     {
         public Box GetTop ()
         {
@@ -15,8 +15,6 @@ namespace Boxes
                     </hbox>
                 </hbox>
             ");
-            brushes.Clear ();
-            CreateBrushForBox (top);
             return top;
         }
     }

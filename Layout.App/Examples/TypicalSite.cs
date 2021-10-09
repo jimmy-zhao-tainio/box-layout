@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class TypicalSite : Example, IExample
+    public class TypicalSite : IExample
     {
         public Box GetTop ()
         {
@@ -129,9 +129,6 @@ namespace Boxes
                         </vbox>
                     </hbox>
             ");
-            brushes.Clear ();
-            CreateBrushForBox (top);
-
             return top;
         }
     }

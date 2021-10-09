@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class ExpandCenterHorizontal : Example, IExample
+    public class ExpandCenterHorizontal : IExample
     {
         public Box GetTop ()
         {
@@ -17,8 +17,6 @@ namespace Boxes
                         <vbox expand=""true"" />
                     </hbox>
             ");
-            brushes.Clear ();
-            CreateBrushForBox (top);
             return top;
         }
     }

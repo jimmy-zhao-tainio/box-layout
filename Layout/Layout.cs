@@ -52,8 +52,8 @@ namespace UI.Layout
         {
             LayoutLines(box, width, height, 0, 0);
 
-            SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, height);
-            SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, width);
+            SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height);
+            SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width);
 
             if (box.HorizontalScrollbar.Visible && box.VerticalScrollbar.Visible)
             {
@@ -62,14 +62,14 @@ namespace UI.Layout
             else if (box.VerticalScrollbar.Visible)
             {
                 LayoutLines(box, width, height, 0, ScrollbarSettings.Thickness);
-                SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, width - ScrollbarSettings.Thickness);
+                SetScrollbarVisibility(box.HorizontalScrollbar, box.ActualSize.Width, box.LayoutSize.Width - ScrollbarSettings.Thickness);
                 if (box.HorizontalScrollbar.Visible)
                     LayoutLines(box, width, height, ScrollbarSettings.Thickness, ScrollbarSettings.Thickness);
             }
             else if (box.HorizontalScrollbar.Visible)
             {
                 LayoutLines(box, width, height, ScrollbarSettings.Thickness, 0);
-                SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, height - ScrollbarSettings.Thickness);
+                SetScrollbarVisibility(box.VerticalScrollbar, box.ActualSize.Height, box.LayoutSize.Height - ScrollbarSettings.Thickness);
                 if (box.VerticalScrollbar.Visible)
                     LayoutLines(box, width, height, ScrollbarSettings.Thickness, ScrollbarSettings.Thickness);
             }

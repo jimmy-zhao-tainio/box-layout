@@ -7,6 +7,5 @@ namespace Boxes
     public interface IExample
     {
         Box GetTop ();
-        Dictionary<Box, SolidBrush> GetBrushes ();
     }
 }

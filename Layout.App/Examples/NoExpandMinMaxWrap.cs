@@ -2,7 +2,7 @@
 
 namespace Boxes
 {
-    public class NoExoandMinMaxWrap : Example, IExample
+    public class NoExoandMinMaxWrap : IExample
     {
         public Box GetTop ()
         {
@@ -18,8 +18,6 @@ namespace Boxes
                         <vbox min-size=""3,3"" max-size=""3, 3"" expand=""false"" />
                     </hbox>
             ");
-            brushes.Clear ();
-            CreateBrushForBox (top);
             return top;
         }
     }

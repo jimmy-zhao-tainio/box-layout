@@ -3,7 +3,7 @@ using UI.Controls;
 
 namespace Boxes
 {
-    public class ExpandMinMaxWrapCrossAlignEndCenter : Example, IExample
+    public class ExpandMinMaxWrapCrossAlignEndCenter : IExample
     {
         public Box GetTop ()
         {
@@ -19,12 +19,6 @@ namespace Boxes
                         <vbox min-size=""3,3"" max-size=""6, 6"" expand=""true"" />
                     </hbox>
             ");
-            brushes.Clear ();
-            int r = 50;
-            int g = 50;
-            int b = 50;
-            brushes.Add (top, new SolidBrush (Color.FromArgb (r, g, b)));
-            CreateBrushForBox (top);
             return top;
         }
     }
