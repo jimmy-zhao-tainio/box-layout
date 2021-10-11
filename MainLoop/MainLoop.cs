@@ -58,13 +58,12 @@ namespace UI
 
             private void Render(Window window)
             {
-                using (var bitmap = new Bitmap(window.PictureBox.Width, window.PictureBox.Height))
-                using (var graphics = Graphics.FromImage(bitmap))
-                {
-                    UI.Render.RenderBox(UI.Structures.Point.New(0, 0, UI.Structures.Orientation.Horizontal), window.Top, graphics);
-                    window.PictureBox.Image?.Dispose();
-                    window.PictureBox.Image = (Bitmap)bitmap.Clone();
-                }
+                Bitmap bitmap = UI.Render.RenderBox(window.Top);
+                if (bitmap == null)
+                    return;
+                window.PictureBox.Image?.Dispose();
+                window.PictureBox.Image = (Bitmap)bitmap.Clone();
+                bitmap.Dispose();
             }
         }
 
