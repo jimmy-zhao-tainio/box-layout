@@ -53,7 +53,7 @@ namespace Unit
             LayoutManager.Process (top, 50, 100);
             Assert.IsTrue (v1.LayoutPosition.Equals (0, 0));
             Assert.IsTrue (v1.LayoutSize.Equals (50, 50));
-            Assert.IsTrue (v1.ActualSize.Equals (50, 100));
+            Assert.IsTrue (v1.ContentSize.Equals (50, 100));
         }
     }
 }

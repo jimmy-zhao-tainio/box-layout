@@ -54,11 +54,11 @@ namespace UI.Controls
             return true;
         }
 
-        public void Add (Box box, int? equalSizeMain = null)
+        public void Add (Box box)
         {
             Children.Add (box);
 
-            MinSize.Main += equalSizeMain == null ? box.Min.GetMain (Orientation) : equalSizeMain.Value;
+            MinSize.Main += box.Min.GetMain (Orientation);
             MinSize.Cross = Math.Max (MinSize.Cross, box.Min.GetCross (Orientation));
 
             Expand.Main = Expand.Main || box.Expand.GetMain (Orientation);
@@ -78,6 +78,20 @@ namespace UI.Controls
                     UserMaxSize.Cross = box.UserMaxSize.GetCross (Orientation);
                 else
                     UserMaxSize.Cross = Math.Max (UserMaxSize.Cross, box.UserMaxSize.GetCross (Orientation));
+            }
+        }
+
+        public Size LayoutSize
+        {
+            get
+            {
+                Size size = Size.New(Orientation);
+                foreach (Box child in Children)
+                {
+                    size.Main += child.LayoutSize.GetMain(Orientation);
+                    size.Cross = Math.Max(size.Cross, child.LayoutSize.GetCross(Orientation));
+                }
+                return size;
             }
         }
     }

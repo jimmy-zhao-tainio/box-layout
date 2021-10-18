@@ -18,7 +18,7 @@ namespace Unit
             LayoutManager.Process (top, 200, 200);
 
             Assert.IsTrue (top.LayoutSize.Equals (200, 200));
-            Assert.IsTrue (top.ActualSize.Equals (100, 100));
+            Assert.IsTrue (top.ContentSize.Equals (100, 100));
         }
 
         [TestMethod]
@@ -28,11 +28,13 @@ namespace Unit
 
             top.UserMinSize.Width = 200;
             top.UserMinSize.Height = 200;
+            top.HorizontalScrollbar.Mode = UI.Structures.ScrollbarMode.Hidden;
+            top.VerticalScrollbar.Mode = UI.Structures.ScrollbarMode.Hidden;
 
             LayoutManager.Process (top, 100, 100);
 
             Assert.IsTrue (top.LayoutSize.Equals (100, 100));
-            Assert.IsTrue (top.ActualSize.Equals (200, 200));
+            Assert.IsTrue (top.ContentSize.Equals (200, 200));
         }
     }
 }

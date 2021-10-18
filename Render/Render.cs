@@ -32,7 +32,7 @@ namespace UI
 
         static public Bitmap RenderBox(Controls.Box box)
         {
-            if (box.LayoutSize.Width == 0 || box.LayoutSize.Height == 0)
+            if (box.LayoutSize.Width <= 0 || box.LayoutSize.Height <= 0)
                 return null;
 
             Bitmap bitmap = new Bitmap(box.LayoutSize.Width, box.LayoutSize.Height);
@@ -43,16 +43,49 @@ namespace UI
             if (brush != null)
                 graphics.FillRectangle(brush, 0, 0, box.LayoutSize.Width, box.LayoutSize.Height);
 
-            foreach (Controls.Box child in box.Children)
+            if (box.ContentSize.Width <= box.LayoutSize.Width && box.ContentSize.Height <= box.LayoutSize.Height)
             {
-                Bitmap childBitmap = Render.RenderBox(child);
-                graphics.DrawImage(childBitmap, child.LayoutPosition.X, child.LayoutPosition.Y);
-                childBitmap.Dispose();
+                foreach (Controls.Box child in box.Children)
+                {
+                    Bitmap childBitmap = Render.RenderBox(child);
+                    if (childBitmap != null)
+                    {
+                        graphics.DrawImage(childBitmap, child.LayoutPosition.X, child.LayoutPosition.Y);
+                        childBitmap.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                Bitmap contentBitmap = new Bitmap(box.ContentSize.Width, box.ContentSize.Height);
+                Graphics contentGraphics = Graphics.FromImage(contentBitmap);
+
+                foreach (Controls.Box child in box.Children)
+                {
+                    Bitmap childBitmap = Render.RenderBox(child);
+                    if (childBitmap != null)
+                    {
+                        contentGraphics.DrawImage(childBitmap, child.LayoutPosition.X, child.LayoutPosition.Y);
+                        childBitmap.Dispose();
+                    }
+                }
+                graphics.DrawImage(contentBitmap,
+                                   Rectangle.FromLTRB(0, 0, 
+                                                      box.LayoutSize.Width, 
+                                                      box.LayoutSize.Height),
+                                   Rectangle.FromLTRB(box.HorizontalScrollbar.Offset, 
+                                                      box.VerticalScrollbar.Offset,
+                                                      box.HorizontalScrollbar.Offset + box.LayoutSize.Width,
+                                                      box.VerticalScrollbar.Offset + box.LayoutSize.Height),
+                                   GraphicsUnit.Pixel);
+
+                contentGraphics.Dispose();
+                contentBitmap.Dispose();
             }
             if (box.HorizontalScrollbar.Visible)
-                Render.RenderHorizontalScrollbar (graphics, box);
+                Render.RenderHorizontalScrollbar(graphics, box);
             if (box.VerticalScrollbar.Visible)
-                Render.RenderVerticalScrollbar (graphics, box);
+                Render.RenderVerticalScrollbar(graphics, box);
             if (box.HorizontalScrollbar.Visible && box.VerticalScrollbar.Visible)
                 Render.RenderCornerScrollbar(graphics, box);
 
@@ -63,7 +96,7 @@ namespace UI
         static private void RenderHorizontalScrollbar(Graphics graphics, Controls.Box box)
         {
             Structures.HScrollbar scrollbar = box.HorizontalScrollbar;
-            int handleLength = ScrollbarHandleLength(scrollbar.Size.Width, box.LayoutSize.Width, box.ActualSize.Width, 
+            int handleLength = ScrollbarHandleLength(scrollbar.Size.Width, box.LayoutSize.Width, box.ContentSize.Width, 
                                                      box.VerticalScrollbar.Visible);
 
             graphics.FillRectangle (new SolidBrush (Color.LightGray), 
@@ -81,7 +114,7 @@ namespace UI
         static private void RenderVerticalScrollbar(Graphics graphics, Controls.Box box)
         {
             Structures.VScrollbar scrollbar = box.VerticalScrollbar;
-            int handleLength = ScrollbarHandleLength(scrollbar.Size.Height, box.LayoutSize.Height, box.ActualSize.Height, 
+            int handleLength = ScrollbarHandleLength(scrollbar.Size.Height, box.LayoutSize.Height, box.ContentSize.Height, 
                                                      box.HorizontalScrollbar.Visible);
 
             graphics.FillRectangle (new SolidBrush (Color.LightGray), 
@@ -96,12 +129,12 @@ namespace UI
                                     handleLength);
         }
 
-        static private int ScrollbarHandleLength(int scrollbarLength, int boxLayoutLength, int boxActualLength, bool oppositeScrollbar)
+        static private int ScrollbarHandleLength(int scrollbarLength, int boxLayoutLength, int boxContentLength, bool oppositeScrollbar)
         {
             int handleLength;
 
             handleLength = scrollbarLength * (boxLayoutLength - (oppositeScrollbar ? ScrollbarSettings.Thickness : 0));
-            handleLength /= boxActualLength;
+            handleLength /= boxContentLength;
             handleLength -= ScrollbarSettings.LengthPadding * 2;
 
             if (handleLength < ScrollbarSettings.Thickness)

@@ -55,37 +55,32 @@ namespace WindowsFormsApp1
             foreach (string key in iboxes.Keys)
                 listBox1.Items.Add (key);
             listBox1.SelectedIndex = 0;
-
-            this.Load += Form1_Load;
-            this.Paint += Form1_Paint;
         }
 
-        int listBoxWidth = 0;
-
-        private void Form1_Load (object sender, EventArgs e)
-        {
-            listBoxWidth = listBox1.Width;
-            Form1_Resize (null, null);
-        }
 
         private void Form1_Resize (object sender, EventArgs e)
         {
-            UI.Layout.LayoutManager.Process (top, this.ClientSize.Width - listBoxWidth, this.ClientSize.Height);
-            this.Invalidate ();
-        }
-
-        private void Form1_Paint (object sender, PaintEventArgs e)
-        {
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-            UI.Render.RenderBox(UI.Structures.Point.New(listBoxWidth, 0, UI.Structures.Orientation.Horizontal), top, e.Graphics);
+            if (top == null)
+                return;
+            Render();
         }
 
         private void listBox1_SelectedIndexChanged (object sender, EventArgs e)
         {
             ibox = iboxes[(string)listBox1.SelectedItem];
             top = ibox.GetTop ();
-            Form1_Load (null, null);
+            Render();
         }
-
+        
+        private void Render()
+        {
+            UI.Layout.LayoutManager.Process (top, this.ClientSize.Width - listBox1.Width, this.ClientSize.Height);
+            Bitmap bitmap = UI.Render.RenderBox(top);
+            if (bitmap == null)
+                return;
+            pictureBox.Image?.Dispose();
+            pictureBox.Image = (Bitmap)bitmap.Clone();
+            bitmap.Dispose();
+        }
     }
 }

@@ -23,9 +23,9 @@ namespace Unit
             Box max = top.Children[0];
 
             Assert.IsTrue (top.LayoutSize.Equals (1000, 1000));
-            Assert.IsTrue (top.ActualSize.Equals (10, 10));
+            Assert.IsTrue (top.ContentSize.Equals (10, 10));
             Assert.IsTrue (max.LayoutSize.Equals (10, 10));
-            Assert.IsTrue (max.ActualSize.Equals (20, 10));
+            Assert.IsTrue (max.ContentSize.Equals (20, 10));
         }
     }
 }
