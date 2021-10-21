@@ -33,6 +33,8 @@ namespace UI.Layout
             }
             SetScrollbarGeometry(box.VerticalScrollbar, box.LayoutSize, box.HorizontalScrollbar.Visible);
             SetScrollbarGeometry(box.HorizontalScrollbar, box.LayoutSize, box.VerticalScrollbar.Visible);
+            box.ScrollSize.Width = box.LayoutSize.Width - box.VerticalScrollbar.Size.Width;
+            box.ScrollSize.Height = box.LayoutSize.Height - box.HorizontalScrollbar.Size.Height;
         }
 
         static private void SetScrollbarGeometry(Scrollbar scrollbar, Size layoutSize, bool oppositeVisible)

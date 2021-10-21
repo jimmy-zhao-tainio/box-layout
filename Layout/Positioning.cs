@@ -109,9 +109,9 @@ namespace UI.Layout
                 if (box.LineAlignCross == UI.Structures.LineAlignCross.Start)
                     crossPosition = 0;
                 else if (box.LineAlignCross == UI.Structures.LineAlignCross.Center)
-                    crossPosition = Math.Max (0, box.LayoutSize.Cross - usedCrossLength) / 2;
+                    crossPosition = Math.Max (0, box.ScrollSize.Cross - usedCrossLength) / 2;
                 else
-                    crossPosition = Math.Max (0, box.LayoutSize.Cross - usedCrossLength);
+                    crossPosition = Math.Max (0, box.ScrollSize.Cross - usedCrossLength);
 
                 foreach (Line line in box.Lines)
                 {
@@ -124,7 +124,7 @@ namespace UI.Layout
             else if (box.LineAlignCross == UI.Structures.LineAlignCross.SpaceEvenly)
             {
                 int usedCrossLength = box.Lines.Sum (i => i.FinalSize.Cross);
-                Spacing spacing = Spacing.New (box.Lines.Count + 1, usedCrossLength, box.LayoutSize.Cross);
+                Spacing spacing = Spacing.New (box.Lines.Count + 1, usedCrossLength, box.ScrollSize.Cross);
 
                 int crossPosition = spacing.Next ();
                 foreach (Line line in box.Lines)
@@ -139,7 +139,7 @@ namespace UI.Layout
             else if (box.LineAlignCross == UI.Structures.LineAlignCross.SpaceBetween)
             {
                 int usedCrossLength = box.Lines.Sum (i => i.FinalSize.Cross);
-                Spacing spacing = Spacing.New (box.Lines.Count - 1, usedCrossLength, box.LayoutSize.Cross);
+                Spacing spacing = Spacing.New (box.Lines.Count - 1, usedCrossLength, box.ScrollSize.Cross);
 
                 int crossPosition = 0;
                 foreach (Line line in box.Lines)
@@ -154,7 +154,7 @@ namespace UI.Layout
             else if (box.LineAlignCross == UI.Structures.LineAlignCross.SpaceAround)
             {
                 int usedCrossLength = box.Lines.Sum (i => i.FinalSize.Cross);
-                Spacing spacing = Spacing.New (box.Lines.Count, usedCrossLength, box.LayoutSize.Cross);
+                Spacing spacing = Spacing.New (box.Lines.Count, usedCrossLength, box.ScrollSize.Cross);
                 int space;
 
                 int crossPosition = 0;

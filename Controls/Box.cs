@@ -40,6 +40,7 @@ namespace UI.Controls
         public Point LayoutPosition;
         public Size LayoutSize;
         public Size ContentSize;
+        public Size ScrollSize;
         public BoxComputed Computed;
 
         public HScrollbar HorizontalScrollbar;
@@ -53,6 +54,7 @@ namespace UI.Controls
             LayoutPosition = Point.New (Orientation);
             LayoutSize = Size.New (Orientation);
             ContentSize = Size.New (Orientation);
+            ScrollSize = Size.New (Orientation);
             Computed = new BoxComputed ();
             UserMinSize = Size.New (0, 0, Orientation);
             UserMaxSize = Size.New (int.MaxValue, int.MaxValue, Orientation);
