@@ -10,29 +10,31 @@ namespace UI
 {
     public partial class Events
     {
-        static public Box FindControl(int x, int y, Box box)
-        {
-            return FindControl(new Structures.HPoint (x, y), box);
-        }
+        static Structures.Point point = Structures.Point.New(0, 0);
 
-        static public Box FindControl(Structures.Point point, Box box)
+        static public Box FindControl(int x, int y, Box box, ref Structures.Point relativePoint)
         {
-            Structures.Point relative = UI.Structures.Point.New (point.X - box.LayoutPosition.X,
-                                                                 point.Y - box.LayoutPosition.Y,
-                                                                 Structures.Orientation.Horizontal);
+            point.X = x - box.LayoutPosition.X;
+            point.Y = y - box.LayoutPosition.Y;
 
-            if (relative.X < 0 || relative.Y < 0)
-                return null;
-            if (relative.X >= box.LayoutSize.Width || 
-                relative.Y >= box.LayoutSize.Height)
+            if (point.X < 0 || 
+                point.Y < 0 ||
+                point.X >= box.LayoutSize.Width || 
+                point.Y >= box.LayoutSize.Height)
                 return null;
 
-            foreach (Box child in box.Children)
+            if (box.HorizontalScrollbar.AtPoint(point) == false && box.VerticalScrollbar.AtPoint(point) == false)
             {
-                Box found = FindControl(relative, child);
-                if (found != null)
-                    return found;
+                foreach (Box child in box.Children)
+                {
+                    Box found = FindControl(point.X, point.Y, child, ref relativePoint);
+                    if (found != null)
+                        return found;
+                }
             }
+
+            relativePoint.X = point.X;
+            relativePoint.Y = point.Y;
             return box;
         }
     }

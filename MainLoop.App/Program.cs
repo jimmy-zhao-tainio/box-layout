@@ -18,7 +18,7 @@ namespace ConsoleApp1
                                 <vbox expand-main=""true"">
                                     <hbox min-size=""80, 80"" expand-cross=""true"" />
                                 </vbox>
-                                <hbox expand=""true"" min-size=""320, 240"" wrap=""true"" scroll-offset-y=""10"">
+                                <hbox expand=""true"" min-size=""320, 240"" wrap=""true"">
                                     <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
                                     <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
                                     <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />

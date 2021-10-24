@@ -56,6 +56,11 @@
                 return Height;
             return Width;
         }
+
+        override public string ToString()
+        {
+            return string.Format("{0}, {1}", Width, Height);
+        }
     }
 
     public class HSize : Size

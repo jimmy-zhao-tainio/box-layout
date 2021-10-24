@@ -35,11 +35,15 @@ namespace UI
                 window.Form.Load += Form_Update;
                 window.Form.Resize += Form_Update;
                 window.PictureBox.MouseMove += PictureBox_MouseMove;
+                window.PictureBox.MouseDown += PictureBox_MouseDown;
+                window.PictureBox.MouseUp += PictureBox_MouseUp;
+                window.PictureBox.MouseCaptureChanged += PictureBox_MouseCaptureChanged;
                 window.Form.Show();
                 window.Form.ResumeLayout();
                 Render(window);
             }
 
+            
             private void Form_Update(object sender, EventArgs e)
             {
                 Window window = (Window)((Form)sender).Tag;
@@ -52,8 +56,25 @@ namespace UI
             private void PictureBox_MouseMove(object sender, MouseEventArgs e)
             {
                 Window window = (Window)((PictureBox)sender).Tag;
-
                 Events.RegisterMouseMove(e.X, e.Y, window.Top);
+            }
+
+            private void PictureBox_MouseDown(object sender, MouseEventArgs e)
+            {
+                Window window = (Window)((PictureBox)sender).Tag;
+                Events.RegisterMouseDown(e.X, e.Y, window.Top);
+            }
+
+            private void PictureBox_MouseUp(object sender, MouseEventArgs e)
+            {
+                Window window = (Window)((PictureBox)sender).Tag;
+                Events.RegisterMouseUp(e.X, e.Y, window.Top);
+            }
+
+            private void PictureBox_MouseCaptureChanged(object sender, EventArgs e)
+            {
+                Window window = (Window)((PictureBox)sender).Tag;
+                Events.RegisterMouseLose(window.Top);
             }
 
             private void Render(Window window)

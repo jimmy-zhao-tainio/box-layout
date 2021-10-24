@@ -14,16 +14,18 @@ namespace UI
 
         static Random random = new Random ();
 
-        static SolidBrush CreateBrushForBox (Controls.Box box)
+        static SolidBrush CreateBrushForBox(Controls.Box box)
         {
             SolidBrush brush = null;
 
             if (box.Children.Count == 0)
             {
-                int r = random.Next (256 - 50) + 50;
-                int g = random.Next (256 - 50) + 50;
-                int b = random.Next (256 - 50) + 50;
-                brush = new SolidBrush(Color.FromArgb(r, g, b));
+                byte[] colorBytes = new byte[3];
+                colorBytes[0] = (byte)(random.Next(128) + 80);
+                colorBytes[1] = (byte)(random.Next(128) + 100);
+                colorBytes[2] = (byte)(random.Next(128) + 120);
+
+                brush = new SolidBrush(Color.FromArgb(255, colorBytes[0], colorBytes[1], colorBytes[2]));
             }
             for (int i = 0; i < box.Children.Count; i++)
                 CreateBrushForBox (box.Children[i]);
@@ -83,21 +85,19 @@ namespace UI
                 contentBitmap.Dispose();
             }
             if (box.HorizontalScrollbar.Visible)
-                Render.RenderHorizontalScrollbar(graphics, box);
+                Render.RenderScrollbar(graphics, box, box.HorizontalScrollbar);
             if (box.VerticalScrollbar.Visible)
-                Render.RenderVerticalScrollbar(graphics, box);
+                Render.RenderScrollbar(graphics, box, box.VerticalScrollbar);
             if (box.HorizontalScrollbar.Visible && box.VerticalScrollbar.Visible)
-                Render.RenderCornerScrollbar(graphics, box);
+                Render.RenderScrollbarCorner(graphics, box);
 
             graphics.Dispose();
             return bitmap;
         }
         
-        static private void RenderHorizontalScrollbar(Graphics graphics, Controls.Box box)
+        static private void RenderScrollbar(Graphics graphics, Controls.Box box, Structures.Scrollbar scrollbar)
         {
-            Structures.HScrollbar scrollbar = box.HorizontalScrollbar;
-            int handleLength = ScrollbarHandleLength(scrollbar.Size.Width, box.LayoutSize.Width, box.ContentSize.Width, 
-                                                     box.VerticalScrollbar.Visible);
+            scrollbar.SetHandleGeometry(box.ContentSize.GetMain(scrollbar.Orientation));
 
             graphics.FillRectangle (new SolidBrush (Color.LightGray), 
                                     scrollbar.Position.X, 
@@ -105,58 +105,19 @@ namespace UI
                                     scrollbar.Size.Width, 
                                     scrollbar.Size.Height);
             graphics.FillRectangle (new SolidBrush (Color.Gray), 
-                                    scrollbar.Position.X + ScrollbarSettings.LengthPadding, 
-                                    scrollbar.Position.Y + ScrollbarSettings.SidePadding, 
-                                    handleLength, 
-                                    scrollbar.Size.Height - ScrollbarSettings.SidePadding * 2);
+                                    scrollbar.HandlePosition.X, 
+                                    scrollbar.HandlePosition.Y, 
+                                    scrollbar.HandleSize.Width, 
+                                    scrollbar.HandleSize.Height);
         }
 
-        static private void RenderVerticalScrollbar(Graphics graphics, Controls.Box box)
+        static private void RenderScrollbarCorner(Graphics graphics, Controls.Box box)
         {
-            Structures.VScrollbar scrollbar = box.VerticalScrollbar;
-            int handleLength = ScrollbarHandleLength(scrollbar.Size.Height, box.LayoutSize.Height, box.ContentSize.Height, 
-                                                     box.HorizontalScrollbar.Visible);
-
-            graphics.FillRectangle (new SolidBrush (Color.LightGray), 
-                                    scrollbar.Position.X, 
-                                    scrollbar.Position.Y, 
-                                    scrollbar.Size.Width, 
-                                    scrollbar.Size.Height);
-            graphics.FillRectangle (new SolidBrush (Color.Gray), 
-                                    scrollbar.Position.X + ScrollbarSettings.SidePadding, 
-                                    scrollbar.Position.Y + ScrollbarSettings.LengthPadding, 
-                                    scrollbar.Size.Width - ScrollbarSettings.SidePadding * 2, 
-                                    handleLength);
-        }
-
-        static private int ScrollbarHandleLength(int scrollbarLength, int boxLayoutLength, int boxContentLength, bool oppositeScrollbar)
-        {
-            int handleLength;
-
-            handleLength = scrollbarLength * (boxLayoutLength - (oppositeScrollbar ? ScrollbarSettings.Thickness : 0));
-            handleLength /= boxContentLength;
-            handleLength -= ScrollbarSettings.LengthPadding * 2;
-
-            if (handleLength < ScrollbarSettings.Thickness)
-            {
-                if (scrollbarLength >= ScrollbarSettings.MinHandleLength + ScrollbarSettings.LengthPadding * 2)
-                    handleLength = ScrollbarSettings.Thickness;
-                else
-                    handleLength = scrollbarLength - ScrollbarSettings.LengthPadding * 2;
-            }
-            return handleLength;
-        }
-
-        static private void RenderCornerScrollbar(Graphics graphics, Controls.Box box)
-        {
-            Structures.VScrollbar vscrollbar = box.VerticalScrollbar;
-            Structures.HScrollbar hscrollbar = box.HorizontalScrollbar;
-
             graphics.FillRectangle(new SolidBrush(Color.LightGray),
-                                    vscrollbar.Position.X,
-                                    hscrollbar.Position.Y,
-                                    vscrollbar.Size.Width,
-                                    hscrollbar.Size.Height);
+                                    box.VerticalScrollbar.Position.X,
+                                    box.HorizontalScrollbar.Position.Y,
+                                    box.VerticalScrollbar.Size.Width,
+                                    box.HorizontalScrollbar.Size.Height);
         }
     }
 }

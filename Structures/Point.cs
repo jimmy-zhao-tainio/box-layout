@@ -25,6 +25,11 @@
             return X == x && Y == y;
         }
 
+        public static Point New (int x, int y)
+        {
+            return new HPoint (x, y);
+        }
+
         public static Point New (int x, int y, Orientation orientation)
         {
             if (orientation == Orientation.Horizontal)
@@ -73,6 +78,11 @@
                 Y = value;
             else
                 X = value;
+        }
+
+        override public string ToString()
+        {
+            return string.Format("{0}, {1}", X, Y);
         }
     }
 
