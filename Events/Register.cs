@@ -47,9 +47,11 @@ namespace UI
         {
             if (scrollbar.HandleAtPoint(relativePoint))
             {
+                PrintDebug("RegisterMouseDown: HandleAtPoint");
             }
             else
             { 
+                PrintDebug("RegisterMouseDown: Scrollbar");
             }
         }
 

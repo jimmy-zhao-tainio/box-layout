@@ -45,10 +45,10 @@
         {
             if (Visible == false)
                 return false;
-            if (point.X - Position.X < 0 ||
-                point.Y - Position.Y < 0 ||
-                point.X - Position.X >= Size.Width ||
-                point.Y - Position.Y >= Size.Height)
+            if (point.X - HandlePosition.X < 0 ||
+                point.Y - HandlePosition.Y < 0 ||
+                point.X - HandlePosition.X >= HandleSize.Width ||
+                point.Y - HandlePosition.Y >= HandleSize.Height)
                 return false;
             return true;
         }
