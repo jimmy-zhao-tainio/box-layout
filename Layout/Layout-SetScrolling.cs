@@ -31,13 +31,15 @@ namespace UI.Layout
                 if (box.VerticalScrollbar.Visible)
                     LayoutLines(box, width, height, ScrollbarSettings.Thickness, ScrollbarSettings.Thickness);
             }
-            SetScrollbarGeometry(box.VerticalScrollbar, box.LayoutSize, box.HorizontalScrollbar.Visible);
-            SetScrollbarGeometry(box.HorizontalScrollbar, box.LayoutSize, box.VerticalScrollbar.Visible);
-            box.ScrollSize.Width = box.LayoutSize.Width - box.VerticalScrollbar.Size.Width;
-            box.ScrollSize.Height = box.LayoutSize.Height - box.HorizontalScrollbar.Size.Height;
+            SetScrollbarGeometry(box, box.VerticalScrollbar, box.HorizontalScrollbar.Visible);
+            SetScrollbarGeometry(box, box.HorizontalScrollbar, box.VerticalScrollbar.Visible);
+            box.ScrollAreaSize.Width = box.LayoutSize.Width - box.VerticalScrollbar.Size.Width;
+            box.ScrollAreaSize.Height = box.LayoutSize.Height - box.HorizontalScrollbar.Size.Height;
+            SetHandleGeometry(box, box.VerticalScrollbar);
+            SetHandleGeometry(box, box.HorizontalScrollbar);
         }
 
-        static private void SetScrollbarGeometry(Scrollbar scrollbar, Size layoutSize, bool oppositeVisible)
+        static private void SetScrollbarGeometry(Box box, Scrollbar scrollbar, bool oppositeVisible)
         {
             if (scrollbar.Visible == false)
             {
@@ -46,19 +48,12 @@ namespace UI.Layout
                 scrollbar.Size.Width = 0;
                 scrollbar.Size.Height = 0;
             }
-            else if (scrollbar is HScrollbar)
+            else
             {
-                scrollbar.Position.X = 0;
-                scrollbar.Position.Y = layoutSize.Height - ScrollbarSettings.Thickness;
-                scrollbar.Size.Width = layoutSize.Width - (oppositeVisible ? ScrollbarSettings.Thickness : 0);
-                scrollbar.Size.Height = ScrollbarSettings.Thickness;
-            }
-            else if (scrollbar is VScrollbar)
-            { 
-                scrollbar.Position.X = layoutSize.Width - ScrollbarSettings.Thickness;
-                scrollbar.Position.Y = 0;
-                scrollbar.Size.Width = ScrollbarSettings.Thickness;
-                scrollbar.Size.Height = layoutSize.Height - (oppositeVisible ? ScrollbarSettings.Thickness : 0);
+                scrollbar.Position.Main = 0;
+                scrollbar.Position.Cross = box.LayoutSize.GetCross (scrollbar.Orientation) - ScrollbarSettings.Thickness;
+                scrollbar.Size.Main = box.LayoutSize.GetMain (scrollbar.Orientation) - (oppositeVisible ? ScrollbarSettings.Thickness : 0);
+                scrollbar.Size.Cross = ScrollbarSettings.Thickness;
             }
         }
 
@@ -70,6 +65,16 @@ namespace UI.Layout
                 scrollbar.Visible = true;
             else if (scrollbar.Mode == ScrollbarMode.Auto)
                 scrollbar.Visible = contentLength > layoutLength;
+        }
+
+        static private void SetHandleGeometry(Box box, Structures.Scrollbar scrollbar)
+        {
+            if (scrollbar.Visible == false)
+                return;
+
+            scrollbar.Update (box.ScrollAreaSize.GetMain(scrollbar.Orientation),
+                              box.ContentSize.GetMain(scrollbar.Orientation));
+            scrollbar.SetHandlePositionByContentOffset();
         }
     }
 }

@@ -79,8 +79,8 @@ namespace UI.Controls
                 box.AlignCross = (AlignCross)Enum.Parse (typeof (AlignCross), AlignCross, true);
                 box.LineAlignCross = (LineAlignCross)Enum.Parse (typeof (LineAlignCross), LineAlignCross, true);
                 box.SelfAlignCross = (SelfAlignCross)Enum.Parse (typeof (SelfAlignCross), SelfAlignCross, true);
-                box.VerticalScrollbar.Offset = Int32.Parse(ScrollOffsetY);
-                box.HorizontalScrollbar.Offset = Int32.Parse(ScrollOffsetX);
+                box.VerticalScrollbar.ContentOffset = Int32.Parse(ScrollOffsetY);
+                box.HorizontalScrollbar.ContentOffset = Int32.Parse(ScrollOffsetX);
 
                 for (int i = 0; i < Children.Count; i++)
                     box.Pack (Children[i].ToBox ());

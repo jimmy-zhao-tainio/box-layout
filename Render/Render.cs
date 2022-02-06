@@ -75,10 +75,10 @@ namespace UI
                                    Rectangle.FromLTRB(0, 0, 
                                                       box.LayoutSize.Width, 
                                                       box.LayoutSize.Height),
-                                   Rectangle.FromLTRB(box.HorizontalScrollbar.Offset, 
-                                                      box.VerticalScrollbar.Offset,
-                                                      box.HorizontalScrollbar.Offset + box.LayoutSize.Width,
-                                                      box.VerticalScrollbar.Offset + box.LayoutSize.Height),
+                                   Rectangle.FromLTRB(box.HorizontalScrollbar.ContentOffset, 
+                                                      box.VerticalScrollbar.ContentOffset,
+                                                      box.HorizontalScrollbar.ContentOffset + box.LayoutSize.Width,
+                                                      box.VerticalScrollbar.ContentOffset + box.LayoutSize.Height),
                                    GraphicsUnit.Pixel);
 
                 contentGraphics.Dispose();
@@ -97,8 +97,6 @@ namespace UI
         
         static private void RenderScrollbar(Graphics graphics, Controls.Box box, Structures.Scrollbar scrollbar)
         {
-            scrollbar.SetHandleGeometry(box.ContentSize.GetMain(scrollbar.Orientation));
-
             graphics.FillRectangle (new SolidBrush (Color.LightGray), 
                                     scrollbar.Position.X, 
                                     scrollbar.Position.Y, 

@@ -42,7 +42,6 @@ namespace UI
                 window.Form.ResumeLayout();
                 Render(window);
             }
-
             
             private void Form_Update(object sender, EventArgs e)
             {

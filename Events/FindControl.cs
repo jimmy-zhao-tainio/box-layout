@@ -8,7 +8,7 @@ using UI;
 
 namespace UI
 {
-    public partial class Events
+    public partial class Loop
     {
         static Structures.Point point = Structures.Point.New(0, 0);
 
@@ -27,7 +27,9 @@ namespace UI
             {
                 foreach (Box child in box.Children)
                 {
-                    Box found = FindControl(point.X, point.Y, child, ref relativePoint);
+                    Box found = FindControl(point.X + box.HorizontalScrollbar.ContentOffset, 
+                                            point.Y + box.VerticalScrollbar.ContentOffset, 
+                                            child, ref relativePoint);
                     if (found != null)
                         return found;
                 }

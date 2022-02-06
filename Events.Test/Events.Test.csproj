@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Test.EventQueue.cs" />
     <Compile Include="Test.FindControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

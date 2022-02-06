@@ -11,32 +11,38 @@ namespace Unit
         [TestMethod]
         public void FindControl()
         {
+            UI.Structures.Point relativePoint = UI.Structures.Point.New(0, 0);
+
             Box top = BoxCreate.FromXml (@"
                 <hbox min-size=""100, 100"" />
             ");
 
             LayoutManager.Process (top, 100, 100);
-            Assert.IsTrue(UI.Events.FindControl(0, 0, top) == top);
-            Assert.IsTrue(UI.Events.FindControl(99, 99, top) == top);
-            Assert.IsTrue(UI.Events.FindControl(100, 100, top) == null);
+            Assert.IsTrue(UI.Loop.FindControl(0, 0, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.Loop.FindControl(99, 99, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.Loop.FindControl(100, 100, top, ref relativePoint) == null);
         }
     
         [TestMethod]
         public void FindControlOverflow()
         {
+            UI.Structures.Point relativePoint = UI.Structures.Point.New(0, 0);
+            
             Box top = BoxCreate.FromXml (@"
                 <hbox min-size=""100, 100"" />
             ");
 
             LayoutManager.Process (top, 50, 50);
-            Assert.IsTrue(UI.Events.FindControl(0, 0, top) == top);
-            Assert.IsTrue(UI.Events.FindControl(49, 49, top) == top);
-            Assert.IsTrue(UI.Events.FindControl(50, 50, top) == null);
+            Assert.IsTrue(UI.Loop.FindControl(0, 0, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.Loop.FindControl(49, 49, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.Loop.FindControl(50, 50, top, ref relativePoint) == null);
         }
 
         [TestMethod]
         public void FindControlChildOverflow()
         {
+            UI.Structures.Point relativePoint = UI.Structures.Point.New(0, 0);
+            
             Box top = BoxCreate.FromXml (@"
                 <hbox min-size=""100, 100"">
                     <hbox min-size=""100, 100"" />
@@ -44,7 +50,7 @@ namespace Unit
             ");
 
             LayoutManager.Process (top, 50, 50);
-            Assert.IsTrue(UI.Events.FindControl(50, 50, top) == null);
+            Assert.IsTrue(UI.Loop.FindControl(50, 50, top, ref relativePoint) == null);
         }
     }
 }

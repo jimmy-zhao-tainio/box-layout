@@ -1,4 +1,6 @@
-﻿namespace UI.Structures
+﻿using System.Diagnostics;
+
+namespace UI.Structures
 {
     public enum ScrollbarMode
     {
@@ -16,7 +18,10 @@
         public Size HandleSize;
         public Point HandlePosition;
         public bool Visible;
-        public int Offset; // Amount of pixels scrolled.
+
+        public int ContentOffset; // Amount of pixels scrolled.
+        
+        ScrollbarLengths Lengths = new ScrollbarLengths();
 
         public Scrollbar(ScrollbarMode mode, Orientation orientation)
         {
@@ -26,50 +31,55 @@
             Position = Point.New(orientation);
             HandlePosition = Point.New(orientation);
             Mode = mode;
-            Offset = 0;
+            ContentOffset = 0;
+        }
+
+        public void Update(int scrollAreaLength, int contentLength)
+        {
+            Lengths.SetLengths(contentLength, scrollAreaLength);
+            HandleSize.Main = Lengths.HandleLength;
+            HandleSize.Cross = Size.Cross - ScrollbarSettings.SidePadding * 2;
+
+            if (scrollAreaLength + ContentOffset > contentLength)
+                ContentOffset = contentLength - scrollAreaLength;
+        }
+
+        public void SetHandlePositionByContentOffset()
+        {
+            int handleOffset = (int)(ContentOffset * Lengths.ContentHandleOffsetRatio);
+
+            HandlePosition.Main = Position.Main + ScrollbarSettings.LengthPadding + handleOffset;
+            HandlePosition.Cross = Position.Cross + ScrollbarSettings.SidePadding;
+        }
+
+        public int GetContentOffsetByHandleCenter(int handleCenter)
+        {
+            int handleOffset = handleCenter - (HandleSize.Main / 2);
+            if (handleOffset < 0)
+                handleOffset = 0;
+            else if (handleOffset + HandleSize.Main > Lengths.EffectiveScrollbarLength)
+                handleOffset = Lengths.EffectiveScrollbarLength - HandleSize.Main;
+            return (int)(handleOffset * Lengths.HandleContentOffsetRatio);
         }
 
         public bool AtPoint(Structures.Point point)
         {
             if (Visible == false)
                 return false;
-            if (point.X - Position.X < 0 ||
-                point.Y - Position.Y < 0 ||
-                point.X - Position.X >= Size.Width ||
-                point.Y - Position.Y >= Size.Height)
-                return false;
-            return true;
+            if (point.X >= Position.X && point.X < Position.X + Size.Width &&
+                point.Y >= Position.Y && point.Y < Position.Y + Size.Height)
+                return true;
+            return false;
         }
 
         public bool HandleAtPoint(Structures.Point point)
         {
             if (Visible == false)
                 return false;
-            if (point.X - HandlePosition.X < 0 ||
-                point.Y - HandlePosition.Y < 0 ||
-                point.X - HandlePosition.X >= HandleSize.Width ||
-                point.Y - HandlePosition.Y >= HandleSize.Height)
-                return false;
-            return true;
-        }
-
-        public void SetHandleGeometry(int contentLength)
-        {
-            // (scrollbarLength / contentLength) * scrollbarLength
-            HandleSize.Main = Size.Main * Size.Main;
-            HandleSize.Main /= contentLength;
-            HandleSize.Main -= ScrollbarSettings.LengthPadding * 2;
-
-            if (HandleSize.Main < ScrollbarSettings.Thickness)
-            {
-                if (Size.Main >= ScrollbarSettings.MinHandleLength + ScrollbarSettings.LengthPadding * 2)
-                    HandleSize.Main = ScrollbarSettings.Thickness;
-                else
-                    HandleSize.Main = Size.Main - ScrollbarSettings.LengthPadding * 2;
-            }
-            HandleSize.Cross = Size.Cross - ScrollbarSettings.SidePadding * 2;
-            HandlePosition.Main = Position.Main + ScrollbarSettings.LengthPadding;
-            HandlePosition.Cross = Position.Cross + ScrollbarSettings.SidePadding;
+            if (point.X >= HandlePosition.X && point.X < HandlePosition.X + HandleSize.Width &&
+                point.Y >= HandlePosition.Y && point.Y < HandlePosition.Y + HandleSize.Height)
+                return true;
+            return false;
         }
     }
 

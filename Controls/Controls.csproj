@@ -47,7 +47,6 @@
     <Compile Include="BoxCreate.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Structures\Structures.csproj">
