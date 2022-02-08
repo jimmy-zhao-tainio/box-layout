@@ -18,6 +18,8 @@ namespace UI.Structures
         public Size HandleSize;
         public Point HandlePosition;
         public bool Visible;
+        public int SelectedOriginalAbsoluteMain = 0;
+        public int SelectedOriginalHandleMain = 0;
 
         public int ContentOffset; // Amount of pixels scrolled.
         
@@ -42,24 +44,28 @@ namespace UI.Structures
 
             if (scrollAreaLength + ContentOffset > contentLength)
                 ContentOffset = contentLength - scrollAreaLength;
-        }
 
-        public void SetHandlePositionByContentOffset()
-        {
             int handleOffset = (int)(ContentOffset * Lengths.ContentHandleOffsetRatio);
 
             HandlePosition.Main = Position.Main + ScrollbarSettings.LengthPadding + handleOffset;
             HandlePosition.Cross = Position.Cross + ScrollbarSettings.SidePadding;
         }
 
-        public int GetContentOffsetByHandleCenter(int handleCenter)
+        public void SetContentOffsetByHandleCenter(int handleCenter)
         {
-            int handleOffset = handleCenter - (HandleSize.Main / 2);
+            int handlePosition = handleCenter - (HandleSize.Main / 2);
+            SetContentOffsetByHandlePosition(handlePosition);
+        }
+
+        public void SetContentOffsetByHandlePosition(int handlePosition)
+        {
+            int handleOffset = handlePosition;
             if (handleOffset < 0)
                 handleOffset = 0;
             else if (handleOffset + HandleSize.Main > Lengths.EffectiveScrollbarLength)
                 handleOffset = Lengths.EffectiveScrollbarLength - HandleSize.Main;
-            return (int)(handleOffset * Lengths.HandleContentOffsetRatio);
+            // Setting content offset
+            ContentOffset = (int)(handleOffset * Lengths.HandleContentOffsetRatio);
         }
 
         public bool AtPoint(Structures.Point point)

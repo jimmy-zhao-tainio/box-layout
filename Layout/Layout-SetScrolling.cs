@@ -35,6 +35,12 @@ namespace UI.Layout
             SetScrollbarGeometry(box, box.HorizontalScrollbar, box.VerticalScrollbar.Visible);
             box.ScrollAreaSize.Width = box.LayoutSize.Width - box.VerticalScrollbar.Size.Width;
             box.ScrollAreaSize.Height = box.LayoutSize.Height - box.HorizontalScrollbar.Size.Height;
+        }
+
+        static private void SetScrollingHandles(Box box)
+        {
+            foreach (Box child in box.Children)
+                SetScrollingHandles(child);
             SetHandleGeometry(box, box.VerticalScrollbar);
             SetHandleGeometry(box, box.HorizontalScrollbar);
         }
@@ -70,11 +76,12 @@ namespace UI.Layout
         static private void SetHandleGeometry(Box box, Structures.Scrollbar scrollbar)
         {
             if (scrollbar.Visible == false)
+            {
+                scrollbar.ContentOffset = 0;
                 return;
-
+            }
             scrollbar.Update (box.ScrollAreaSize.GetMain(scrollbar.Orientation),
                               box.ContentSize.GetMain(scrollbar.Orientation));
-            scrollbar.SetHandlePositionByContentOffset();
         }
     }
 }

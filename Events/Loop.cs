@@ -10,6 +10,7 @@ namespace UI
     {
         private EventQueue Queue;
         private Box Top;
+        private Structures.Scrollbar SelectedScrollbar = null;
 
         public delegate void RenderHandler (Bitmap bitmap);
         public event RenderHandler RenderEvent;
@@ -64,6 +65,8 @@ namespace UI
         {
             Structures.Point relativePoint = Structures.Point.New(0, 0);
 
+            SelectedScrollbar = null;
+
             Box found = Loop.FindControl(e.X, e.Y, Top, ref relativePoint);
             if (found == null)
                 return;
@@ -73,6 +76,16 @@ namespace UI
         {
             Structures.Point relativePoint = Structures.Point.New(0, 0);
 
+            if (SelectedScrollbar != null)
+            {
+                Structures.Point absolutePoint = Structures.Point.New(e.X, e.Y);
+                int mainDiff = absolutePoint.GetMain(SelectedScrollbar.Orientation) -
+                               SelectedScrollbar.SelectedOriginalAbsoluteMain;
+                SelectedScrollbar.SetContentOffsetByHandlePosition(SelectedScrollbar.SelectedOriginalHandleMain + mainDiff);
+                ProcessAndRender();
+                return;
+            }
+
             Box found = Loop.FindControl(e.X, e.Y, Top, ref relativePoint);
 
             if (found == null)
@@ -80,39 +93,39 @@ namespace UI
                 PrintDebug("RegisterMouseMove: null");
                 return;
             }
-
-            PrintDebug(string.Format("RegisterMouseMove: {0}, {1}, {2}", found.GetHashCode(), found.LayoutSize.Width, found.LayoutSize.Height));
         }
 
         private void Queue_MouseLoseEvent(MouseLoseEventArgs e)
         {
+            SelectedScrollbar = null;
         }
 
         private void Queue_MouseDownEvent(MouseDownEventArgs e)
         {
+            Structures.Point absolutePoint = Structures.Point.New(e.X, e.Y);
             Structures.Point relativePoint = Structures.Point.New(0, 0);
 
             Box found = Loop.FindControl(e.X, e.Y, Top, ref relativePoint);
             if (found == null)
                 return;
             if (found.HorizontalScrollbar.AtPoint(relativePoint))
-                MouseDownScrollbar(found, found.HorizontalScrollbar, relativePoint);
+                MouseDownScrollbar(found, found.HorizontalScrollbar, absolutePoint, relativePoint);
             else if (found.VerticalScrollbar.AtPoint(relativePoint))
-                MouseDownScrollbar(found, found.VerticalScrollbar, relativePoint);
+                MouseDownScrollbar(found, found.VerticalScrollbar, absolutePoint, relativePoint);
         }
 
-        private void MouseDownScrollbar(Box box, Structures.Scrollbar scrollbar, Structures.Point relativePoint)
+        private void MouseDownScrollbar(Box box, Structures.Scrollbar scrollbar, Structures.Point absolutePoint, Structures.Point relativePoint)
         {
             if (scrollbar.HandleAtPoint(relativePoint))
             {
-                PrintDebug("RegisterMouseDown: HandleAtPoint");
+                SelectedScrollbar = scrollbar;
+                SelectedScrollbar.SelectedOriginalAbsoluteMain = absolutePoint.GetMain(scrollbar.Orientation);
+                SelectedScrollbar.SelectedOriginalHandleMain = SelectedScrollbar.HandlePosition.Main;
             }
             else
             {
                 int handleCenter = relativePoint.GetMain(scrollbar.Orientation);
-                int contentOffset = scrollbar.GetContentOffsetByHandleCenter(handleCenter);
-                scrollbar.ContentOffset = contentOffset;
-                PrintDebug("RegisterMouseDown: Scrollbar");
+                scrollbar.SetContentOffsetByHandleCenter(handleCenter);
                 ProcessAndRender();
             }
         }

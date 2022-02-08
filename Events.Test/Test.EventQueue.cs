@@ -16,7 +16,7 @@ namespace Unit
             int maxItems = 10000;
             int handledItems = 0;
 
-            queue.MouseMoveEvent += (UI.MouseMoveEventArgs e) =>
+            queue.MouseDownEvent += (UI.MouseDownEventArgs e) =>
             {
                 Thread.SpinWait(1000);
                 handledItems++;
@@ -24,7 +24,7 @@ namespace Unit
             for (int i = 0; i < maxItems; i++)
             {
                 Thread.SpinWait(1000);
-                queue.Enqueue(new UI.MouseMoveEventArgs(i, i));
+                queue.Enqueue(new UI.MouseDownEventArgs(i, i));
             }
             queue.Dispose();
             Assert.IsTrue(handledItems == maxItems);

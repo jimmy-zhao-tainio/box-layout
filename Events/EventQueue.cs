@@ -112,6 +112,8 @@ namespace UI
                 // Keeping all of them is too slow.
                 if (item is ChangeSizeEventArgs)
                     items.RemoveAll(e => e is ChangeSizeEventArgs);
+                if (item is MouseMoveEventArgs)
+                    items.RemoveAll(e => e is MouseMoveEventArgs);
                 items.Insert(0, item);
                 Monitor.PulseAll(locker);
             }

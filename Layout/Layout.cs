@@ -10,6 +10,7 @@ namespace UI.Layout
         {
             SetMinMainCrossSizes (top);
             SetScrolling (top, width, height);
+            SetScrollingHandles (top);
             SetLinePositions (top);
             SetAlignMain (top);
             SetAlignCross (top);
