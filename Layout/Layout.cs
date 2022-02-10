@@ -6,8 +6,13 @@ namespace UI.Layout
 {
     public partial class LayoutManager
     {
-        static public void Process(Box top, int width, int height)
+        static public void Process(Box top, int width, int height, bool onlyScrolling = false)
         {
+            if (onlyScrolling)
+            {
+                SetScrollingHandles (top);
+                return;
+            }
             SetMinMainCrossSizes (top);
             SetScrolling (top, width, height);
             SetScrollingHandles (top);

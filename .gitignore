@@ -11,3 +11,4 @@ bin
 obj
 packages
 /~$box-layout-settings.pptm
+*.testlog

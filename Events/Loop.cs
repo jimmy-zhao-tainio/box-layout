@@ -78,11 +78,8 @@ namespace UI
 
             if (SelectedScrollbar != null)
             {
-                Structures.Point absolutePoint = Structures.Point.New(e.X, e.Y);
-                int mainDiff = absolutePoint.GetMain(SelectedScrollbar.Orientation) -
-                               SelectedScrollbar.SelectedOriginalAbsoluteMain;
-                SelectedScrollbar.SetContentOffsetByHandlePosition(SelectedScrollbar.SelectedOriginalHandleMain + mainDiff);
-                ProcessAndRender();
+                SelectedScrollbar.DragScroll(Structures.Point.New(e.X, e.Y).GetMain(SelectedScrollbar.Orientation));
+                ProcessAndRender(true);
                 return;
             }
 
@@ -119,25 +116,23 @@ namespace UI
             if (scrollbar.HandleAtPoint(relativePoint))
             {
                 SelectedScrollbar = scrollbar;
-                SelectedScrollbar.SelectedOriginalAbsoluteMain = absolutePoint.GetMain(scrollbar.Orientation);
-                SelectedScrollbar.SelectedOriginalHandleMain = SelectedScrollbar.HandlePosition.Main;
+                SelectedScrollbar.DragScrollBegin(absolutePoint.GetMain(scrollbar.Orientation));
             }
             else
             {
-                int handleCenter = relativePoint.GetMain(scrollbar.Orientation);
-                scrollbar.SetContentOffsetByHandleCenter(handleCenter);
-                ProcessAndRender();
+                scrollbar.SetContentOffsetByHandleCenter(relativePoint.GetMain(scrollbar.Orientation));
+                ProcessAndRender(true);
             }
         }
 
-        private void ProcessAndRender()
+        private void ProcessAndRender(bool onlyScrolling = false)
         {
-            ProcessAndRender(Top.LayoutSize.Width, Top.LayoutSize.Height);
+            ProcessAndRender(Top.LayoutSize.Width, Top.LayoutSize.Height, onlyScrolling);
         }
 
-        private void ProcessAndRender(int width, int height)
+        private void ProcessAndRender(int width, int height, bool onlyScrolling = false)
         {
-            LayoutManager.Process (Top, width, height);
+            LayoutManager.Process (Top, width, height, onlyScrolling);
 
             Bitmap bitmap = UI.Render.RenderBox(Top);
             if (bitmap == null)

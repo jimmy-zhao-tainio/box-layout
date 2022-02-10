@@ -12,26 +12,6 @@ namespace UI
     {
         static Dictionary<Controls.Box, SolidBrush> brushes = new Dictionary<Controls.Box, SolidBrush> ();
 
-        static Random random = new Random ();
-
-        static SolidBrush CreateBrushForBox(Controls.Box box)
-        {
-            SolidBrush brush = null;
-
-            if (box.Children.Count == 0)
-            {
-                byte[] colorBytes = new byte[3];
-                colorBytes[0] = (byte)(random.Next(128) + 80);
-                colorBytes[1] = (byte)(random.Next(128) + 100);
-                colorBytes[2] = (byte)(random.Next(128) + 120);
-
-                brush = new SolidBrush(Color.FromArgb(255, colorBytes[0], colorBytes[1], colorBytes[2]));
-            }
-            for (int i = 0; i < box.Children.Count; i++)
-                CreateBrushForBox (box.Children[i]);
-            return brush;
-        }
-
         static public Bitmap RenderBox(Controls.Box box)
         {
             if (box.LayoutSize.Width <= 0 || box.LayoutSize.Height <= 0)
@@ -45,45 +25,25 @@ namespace UI
             if (brush != null)
                 graphics.FillRectangle(brush, 0, 0, box.LayoutSize.Width, box.LayoutSize.Height);
 
-            if (box.ContentSize.Width <= box.LayoutSize.Width && box.ContentSize.Height <= box.LayoutSize.Height)
+            foreach (Controls.Box child in box.Children)
             {
-                foreach (Controls.Box child in box.Children)
+                if (!RectangleIntersects (0, 0, box.LayoutSize.Width, box.LayoutSize.Height,
+                                          child.LayoutPosition.X - box.HorizontalScrollbar.ContentOffset,
+                                          child.LayoutPosition.Y - box.VerticalScrollbar.ContentOffset,
+                                          child.LayoutSize.Width,
+                                          child.LayoutSize.Height))
+                    continue;
+
+                Bitmap childBitmap = Render.RenderBox(child);
+                if (childBitmap != null)
                 {
-                    Bitmap childBitmap = Render.RenderBox(child);
-                    if (childBitmap != null)
-                    {
-                        graphics.DrawImage(childBitmap, child.LayoutPosition.X, child.LayoutPosition.Y);
-                        childBitmap.Dispose();
-                    }
+                    graphics.DrawImage(childBitmap, 
+                                       child.LayoutPosition.X - box.HorizontalScrollbar.ContentOffset, 
+                                       child.LayoutPosition.Y - box.VerticalScrollbar.ContentOffset);
+                    childBitmap.Dispose();
                 }
             }
-            else
-            {
-                Bitmap contentBitmap = new Bitmap(box.ContentSize.Width, box.ContentSize.Height);
-                Graphics contentGraphics = Graphics.FromImage(contentBitmap);
 
-                foreach (Controls.Box child in box.Children)
-                {
-                    Bitmap childBitmap = Render.RenderBox(child);
-                    if (childBitmap != null)
-                    {
-                        contentGraphics.DrawImage(childBitmap, child.LayoutPosition.X, child.LayoutPosition.Y);
-                        childBitmap.Dispose();
-                    }
-                }
-                graphics.DrawImage(contentBitmap,
-                                   Rectangle.FromLTRB(0, 0, 
-                                                      box.LayoutSize.Width, 
-                                                      box.LayoutSize.Height),
-                                   Rectangle.FromLTRB(box.HorizontalScrollbar.ContentOffset, 
-                                                      box.VerticalScrollbar.ContentOffset,
-                                                      box.HorizontalScrollbar.ContentOffset + box.LayoutSize.Width,
-                                                      box.VerticalScrollbar.ContentOffset + box.LayoutSize.Height),
-                                   GraphicsUnit.Pixel);
-
-                contentGraphics.Dispose();
-                contentBitmap.Dispose();
-            }
             if (box.HorizontalScrollbar.Visible)
                 Render.RenderScrollbar(graphics, box, box.HorizontalScrollbar);
             if (box.VerticalScrollbar.Visible)
@@ -94,7 +54,20 @@ namespace UI
             graphics.Dispose();
             return bitmap;
         }
-        
+
+        static private bool RectangleIntersects(int x1, int y1, int w1, int h1,
+                                                int x2, int y2, int w2, int h2)
+        {
+            int leftX = Math.Max(x1, x2);
+            int rightX = Math.Min(x1 + w1, x2 + w2);
+            int topY = Math.Max(y1, y2);
+            int bottomY = Math.Min(y1 + h1, y2 + h2);
+
+            if (leftX < rightX && topY < bottomY)
+                return true;
+            return false;
+        }
+
         static private void RenderScrollbar(Graphics graphics, Controls.Box box, Structures.Scrollbar scrollbar)
         {
             graphics.FillRectangle (new SolidBrush (Color.LightGray), 
@@ -116,6 +89,26 @@ namespace UI
                                     box.HorizontalScrollbar.Position.Y,
                                     box.VerticalScrollbar.Size.Width,
                                     box.HorizontalScrollbar.Size.Height);
+        }
+
+        static Random random = new Random ();
+
+        static SolidBrush CreateBrushForBox(Controls.Box box)
+        {
+            SolidBrush brush = null;
+
+            if (box.Children.Count == 0)
+            {
+                byte[] colorBytes = new byte[3];
+                colorBytes[0] = (byte)(random.Next(128) + 80);
+                colorBytes[1] = (byte)(random.Next(128) + 100);
+                colorBytes[2] = (byte)(random.Next(128) + 120);
+
+                brush = new SolidBrush(Color.FromArgb(255, colorBytes[0], colorBytes[1], colorBytes[2]));
+            }
+            for (int i = 0; i < box.Children.Count; i++)
+                CreateBrushForBox (box.Children[i]);
+            return brush;
         }
     }
 }

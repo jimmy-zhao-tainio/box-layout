@@ -18,13 +18,25 @@ namespace UI.Structures
         public Size HandleSize;
         public Point HandlePosition;
         public bool Visible;
-        public int SelectedOriginalAbsoluteMain = 0;
-        public int SelectedOriginalHandleMain = 0;
+
+        private int ContentLength;
+        private int ViewLength;
+        private int ScrollbarLength;
+        private int EffectiveScrollbarLength;
+        private int HandleLength;
+        private double ViewContentRatio;
+
+        private int ContentScrollRange;
+        private int HandleScrollRange;
+
+        private double HandleContentOffsetRatio;
+        private double ContentHandleOffsetRatio;
+
+        private int DragOriginalAbsoluteMain = 0;
+        private int DragOriginalHandleMain = 0;
 
         public int ContentOffset; // Amount of pixels scrolled.
         
-        ScrollbarLengths Lengths = new ScrollbarLengths();
-
         public Scrollbar(ScrollbarMode mode, Orientation orientation)
         {
             Orientation = orientation;
@@ -38,14 +50,14 @@ namespace UI.Structures
 
         public void Update(int scrollAreaLength, int contentLength)
         {
-            Lengths.SetLengths(contentLength, scrollAreaLength);
-            HandleSize.Main = Lengths.HandleLength;
+            SetLengths(contentLength, scrollAreaLength);
+            HandleSize.Main = HandleLength;
             HandleSize.Cross = Size.Cross - ScrollbarSettings.SidePadding * 2;
 
             if (scrollAreaLength + ContentOffset > contentLength)
                 ContentOffset = contentLength - scrollAreaLength;
 
-            int handleOffset = (int)(ContentOffset * Lengths.ContentHandleOffsetRatio);
+            int handleOffset = (int)(ContentOffset * ContentHandleOffsetRatio);
 
             HandlePosition.Main = Position.Main + ScrollbarSettings.LengthPadding + handleOffset;
             HandlePosition.Cross = Position.Cross + ScrollbarSettings.SidePadding;
@@ -62,10 +74,9 @@ namespace UI.Structures
             int handleOffset = handlePosition;
             if (handleOffset < 0)
                 handleOffset = 0;
-            else if (handleOffset + HandleSize.Main > Lengths.EffectiveScrollbarLength)
-                handleOffset = Lengths.EffectiveScrollbarLength - HandleSize.Main;
-            // Setting content offset
-            ContentOffset = (int)(handleOffset * Lengths.HandleContentOffsetRatio);
+            else if (handleOffset + HandleSize.Main > EffectiveScrollbarLength)
+                handleOffset = EffectiveScrollbarLength - HandleSize.Main;
+            ContentOffset = (int)(handleOffset * HandleContentOffsetRatio);
         }
 
         public bool AtPoint(Structures.Point point)
@@ -86,6 +97,58 @@ namespace UI.Structures
                 point.Y >= HandlePosition.Y && point.Y < HandlePosition.Y + HandleSize.Height)
                 return true;
             return false;
+        }
+
+        private void SetLengths(int contentLength, int viewLength)
+        {
+            ContentLength = contentLength;
+            ViewLength = viewLength;
+            ScrollbarLength = viewLength;
+            EffectiveScrollbarLength = ScrollbarLength - (ScrollbarSettings.LengthPadding * 2);
+
+            ViewContentRatio = GetViewContentRatio();
+            HandleLength = GetHandleLength();
+
+            ContentScrollRange = ContentLength - ViewLength;
+            HandleScrollRange = EffectiveScrollbarLength - HandleLength;
+
+            HandleContentOffsetRatio = ContentScrollRange / (double)HandleScrollRange;
+            ContentHandleOffsetRatio = HandleScrollRange / (double)ContentScrollRange;
+        }
+
+        private double GetViewContentRatio()
+        {
+            if (ContentLength != 0)
+                return ViewLength / (double)ContentLength;
+            else
+                return 1d;
+        }
+
+        private int GetHandleLength()
+        {
+            int length = (int)(EffectiveScrollbarLength * ViewContentRatio);
+
+            if (length > EffectiveScrollbarLength)
+                return EffectiveScrollbarLength;
+            if (length < ScrollbarSettings.MinHandleLength)
+            {
+                if (EffectiveScrollbarLength < ScrollbarSettings.MinHandleLength)
+                    return EffectiveScrollbarLength;
+                return ScrollbarSettings.MinHandleLength;
+            }
+            return length;
+        }
+
+        public void DragScrollBegin(int absoluteMain)
+        {
+            DragOriginalAbsoluteMain = absoluteMain;
+            DragOriginalHandleMain = HandlePosition.Main;
+        }
+
+        public void DragScroll(int absoluteMain)
+        {
+            int mainDiff = absoluteMain - DragOriginalAbsoluteMain;
+            SetContentOffsetByHandlePosition(DragOriginalHandleMain + mainDiff);
         }
     }
 

@@ -48,7 +48,6 @@
     <Compile Include="Orientation.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScrollbarLengths.cs" />
     <Compile Include="ScrollbarSettings.cs" />
     <Compile Include="Scrollbar.cs" />
     <Compile Include="Size.cs" />

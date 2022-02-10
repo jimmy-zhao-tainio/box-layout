@@ -8,7 +8,12 @@ namespace WindowsFormsApp
 {
     class ExampleXml
     {
-        public static string Buffer = @"
+        public static string Buffer;
+
+        static ExampleXml()
+        {
+            Random random = new Random();
+            Buffer = @"
                     <hbox>
                         <vbox expand=""true"">
                             <hbox expand-main=""true"">
@@ -18,109 +23,12 @@ namespace WindowsFormsApp
                                 <vbox expand-main=""true"">
                                     <hbox min-size=""80, 80"" expand-cross=""true"" />
                                 </vbox>
-                                <hbox expand=""true"" min-size=""320, 240"" wrap=""true"">
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                    <hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" /><hbox min-size=""40, 40"" />
-                                </hbox>
+                                <hbox expand=""true"" min-size=""320, 240"" wrap=""true"">";
+            for (int i = 0; i < 500; i++)
+            {
+                Buffer += String.Format(@"<hbox min-size=""{0}, {1}"" />", random.Next(20, 100), random.Next(20, 100));
+            }
+            Buffer += @"</hbox>
                                 <vbox expand-main=""true"">
                                     <hbox min-size=""80, 80"" expand-cross=""true"" />
                                 </vbox>
@@ -129,7 +37,7 @@ namespace WindowsFormsApp
                                 <hbox min-size=""80, 80"" expand-main=""true"" />
                             </hbox>
                         </vbox>
-                    </hbox>
-            ";
+                    </hbox>";
+        }
     }
 }
