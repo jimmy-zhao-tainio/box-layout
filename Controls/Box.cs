@@ -33,6 +33,7 @@ namespace UI.Controls
         public AlignCross AlignCross = AlignCross.Start;
         public LineAlignCross LineAlignCross = LineAlignCross.Start;
         public SelfAlignCross SelfAlignCross = SelfAlignCross.Inherit;
+        public EqualSize EqualSize = EqualSize.False;
 
         public Size UserMinSize;
         public Size UserMaxSize;

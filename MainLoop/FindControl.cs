@@ -8,7 +8,7 @@ using UI;
 
 namespace UI
 {
-    public partial class Loop
+    public partial class MainLoop
     {
         static Structures.Point point = Structures.Point.New(0, 0);
 

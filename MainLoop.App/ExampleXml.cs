@@ -23,10 +23,10 @@ namespace WindowsFormsApp
                                 <vbox expand-main=""true"">
                                     <hbox min-size=""80, 80"" expand-cross=""true"" />
                                 </vbox>
-                                <hbox expand=""true"" min-size=""320, 240"" wrap=""true"">";
+                                <hbox expand=""true"" min-size=""320, 240"" equal-size=""FirstMinimal"" wrap=""true"">";
             for (int i = 0; i < 500; i++)
             {
-                Buffer += String.Format(@"<hbox min-size=""{0}, {1}"" />", random.Next(20, 100), random.Next(20, 100));
+                Buffer += String.Format(@"<hbox min-size=""{0}, {1}"" horizontal-scrollbar=""Hidden"" vertical-scrollbar=""Hidden"" />", random.Next(20, 100), random.Next(20, 100));
             }
             Buffer += @"</hbox>
                                 <vbox expand-main=""true"">

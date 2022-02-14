@@ -1,102 +1,154 @@
-﻿using System.Windows.Forms;
-using System.Drawing;
-using System.Threading;
-using System.Collections.Generic;
-using UI.Layout;
+﻿using System.Diagnostics;
 using UI.Controls;
-using UI.Structures;
+using UI.Layout;
+using System.Drawing;
 using System;
-using System.Diagnostics;
 
 namespace UI
 {
-    public class MainLoop
+    public partial class MainLoop : IDisposable
     {
-        private class Context : ApplicationContext
+        private EventQueue Queue;
+        private Box Top;
+        private Structures.Scrollbar SelectedScrollbar = null;
+
+        public delegate void RenderHandler (Bitmap bitmap);
+        public event RenderHandler RenderEvent;
+
+        public MainLoop(Box top)
         {
-            private int openWindows = 0;
+            Top = top;
+            Queue = new EventQueue();
+            Queue.ChangeSizeEvent += Queue_ChangeSizeEvent;
+            Queue.MouseDownEvent += Queue_MouseDownEvent;
+            Queue.MouseLoseEvent += Queue_MouseLoseEvent;
+            Queue.MouseMoveEvent += Queue_MouseMoveEvent;
+            Queue.MouseUpEvent += Queue_MouseUpEvent;
+        }
 
-            public void Add(Controls.Window window)
+        public void Dispose()
+        {
+            Queue.Dispose();
+        }
+
+        public void ChangeSize(int x, int y)
+        {
+            Queue.Enqueue(new ChangeSizeEventArgs(x, y));
+        }
+
+        public void RegisterMouseMove(int x, int y)
+        {
+            Queue.Enqueue(new MouseMoveEventArgs(x, y));
+        }
+
+        public void RegisterMouseDown(int x, int y)
+        {
+            Queue.Enqueue(new MouseDownEventArgs(x, y));
+        }
+
+        public void RegisterMouseUp(int x, int y)
+        {
+            Queue.Enqueue(new MouseUpEventArgs(x, y));
+        }
+
+        public void RegisterMouseLose()
+        {
+            Queue.Enqueue(new MouseLoseEventArgs());
+        }
+
+        private void Queue_ChangeSizeEvent(ChangeSizeEventArgs e)
+        {
+            ProcessAndRender(e.Width, e.Height);
+        }
+
+        private void Queue_MouseUpEvent(MouseUpEventArgs e)
+        {
+            Structures.Point relativePoint = Structures.Point.New(0, 0);
+
+            SelectedScrollbar = null;
+
+            Box found = MainLoop.FindControl(e.X, e.Y, Top, ref relativePoint);
+            if (found == null)
+                return;
+        }
+
+        private void Queue_MouseMoveEvent(MouseMoveEventArgs e)
+        {
+            Structures.Point relativePoint = Structures.Point.New(0, 0);
+
+            if (SelectedScrollbar != null)
             {
-                lock (this)
-                {
-                    openWindows++;
-                }
-                window.Form.FormClosed += (s, args) =>
-                {
-                    lock (this)
-                    {
-                        if (--openWindows == 0)
-                            ExitThread();
-                    }
-                };
-
-                window.Form.SuspendLayout();
-                window.Form.Load += Form_Update;
-                window.Form.Resize += Form_Update;
-                window.PictureBox.MouseMove += PictureBox_MouseMove;
-                window.PictureBox.MouseDown += PictureBox_MouseDown;
-                window.PictureBox.MouseUp += PictureBox_MouseUp;
-                window.PictureBox.MouseCaptureChanged += PictureBox_MouseCaptureChanged;
-                window.Form.Show();
-                window.Form.ResumeLayout();
-                Render(window);
+                SelectedScrollbar.DragScroll(Structures.Point.New(e.X, e.Y).GetMain(SelectedScrollbar.Orientation));
+                ProcessAndRender(true);
+                return;
             }
-            
-            private void Form_Update(object sender, EventArgs e)
-            {
-                Window window = (Window)((Form)sender).Tag;
-                window.PictureBox.Width = window.Form.ClientSize.Width;
-                window.PictureBox.Height = window.Form.ClientSize.Height;
-                LayoutManager.Process (window.Top, window.PictureBox.Width, window.PictureBox.Height);
-                Render(window);
-            }
 
-            private void PictureBox_MouseMove(object sender, MouseEventArgs e)
-            {
-                Window window = (Window)((PictureBox)sender).Tag;
-                Events.RegisterMouseMove(e.X, e.Y, window.Top);
-            }
+            Box found = MainLoop.FindControl(e.X, e.Y, Top, ref relativePoint);
 
-            private void PictureBox_MouseDown(object sender, MouseEventArgs e)
+            if (found == null)
             {
-                Window window = (Window)((PictureBox)sender).Tag;
-                Events.RegisterMouseDown(e.X, e.Y, window.Top);
-            }
-
-            private void PictureBox_MouseUp(object sender, MouseEventArgs e)
-            {
-                Window window = (Window)((PictureBox)sender).Tag;
-                Events.RegisterMouseUp(e.X, e.Y, window.Top);
-            }
-
-            private void PictureBox_MouseCaptureChanged(object sender, EventArgs e)
-            {
-                Window window = (Window)((PictureBox)sender).Tag;
-                Events.RegisterMouseLose(window.Top);
-            }
-
-            private void Render(Window window)
-            {
-                Bitmap bitmap = UI.Render.RenderBox(window.Top);
-                if (bitmap == null)
-                    return;
-                window.PictureBox.Image?.Dispose();
-                window.PictureBox.Image = (Bitmap)bitmap.Clone();
-                bitmap.Dispose();
+                PrintDebug("RegisterMouseMove: null");
+                return;
             }
         }
 
-        private static readonly Context context = new Context();
-
-        static public void Add(Controls.Window window)
+        private void Queue_MouseLoseEvent(MouseLoseEventArgs e)
         {
-            context.Add(window);
+            SelectedScrollbar = null;
         }
 
-        static public void Run()
+        private void Queue_MouseDownEvent(MouseDownEventArgs e)
         {
-            Application.Run(context);
+            Structures.Point absolutePoint = Structures.Point.New(e.X, e.Y);
+            Structures.Point relativePoint = Structures.Point.New(0, 0);
+
+            Box found = MainLoop.FindControl(e.X, e.Y, Top, ref relativePoint);
+            if (found == null)
+                return;
+            if (found.HorizontalScrollbar.AtPoint(relativePoint))
+                MouseDownScrollbar(found, found.HorizontalScrollbar, absolutePoint, relativePoint);
+            else if (found.VerticalScrollbar.AtPoint(relativePoint))
+                MouseDownScrollbar(found, found.VerticalScrollbar, absolutePoint, relativePoint);
+        }
+
+        private void MouseDownScrollbar(Box box, Structures.Scrollbar scrollbar, Structures.Point absolutePoint, Structures.Point relativePoint)
+        {
+            if (scrollbar.HandleAtPoint(relativePoint))
+            {
+                SelectedScrollbar = scrollbar;
+                SelectedScrollbar.DragScrollBegin(absolutePoint.GetMain(scrollbar.Orientation));
+            }
+            else
+            {
+                scrollbar.SetContentOffsetByHandleCenter(relativePoint.GetMain(scrollbar.Orientation));
+                ProcessAndRender(true);
+            }
+        }
+
+        private void ProcessAndRender(bool onlyScrolling = false)
+        {
+            ProcessAndRender(Top.LayoutSize.Width, Top.LayoutSize.Height, onlyScrolling);
+        }
+
+        private void ProcessAndRender(int width, int height, bool onlyScrolling = false)
+        {
+            LayoutManager.Process (Top, width, height, onlyScrolling);
+
+            Bitmap bitmap = UI.Render.RenderBox(Top);
+            if (bitmap == null)
+                return;
+            if (RenderEvent != null)
+                RenderEvent(bitmap);
+        }
+
+        private string debugLine = null;
+
+        private void PrintDebug(string line)
+        { 
+            if (debugLine == line)
+                return;
+            debugLine = line;
+            Debug.WriteLine(debugLine);
         }
     }
 }

@@ -18,6 +18,8 @@ namespace UI.Controls
             public string MinSize;
             [XmlAttribute ("max-size")]
             public string MaxSize;
+            [XmlAttribute ("equal-size")]
+            public string EqualSize;
 
             [XmlAttribute ("wrap")]
             public string Wrap = "false";
@@ -37,6 +39,11 @@ namespace UI.Controls
             public string SelfAlignCross = "inherit";
             [XmlAttribute ("line-align-cross")]
             public string LineAlignCross = "start";
+
+            [XmlAttribute("horizontal-scrollbar")]
+            public string HorizontalScrollbar;
+            [XmlAttribute("vertical-scrollbar")]
+            public string VerticalScrollbar;
             [XmlAttribute ("scroll-offset-y")]
             public string ScrollOffsetY = "0";
             [XmlAttribute ("scroll-offset-x")]
@@ -79,6 +86,14 @@ namespace UI.Controls
                 box.AlignCross = (AlignCross)Enum.Parse (typeof (AlignCross), AlignCross, true);
                 box.LineAlignCross = (LineAlignCross)Enum.Parse (typeof (LineAlignCross), LineAlignCross, true);
                 box.SelfAlignCross = (SelfAlignCross)Enum.Parse (typeof (SelfAlignCross), SelfAlignCross, true);
+
+                if (EqualSize != null)
+                    box.EqualSize = (EqualSize)Enum.Parse (typeof (EqualSize), EqualSize, true);
+
+                if (HorizontalScrollbar != null)
+                    box.HorizontalScrollbar.Mode = (ScrollbarMode)Enum.Parse (typeof (ScrollbarMode), HorizontalScrollbar, true);
+                if (VerticalScrollbar != null)
+                    box.VerticalScrollbar.Mode = (ScrollbarMode)Enum.Parse (typeof (ScrollbarMode), VerticalScrollbar, true);
                 box.VerticalScrollbar.ContentOffset = Int32.Parse(ScrollOffsetY);
                 box.HorizontalScrollbar.ContentOffset = Int32.Parse(ScrollOffsetX);
 

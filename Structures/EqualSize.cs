@@ -1,9 +1,8 @@
 ﻿namespace UI.Structures
 {
-    public enum SelfEqualSize
+    public enum EqualSize
     {
-        Inherit,
-        True,
-        False
+        False,
+        FirstMinimal
     }
 }

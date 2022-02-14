@@ -18,9 +18,9 @@ namespace Unit
             ");
 
             LayoutManager.Process (top, 100, 100);
-            Assert.IsTrue(UI.Loop.FindControl(0, 0, top, ref relativePoint) == top);
-            Assert.IsTrue(UI.Loop.FindControl(99, 99, top, ref relativePoint) == top);
-            Assert.IsTrue(UI.Loop.FindControl(100, 100, top, ref relativePoint) == null);
+            Assert.IsTrue(UI.MainLoop.FindControl(0, 0, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.MainLoop.FindControl(99, 99, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.MainLoop.FindControl(100, 100, top, ref relativePoint) == null);
         }
     
         [TestMethod]
@@ -33,9 +33,9 @@ namespace Unit
             ");
 
             LayoutManager.Process (top, 50, 50);
-            Assert.IsTrue(UI.Loop.FindControl(0, 0, top, ref relativePoint) == top);
-            Assert.IsTrue(UI.Loop.FindControl(49, 49, top, ref relativePoint) == top);
-            Assert.IsTrue(UI.Loop.FindControl(50, 50, top, ref relativePoint) == null);
+            Assert.IsTrue(UI.MainLoop.FindControl(0, 0, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.MainLoop.FindControl(49, 49, top, ref relativePoint) == top);
+            Assert.IsTrue(UI.MainLoop.FindControl(50, 50, top, ref relativePoint) == null);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace Unit
             ");
 
             LayoutManager.Process (top, 50, 50);
-            Assert.IsTrue(UI.Loop.FindControl(50, 50, top, ref relativePoint) == null);
+            Assert.IsTrue(UI.MainLoop.FindControl(50, 50, top, ref relativePoint) == null);
         }
     }
 }

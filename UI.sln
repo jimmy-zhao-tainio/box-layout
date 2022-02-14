@@ -15,11 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "Controls\Contro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Render", "Render\Render.csproj", "{F6405D2F-0C90-48B9-B44C-3E3A068B8857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events", "Events\Events.csproj", "{455A0D3F-59A0-49DF-8A3E-72C4D08F26CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainLoop", "MainLoop\MainLoop.csproj", "{455A0D3F-59A0-49DF-8A3E-72C4D08F26CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.Test", "Events.Test\Events.Test.csproj", "{D89DCE00-AAD5-413E-9761-0EEBF4EF0C59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainLoop.Test", "MainLoop.Test\MainLoop.Test.csproj", "{D89DCE00-AAD5-413E-9761-0EEBF4EF0C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{C92526DD-7FCA-47D2-A125-4E2C660C649B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainLoop.App", "MainLoop.App\MainLoop.App.csproj", "{C92526DD-7FCA-47D2-A125-4E2C660C649B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

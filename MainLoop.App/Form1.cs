@@ -15,11 +15,11 @@ namespace WindowsFormsApp
 {
     public partial class Form1 : Form
     {
-        UI.Loop loop;
+        UI.MainLoop loop;
 
         public Form1()
         {
-            loop = new UI.Loop(BoxCreate.FromXml(ExampleXml.Buffer));
+            loop = new UI.MainLoop(BoxCreate.FromXml(ExampleXml.Buffer));
 
             Load += Form1_Update;
             Resize += Form1_Update;
