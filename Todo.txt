@@ -1,0 +1,34 @@
+Support alternative layout methods to enable fast text widgets.	
+
+Text widget
+IBM VGA font
+
+User API for widgets
+
+Scrollwheel
+Scrolling steps
+Keyboard scrolling
+Hidden scrolling
+
+Box background Color
+Box border
+
+Button widget
+Radio widget
+Checkbox widget
+Listbox widget
+Dialog widget
+File dialog widget
+Table widget
+Image widget
+Input widget
+
+Aliased curve graphs widget
+
+Console calculator
+
+Rope structure
+
+Advanced text editor
+C#-scripting
+DML-online

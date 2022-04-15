@@ -71,16 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Layout-SetAlign.cs" />
-    <Compile Include="Layout-SetLinePositions.cs" />
-    <Compile Include="Layout-Lines.cs" />
-    <Compile Include="Layout-SetScrolling.cs" />
-    <Compile Include="Layout-SetMin.cs" />
     <Compile Include="Layout.cs" />
-    <Compile Include="Compute.cs" />
-    <Compile Include="Positioning.cs" />
-    <Compile Include="Spacing.cs" />
-    <Compile Include="Lines.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

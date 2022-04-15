@@ -1,4 +1,4 @@
-﻿namespace UI.Layout
+﻿namespace UI.Controls
 {
     public struct Spacing
     {

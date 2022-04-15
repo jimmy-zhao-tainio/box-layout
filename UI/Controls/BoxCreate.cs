@@ -57,9 +57,9 @@ namespace UI.Controls
                 Box box;
 
                 if (Orientation == "horizontal")
-                    box = new BoxHorizontal ();
+                    box = new BoxHorizontal();
                 else
-                    box = new BoxVertical ();
+                    box = new BoxVertical();
                 if (MinSize != null)
                 {
                     box.UserMinSize.Width = Convert.ToInt32 (MinSize.Split (",".ToCharArray ())[0]);

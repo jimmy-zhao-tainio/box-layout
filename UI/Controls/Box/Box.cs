@@ -5,19 +5,19 @@ namespace UI.Controls
 {
     public class BoxHorizontal : Box
     {
-        public BoxHorizontal () : base (Orientation.Horizontal)
+        public BoxHorizontal() : base(Orientation.Horizontal)
         {
         }
     }
 
     public class BoxVertical : Box
     {
-        public BoxVertical () : base (Orientation.Vertical)
+        public BoxVertical() : base(Orientation.Vertical)
         {
         }
     }
 
-    public class Box
+    public partial class Box
     {
         public Orientation Orientation;
 

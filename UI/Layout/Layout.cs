@@ -10,15 +10,14 @@ namespace UI.Layout
         {
             if (onlyScrolling)
             {
-                SetScrollingHandles (top);
+                top.SetScrollingHandles ();
                 return;
             }
-            SetMinMainCrossSizes (top);
-            SetScrolling (top, width, height);
-            SetScrollingHandles (top);
-            SetLinePositions (top);
-            SetAlignMain (top);
-            SetAlignCross (top);
+            top.SetMinSizes ();
+            top.Layout (width, height);
+            top.SetScrollingHandles ();
+            top.AlignLines();
+            top.AlignLinesContent();
         }
     }
 }

@@ -1,42 +1,43 @@
 ﻿using System;
 using UI.Structures;
-using UI.Controls;
 
-namespace UI.Layout
+namespace UI.Controls
 {
-    public partial class LayoutManager
+    public partial class Box
     {
-        static private void LayoutLines (Box box, int width, int height, int horizontalScrollbarThickness, int verticalScrollbarThickness)
+        private void LayoutLines (int width, int height, int horizontalScrollbarThickness, int verticalScrollbarThickness)
         {
-            Size contentSize = Size.New (0, 0, box.Orientation);
+            Size contentSize = Size.New (0, 0, Orientation);
 
             // Make sure layout size has been limited to UserMaxSize by the caller.
             // If it hasn't then it's an error by the caller and we'll limit ourselves.
-            box.LayoutSize.Width = Math.Min (width, box.UserMaxSize.Width);
-            box.LayoutSize.Height = Math.Min (height, box.UserMaxSize.Height);
+            LayoutSize.Width = Math.Min (width, UserMaxSize.Width);
+            LayoutSize.Height = Math.Min (height, UserMaxSize.Height);
 
             // Temporarily reduce available LayoutSize with scrollbar thickness.
-            box.LayoutSize.Width -= verticalScrollbarThickness;
-            box.LayoutSize.Height -= horizontalScrollbarThickness;
+            LayoutSize.Width -= verticalScrollbarThickness;
+            LayoutSize.Height -= horizontalScrollbarThickness;
 
-            if (box.Children.Count > 0)
+            if (Children.Count > 0)
             {
-                Size size = Size.New (box.LayoutSize.Width, box.LayoutSize.Height, box.Orientation);
-                Lines lines = new Lines ();
+                Size size = Size.New (LayoutSize.Width, LayoutSize.Height, Orientation);
 
-                if (box.Wrap) {
+                if (Wrap)
+                {
                     // If wrapping, size.Main can't be smaller than ChildrenMin.Main
-                    size.Main = Math.Max(box.ChildrenMin.Main, size.Main);
-                    box.Lines = lines.GetLines(box, box.Children, size.Main);
+                    size.Main = Math.Max(ChildrenMin.Main, size.Main);
+                    Lines = GetLines(size.Main);
                 }
                 else
-                    box.Lines = lines.GetLine(box.Orientation, box.Children);
+                {
+                    Lines = GetLine();
+                }
 
                 // Find minimum cross length for each line.
-                Size min = Size.New (box.Orientation);
+                Size min = Size.New (Orientation);
                 min.Main = size.Main;
 
-                box.Lines.ForEach (line => {
+                Lines.ForEach (line => {
                     min.Cross = line.MinSize.Cross;
 
                     // Layout with minimum line cross length.
@@ -44,9 +45,9 @@ namespace UI.Layout
                     line.ProbedUsedSize = line.LayoutSize;
                 });
 
-                Compute.SetLinesSize (box.Lines, size);
+                Compute.SetLinesSize (Lines, size);
 
-                box.Lines.ForEach (line => {
+                Lines.ForEach (line => {
                     // Layout with final cross lengths.
                     LayoutLine (line, line.FinalSize);
 
@@ -56,14 +57,14 @@ namespace UI.Layout
             }
 
             // Make sure content size isn't smaller than UserMinSize.
-            box.ContentSize.Width = Math.Max (contentSize.Width, box.UserMinSize.Width - verticalScrollbarThickness);
-            box.ContentSize.Height = Math.Max (contentSize.Height, box.UserMinSize.Height - horizontalScrollbarThickness);
+            ContentSize.Width = Math.Max (contentSize.Width, UserMinSize.Width - verticalScrollbarThickness);
+            ContentSize.Height = Math.Max (contentSize.Height, UserMinSize.Height - horizontalScrollbarThickness);
 
-            box.LayoutSize.Width += verticalScrollbarThickness;
-            box.LayoutSize.Height += horizontalScrollbarThickness;
+            LayoutSize.Width += verticalScrollbarThickness;
+            LayoutSize.Height += horizontalScrollbarThickness;
         }
 
-        static protected void LayoutLine (Line line, Size lineSize)
+        protected void LayoutLine (Line line, Size lineSize)
         {
             Size size = Size.New (line.Orientation);
 
@@ -76,7 +77,7 @@ namespace UI.Layout
                 size.Main = child.Computed.MainLength;
                 size.Cross = Math.Max (lineSize.Cross, line.MinSize.Cross);
 
-                SetScrolling(child, size.Width, size.Height);
+                child.Layout(size.Width, size.Height);
 
                 // Cross size is largest minimum for all children on this line, but it shouldn't be used unless cross expand is true.
                 if (child.Expand.GetCross (line.Orientation) == false &&
@@ -84,7 +85,7 @@ namespace UI.Layout
                 {
                     size.Main = child.Computed.MainLength;
                     size.Cross = child.ContentSize.GetCross (line.Orientation);
-                    SetScrolling(child, size.Width, size.Height);
+                    child.Layout(size.Width, size.Height);
                 }
             }
         }

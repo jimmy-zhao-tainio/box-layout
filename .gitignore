@@ -1,15 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
 
-.vs/BoxLayout/v15/.suo
-*.lock
-*.ide
-*.ide-shm
-*.ide-wal
-*.suo
-*.dll
-*.pdb
-bin
-obj
-packages
-/~$box-layout-settings.pptm
-*.testlog
-/Todo.txt
+/packages/MSTest.TestAdapter.1.4.0
+/packages/MSTest.TestAdapter.2.1.2
+/packages
+/.vs/UI/v15
+/.vs/UI/v16
+/.vs/UI/v17

@@ -2,7 +2,7 @@
 {
     public enum EqualSize
     {
-        False,
-        FirstMinimal
+        True,
+        False 
     }
 }

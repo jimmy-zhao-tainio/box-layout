@@ -3,7 +3,7 @@ using System.Linq;
 using UI.Structures;
 using UI.Controls;
 
-namespace UI.Layout
+namespace UI.Controls
 {
     public class Compute
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UI.Layout;
+using UI.Controls;
 
 namespace Unit
 {

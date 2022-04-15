@@ -47,17 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExampleXml.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -101,6 +92,10 @@
     <ProjectReference Include="..\Structures\Structures.csproj">
       <Project>{60614870-f017-4bcf-ac7d-19ca304eaaef}</Project>
       <Name>Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Window\Window.csproj">
+      <Project>{fd2a6463-9081-4ec5-a351-bd7d85e80eb6}</Project>
+      <Name>Window</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
