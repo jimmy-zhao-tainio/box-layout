@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 using UI.Structures;
 
 namespace UI.Controls
 {
+    [XmlType(TypeName = "hbox")]
     public class BoxHorizontal : Box
     {
         public BoxHorizontal() : base(Orientation.Horizontal)
@@ -10,6 +13,7 @@ namespace UI.Controls
         }
     }
 
+    [XmlType(TypeName = "vbox")]
     public class BoxVertical : Box
     {
         public BoxVertical() : base(Orientation.Vertical)
@@ -17,37 +21,144 @@ namespace UI.Controls
         }
     }
 
+    [XmlInclude(typeof(BoxHorizontal))]
+    [XmlInclude(typeof(BoxVertical))]
     public partial class Box
     {
         public Orientation Orientation;
 
-        public Size Min;
-        public Size ChildrenMin;
+        [XmlIgnore] public Size Min;
+        [XmlIgnore] public Size ChildrenMin;
 
+        [XmlElement("hbox", typeof(BoxHorizontal))]
+        [XmlElement("vbox", typeof(BoxVertical))]
         public List<Box> Children = new List<Box> ();
 
+        [XmlAttribute ("wrap")]
         public bool Wrap = false;
-        public Expand Expand;
 
-        public AlignMain AlignMain = AlignMain.Start;
-        public AlignCross AlignCross = AlignCross.Start;
-        public LineAlignCross LineAlignCross = LineAlignCross.Start;
-        public SelfAlignCross SelfAlignCross = SelfAlignCross.Inherit;
-        public EqualSize EqualSize = EqualSize.False;
+        [XmlAttribute("expand")]
+        public bool ExpandBoth
+        {
+            get { return false; } // Serializer
+            set
+            {
+                Expand.Main = value;
+                Expand.Cross = value;
+            }
+        }
 
-        public Size UserMinSize;
-        public Size UserMaxSize;
+        [XmlAttribute("expand-main")]
+        public bool ExpandMain
+        {
+            get { return false; }
+            set { Expand.Main = value; }
+        }
+    
+        [XmlAttribute("expand-cross")]
+        public bool ExpandCross
+        {
+            get { return false; }
+            set { Expand.Cross = value; }
+        }
+        [XmlIgnore] public Expand Expand;
 
-        public Point LayoutPosition;
-        public Size LayoutSize;
-        public Size ContentSize;
-        public Size ScrollAreaSize;
-        public BoxComputed Computed;
+        [XmlAttribute("align-main")]
+        public string AlignMainString
+        {
+            get { return string.Empty; }
+            set { AlignMain = (AlignMain)Enum.Parse(typeof(AlignMain), value, true); }
+        }
+        [XmlIgnore] public AlignMain AlignMain = AlignMain.Start;
+        
+        [XmlAttribute ("align-cross")]
+        public string AlignCrossString
+        {
+            get { return string.Empty; }
+            set { AlignCross = (AlignCross)Enum.Parse(typeof(AlignCross), value, true); }
+        }
+        [XmlIgnore] public AlignCross AlignCross = AlignCross.Start;
+        
+        [XmlAttribute ("line-align-cross")]
+        public string LineAlignCrossString
+        {
+            get { return string.Empty; }
+            set { LineAlignCross = (LineAlignCross)Enum.Parse(typeof(LineAlignCross), value, true); }
+        }
+        [XmlIgnore] public LineAlignCross LineAlignCross = LineAlignCross.Start;
 
-        public HScrollbar HorizontalScrollbar;
-        public VScrollbar VerticalScrollbar;
+        [XmlAttribute ("self-align-cross")]
+        public string SelfAlignCrossString
+        {
+            get { return string.Empty; }
+            set { SelfAlignCross = (SelfAlignCross)Enum.Parse(typeof(SelfAlignCross), value, true); }
+        }
+        [XmlIgnore] public SelfAlignCross SelfAlignCross = SelfAlignCross.Inherit;
 
-        public List<Line> Lines;
+        [XmlAttribute ("equal-size")]
+        public string EqualSizeString
+        {
+            get { return string.Empty; }
+            set { EqualSize = (EqualSize)Enum.Parse(typeof(EqualSize), value, true); }
+        }
+        [XmlIgnore] public EqualSize EqualSize = EqualSize.False;
+
+        [XmlAttribute("min-size")]
+        public string UserMinSizeString
+        {
+            get => "";// For the serializer
+            set => UserMinSize = Size.New(value, Orientation);
+        }
+        [XmlIgnore] public Size UserMinSize;
+        
+        [XmlAttribute("max-size")]
+        public string UserMaxSizeString
+        {
+            get => ""; // For the serializer
+            set => UserMaxSize = Size.New(value, Orientation);
+        }
+        [XmlIgnore] public Size UserMaxSize;
+
+        [XmlIgnore] public Point LayoutPosition;
+        [XmlIgnore] public Size LayoutSize;
+        [XmlIgnore] public Size ContentSize;
+        [XmlIgnore] public Size ScrollAreaSize;
+        [XmlIgnore] public BoxComputed Computed;
+
+        [XmlAttribute("horizontal-scrollbar")]
+        public string HorizontalScrollbarString
+        {
+            get => "";
+            set => HorizontalScrollbar.Mode = (ScrollbarMode)Enum.Parse (typeof (ScrollbarMode), value, true);
+        }
+        
+        [XmlAttribute("vertical-scrollbar")]
+        public string VerticalScrollbarString
+        { 
+            get => "";
+            set => VerticalScrollbar.Mode = (ScrollbarMode)Enum.Parse (typeof (ScrollbarMode), value, true);
+        }
+
+        [XmlAttribute("scroll-offset-x")]
+        public string ScrollOffsetX
+        { 
+            get => "";
+            set => HorizontalScrollbar.ContentOffset = Int32.Parse(value);
+        }
+
+        [XmlAttribute("scroll-offset-y")]
+        public string ScrollOffsetY
+        {
+            get => "";
+            set => VerticalScrollbar.ContentOffset = Int32.Parse(value);
+        }
+        
+        [XmlIgnore] public HScrollbar HorizontalScrollbar;
+        [XmlIgnore] public VScrollbar VerticalScrollbar;
+
+        [XmlIgnore] public List<Line> Lines;
+
+        public Box() { }
 
         public Box (Orientation orientation)
         {
@@ -64,12 +175,12 @@ namespace UI.Controls
             VerticalScrollbar = new VScrollbar(ScrollbarMode.Auto);
         }
 
-        public void Pack (Box child)
+        public virtual void Pack (Box child)
         {
             Children.Add(child);
         }
 
-        public void Unpack (Box child)
+        public virtual void Unpack (Box child)
         {
             for (int i = 0; i < Children.Count; i++)
             {

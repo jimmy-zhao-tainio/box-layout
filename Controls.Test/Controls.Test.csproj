@@ -4,14 +4,21 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8FD8EB02-8383-45A5-9948-B4F8F940D907}</ProjectGuid>
+    <ProjectGuid>{3708CCFB-15BB-4B6B-9382-B6F535C1674E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Controls</RootNamespace>
-    <AssemblyName>UI.Controls</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <RootNamespace>Controls.Test</RootNamespace>
+    <AssemblyName>Controls.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>    
+	<ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,8 +40,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,25 +48,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Box\Box-AlignLines.cs" />
-    <Compile Include="Box\Box-AlignLineContent.cs" />
-    <Compile Include="Box\Box-SetMinSizes.cs" />
-    <Compile Include="Box\Box.cs" />
-    <Compile Include="BoxCreate.cs" />
-    <Compile Include="Box\Compute.cs" />
-    <Compile Include="Box\Box-Layout-Lines.cs" />
-    <Compile Include="Box\Box-Layout.cs" />
-    <Compile Include="Box\Line.cs" />
-    <Compile Include="Box\Box-Lines.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Box\Spacing.cs" />
-    <Compile Include="TextBox.cs" />
+    <Compile Include="Test.XML.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MSTest.TestAdapter">
+      <Version>2.2.10</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>2.2.10</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Controls\Controls.csproj">
+      <Project>{8fd8eb02-8383-45a5-9948-b4f8f940d907}</Project>
+      <Name>Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Structures\Structures.csproj">
       <Project>{60614870-f017-4bcf-ac7d-19ca304eaaef}</Project>
       <Name>Structures</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

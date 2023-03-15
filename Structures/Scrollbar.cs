@@ -154,6 +154,8 @@ namespace UI.Structures
 
     public class HScrollbar: Scrollbar 
     {
+        public HScrollbar() : this(ScrollbarMode.Hidden) { }
+
         public HScrollbar(ScrollbarMode mode) : base (mode, Orientation.Horizontal)
         {
         }
@@ -161,6 +163,8 @@ namespace UI.Structures
 
     public class VScrollbar: Scrollbar 
     {
+        public VScrollbar() : this(ScrollbarMode.Hidden) { }
+
         public VScrollbar(ScrollbarMode mode) : base (mode, Orientation.Vertical)
         {
         }

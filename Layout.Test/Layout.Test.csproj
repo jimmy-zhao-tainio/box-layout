@@ -73,7 +73,6 @@
     <Compile Include="Test.ExtraLength.cs" />
     <Compile Include="Test.MinSize.cs" />
     <Compile Include="Test.MaxSize.cs" />
-    <Compile Include="Test.XML.cs" />
     <Compile Include="Test.Layout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,6 +6,14 @@ using UI.Structures;
 
 namespace UI.Controls
 {
+    [XmlType(TypeName = "root")]
+    public class BoxRoot
+    {
+        [XmlElement(typeof (BoxHorizontal))]
+        [XmlElement(typeof (BoxVertical))]
+        public Box Box { get; set; }
+    }
+
     public class BoxCreate
     {
         [XmlRoot ("BoxGlue")]
@@ -105,15 +113,23 @@ namespace UI.Controls
         
         public static Box FromXml(string xml)
         {
-            xml = xml.Replace ("<hbox", "<BoxGlue orientation=\"horizontal\"");
-            xml = xml.Replace ("/hbox", "/BoxGlue");
-            xml = xml.Replace ("<vbox", "<BoxGlue orientation=\"vertical\"");
-            xml = xml.Replace ("/vbox", "/BoxGlue");
+            XmlSerializer serializer = new XmlSerializer (typeof (BoxRoot));
+            serializer.UnknownNode += new XmlNodeEventHandler(serializer_UnknownNode);
+            serializer.UnknownAttribute += new XmlAttributeEventHandler(serializer_UnknownAttribute);
 
-            XmlSerializer serializer = new XmlSerializer (typeof (BoxGlue));
-            StringReader reader = new StringReader (xml);
-            BoxGlue boxGlue = (BoxGlue)serializer.Deserialize (reader);
-            return boxGlue.ToBox ();
+            StringReader reader = new StringReader($"<root>{xml}</root>");
+            var root = (BoxRoot)serializer.Deserialize(reader);
+            return root.Box;
+        }
+
+        private static void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private static void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

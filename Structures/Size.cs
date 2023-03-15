@@ -8,6 +8,8 @@
         public virtual int Main { get; set; }
         public virtual int Cross { get; set; }
 
+        public Size() { }
+
         public Size (int width, int height)
         {
             Width = width;
@@ -30,6 +32,20 @@
             if (orientation == Orientation.Horizontal)
                 return new HSize (width, height);
             return new VSize (width, height);
+        }
+        
+        public static Size New (string sizeText, Orientation orientation)
+        {
+            Size size = New(orientation);
+
+            string[] parts = sizeText.Split(',');
+
+            if (parts.Length == 2 && int.TryParse(parts[0], out int width) && int.TryParse(parts[1], out int height))
+            {
+                size.Width = width;
+                size.Height = height;
+            }
+            return size;
         }
 
         public static Size New (Orientation orientation)

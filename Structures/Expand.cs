@@ -8,6 +8,8 @@
         public virtual bool Main { get; set; }
         public virtual bool Cross { get; set; }
 
+        public Expand() { }
+
         public Expand (bool horizontal, bool vertical)
         {
             Horizontal = horizontal;
