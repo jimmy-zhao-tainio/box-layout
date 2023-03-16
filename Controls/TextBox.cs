@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 
 namespace UI.Controls
 {
+    [XmlType(TypeName = "text")]
     public class TextBox : BoxHorizontal
     {
         [XmlText]

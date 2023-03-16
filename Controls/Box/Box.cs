@@ -21,8 +21,6 @@ namespace UI.Controls
         }
     }
 
-    [XmlInclude(typeof(BoxHorizontal))]
-    [XmlInclude(typeof(BoxVertical))]
     public partial class Box
     {
         public Orientation Orientation;
@@ -32,6 +30,7 @@ namespace UI.Controls
 
         [XmlElement("hbox", typeof(BoxHorizontal))]
         [XmlElement("vbox", typeof(BoxVertical))]
+        [XmlElement("text", typeof(TextBox))]
         public List<Box> Children = new List<Box> ();
 
         [XmlAttribute ("wrap")]

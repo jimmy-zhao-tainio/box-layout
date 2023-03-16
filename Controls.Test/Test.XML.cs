@@ -223,5 +223,14 @@ namespace Unit
             Box box = BoxCreate.FromXml(@"<hbox scroll-offset-y=""10"" />");
             Assert.IsTrue(box.VerticalScrollbar.ContentOffset == 10);
         }
+
+        [TestMethod]
+        public void TextBox()
+        {
+            string hello = "Hello world!";
+            Box box = BoxCreate.FromXml($"<text>{hello}</text>");
+            Assert.IsTrue(box is TextBox);
+            Assert.IsTrue((box as TextBox).Text == hello);
+        }
     }
 }
